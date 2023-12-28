@@ -17,6 +17,9 @@
         "writeFile": true,
         "exists": true,
         "scope": ["$HOME/**"]
+      },
+      "dialog": {
+        "all": true
       }
     },
     "bundle": {
