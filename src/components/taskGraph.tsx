@@ -126,7 +126,6 @@ function BaseNewTaskGraph({
       ...createNodesAndEdgesFromTasks(tasks, serialInput, mode),
       { direction: "LR" }
     );
-    console.log(layouted);
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
     fitView();
