@@ -132,7 +132,7 @@ export function createModeAndTasks(
     case Command.Fit:
       return [Mode.Normal, tasks];
     case Command.Save:
-      downloadTaskAsJson(tasks[0]);
+      downloadTaskAsJson(tasks);
       return [Mode.Normal, tasks];
     case Command.SelectTaskNode:
       const [newMode, newTasks] = selectTask(tasks, serialInput);

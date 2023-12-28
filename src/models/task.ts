@@ -1,3 +1,4 @@
+import { writeTextFile } from "@tauri-apps/api/fs";
 import { v4 as uuidv4 } from "uuid";
 import { Status, DefaultStatus } from "./status";
 import { Mode } from "@/vim/mode";
@@ -213,20 +214,11 @@ export function getSelectedTask(tasks: Task[]): Task {
   })[0];
 }
 
-export const downloadTaskAsJson = (task: Task) => {
-  // タスクデータをJSON形式に変換
-  const taskJson = JSON.stringify(task, null, 2);
-  // Blobを作成
-  const blob = new Blob([taskJson], { type: "application/json" });
-  // Blobからダウンロード用のURLを生成
-  const url = URL.createObjectURL(blob);
-  // aタグを作成してクリックイベントを発火させる
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `task-${task.id}.json`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  // 生成したURLを解放
-  URL.revokeObjectURL(url);
+export const downloadTaskAsJson = async (tasks: Task[]) => {
+  const jsonContent = JSON.stringify(tasks);
+  try {
+    await writeTextFile("task.json", jsonContent);
+  } catch (error) {
+    console.error("Error writing file:", error);
+  }
 };
