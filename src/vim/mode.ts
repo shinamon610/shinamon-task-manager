@@ -1,4 +1,5 @@
-import { UserInput, downloadTaskAsJson, getSelectedTask } from "@/models/task";
+import { UserInput, getSelectedTask } from "@/models/task";
+import { saveTasks } from "@/models/file";
 import {
   updateTasks,
   unSelectAll,
@@ -56,7 +57,8 @@ export function createModeAndTasks(
   command: Command,
   tasks: Task[],
   serialInput: string,
-  userInput: UserInput
+  userInput: UserInput,
+  filePath: string
 ): [Mode, Task[]] {
   switch (command) {
     case Command.CreateTaskNode:
@@ -132,7 +134,7 @@ export function createModeAndTasks(
     case Command.Fit:
       return [Mode.Normal, tasks];
     case Command.Save:
-      downloadTaskAsJson(tasks);
+      saveTasks(tasks, filePath);
       return [Mode.Normal, tasks];
     case Command.SelectTaskNode:
       const [newMode, newTasks] = selectTask(tasks, serialInput);

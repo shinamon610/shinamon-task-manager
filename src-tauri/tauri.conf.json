@@ -15,10 +15,13 @@
       "fs": {
         "readFile": true,
         "writeFile": true,
-        "exists": true,
+        "createDir": true,
         "scope": ["$HOME/**"]
       },
       "dialog": {
+        "all": true
+      },
+      "path": {
         "all": true
       }
     },

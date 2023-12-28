@@ -1,5 +1,3 @@
-import { writeTextFile } from "@tauri-apps/api/fs";
-import { save } from "@tauri-apps/api/dialog";
 import { v4 as uuidv4 } from "uuid";
 import { Status, DefaultStatus } from "./status";
 import { Mode } from "@/vim/mode";
@@ -214,23 +212,3 @@ export function getSelectedTask(tasks: Task[]): Task {
     return task.isSelected;
   })[0];
 }
-
-export const downloadTaskAsJson = async (tasks: Task[]) => {
-  const jsonContent = JSON.stringify(tasks);
-
-  try {
-    // ファイル保存ダイアログを表示
-    const filePath = await save({
-      defaultPath: "tasks.json", // デフォルトのファイル名
-      filters: [{ name: "JSON", extensions: ["json"] }],
-    });
-
-    // ユーザーがファイル保存場所を選択した場合
-    if (filePath) {
-      // 選択したパスにファイルを保存
-      await writeTextFile(filePath, jsonContent);
-    }
-  } catch (error) {
-    console.error("Error writing file:", error);
-  }
-};
