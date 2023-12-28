@@ -34,17 +34,13 @@ async function saveFilePath(
     if (fp === null || fp === "") {
       return null;
     }
-    console.log("ok");
     const targetDir = await appConfigDir();
-    console.log(targetDir);
-    ensureDirExists(targetDir);
+    await ensureDirExists(targetDir);
     await writeTextFile(configFileName, fp, {
       dir: BaseDirectory.AppConfig,
     });
-    console.log("ok");
     return fp;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }

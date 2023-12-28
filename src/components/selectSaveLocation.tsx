@@ -18,7 +18,6 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
         style={{ backgroundColor: "var(--active)", fontSize: "10vh" }}
         onClick={() =>
           selectThenSaveFilePath().then((newFilePath) => {
-            console.log(newFilePath);
             if (newFilePath === null) {
               return;
             }
