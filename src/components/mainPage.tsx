@@ -74,7 +74,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
           name: title,
           startTime: startDateTime,
           endTime: endDateTime,
-          estimatedTime: moment.duration(estimatedTime, "hours"),
+          estimatedTime: estimatedTime,
           spentTime: spentTime,
           to: Array.from(selectedTargets).map(({ value }) => value),
           from: Array.from(selectedSources).map(({ value }) => value),
@@ -123,9 +123,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
             })
           )
         );
-        setEstimatedTime(
-          selectedTask.estimatedTime ? selectedTask.estimatedTime.hours() : null
-        );
+        setEstimatedTime(selectedTask.estimatedTime);
         setSpentTime(selectedTask.spentTime);
         setStartDateTime(selectedTask.startTime);
         setEndDateTime(selectedTask.endTime);

@@ -12,7 +12,7 @@ export type Task = {
   name: string;
   startTime: moment.Moment | null;
   endTime: moment.Moment | null;
-  estimatedTime: moment.Duration | null;
+  estimatedTime: number | null;
   spentTime: number;
   to: UUID[];
   priority: number;
@@ -26,7 +26,7 @@ export type UserInput = {
   name: string | null;
   startTime: moment.Moment | null;
   endTime: moment.Moment | null;
-  estimatedTime: moment.Duration | null;
+  estimatedTime: number | null;
   spentTime: number | null;
   to: UUID[];
   from: UUID[];
