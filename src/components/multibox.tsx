@@ -11,7 +11,7 @@ type MultiBoxProps = {
   isDisabled: boolean;
   defaultOption: Set<Option<string>>;
   data: Set<Option<String>>;
-  setSelectedValue: React.Dispatch<React.SetStateAction<Set<Option<String>>>>;
+  setSelectedValue: React.Dispatch<React.SetStateAction<Set<Option<string>>>>;
 };
 
 interface MultiBoxRef {

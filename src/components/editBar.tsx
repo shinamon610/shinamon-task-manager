@@ -8,6 +8,7 @@ import { Assignee } from "@/models/assignee";
 import { UUID } from "@/models/task";
 import { Task } from "@/models/task";
 import moment, { Moment } from "moment";
+import { MultiBox } from "./multibox";
 
 type EditBarProps = {
   mode: Mode;
@@ -184,10 +185,9 @@ function createContent(
                 key={"sourceflex"}
                 components={[
                   <label key={"source"}>Sources:</label>,
-                  <SelectBox
+                  <MultiBox
                     key={"sourceInput"}
                     isDisabled={isDisabled}
-                    isMulti={true}
                     defaultOption={selectedSources}
                     data={
                       new Set(
@@ -197,7 +197,6 @@ function createContent(
                         }))
                       )
                     }
-                    setData={null}
                     setSelectedValue={setSelectedSources}
                     ref={sourcesRef}
                   />,
@@ -209,10 +208,9 @@ function createContent(
                 key={"targetflex"}
                 components={[
                   <label key={"target"}>Targets:</label>,
-                  <SelectBox
+                  <MultiBox
                     key={"targetInput"}
                     isDisabled={isDisabled}
-                    isMulti={true}
                     defaultOption={selectedTargets}
                     data={
                       new Set(
@@ -222,7 +220,6 @@ function createContent(
                         }))
                       )
                     }
-                    setData={null}
                     setSelectedValue={setSelectedTargets}
                     ref={targetsRef}
                   />,
