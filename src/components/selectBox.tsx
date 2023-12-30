@@ -15,7 +15,6 @@ type SelectBoxProps<S> = {
   isDisabled: boolean;
   defaultOption: Option<S> | null;
   data: Set<Option<S>>;
-  setData: React.Dispatch<React.SetStateAction<Set<Option<S>>>> | null;
   setSelectedValue:
     | React.Dispatch<React.SetStateAction<Option<S>>>
     | React.Dispatch<React.SetStateAction<Option<S> | null>>;
@@ -38,8 +37,7 @@ export function boxStyles(isDisabled: boolean) {
 }
 export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
   (props: SelectBoxProps<any>, ref) => {
-    const { isDisabled, defaultOption, data, setData, setSelectedValue } =
-      props;
+    const { isDisabled, defaultOption, data, setSelectedValue } = props;
 
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
@@ -60,7 +58,6 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
         options={Array.from(data)}
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
-        // onInputChange={handleInputChange}
         // @ts-ignore
         onChange={(newValue) => setSelectedValue(newValue)}
         placeholder=""

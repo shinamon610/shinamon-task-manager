@@ -148,7 +148,6 @@ function createContent(
                     isDisabled={isDisabled}
                     defaultOption={selectedStatus}
                     data={statuses}
-                    setData={setStatuses}
                     setSelectedValue={setSelectedStatus}
                     ref={statusRef}
                   />,
