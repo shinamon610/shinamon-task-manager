@@ -36,3 +36,9 @@ export function getPrevItem<T>(items: T[][], x: number, y: number): T {
   }
   return items[x][y - 1];
 }
+
+export function flatten<T>(x: T[][]): T[] {
+  return x.reduce((a, b) => {
+    return a.concat(b);
+  }, []);
+}
