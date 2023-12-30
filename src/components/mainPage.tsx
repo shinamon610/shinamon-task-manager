@@ -136,6 +136,16 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
           setFilePath(newFilePath);
         });
       }
+      if (newCommand === Command.InputStartDateTime) {
+        if (startDateTime === null) {
+          setStartDateTime(moment());
+        }
+      }
+      if (newCommand === Command.InputEndDateTime) {
+        if (endDateTime === null) {
+          setEndDateTime(moment());
+        }
+      }
     };
     window.addEventListener("keydown", handle);
     return () => {
