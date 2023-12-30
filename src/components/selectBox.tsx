@@ -58,8 +58,10 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
         options={Array.from(data)}
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
-        // @ts-ignore
-        onChange={(newValue) => setSelectedValue(newValue)}
+        onChange={(newValue) => {
+          const nv = newValue as Option<any>;
+          setSelectedValue(nv);
+        }}
         placeholder=""
         isClearable
         isDisabled={isDisabled}

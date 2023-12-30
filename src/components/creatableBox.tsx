@@ -39,8 +39,10 @@ export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps<any>>(
         className="selectbox"
         options={Array.from(data)}
         components={{ DropdownIndicator: null }}
-        // @ts-ignore
-        onChange={(newValue) => setSelectedValue(newValue)}
+        onChange={(newValue) => {
+          const nv = newValue as Option<any>;
+          setSelectedValue(nv);
+        }}
         placeholder=""
         isClearable
         isDisabled={isDisabled}
