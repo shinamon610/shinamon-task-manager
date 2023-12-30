@@ -1,5 +1,5 @@
 import { Mode } from "@/vim/mode";
-import { MutableRefObject, useRef, useEffect, useState } from "react";
+import { MutableRefObject, useRef, useEffect } from "react";
 import { Option, SelectBox } from "./selectBox";
 import { Key } from "./key";
 import { FlexContainer } from "./flexContainer";

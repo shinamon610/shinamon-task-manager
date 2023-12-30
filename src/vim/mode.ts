@@ -56,8 +56,7 @@ export function createModeAndTasks(
   command: Command,
   tasks: Task[],
   serialInput: string,
-  userInput: UserInput,
-  filePath: string
+  userInput: UserInput
 ): [Mode, Task[]] {
   switch (command) {
     case Command.CreateTaskNode:

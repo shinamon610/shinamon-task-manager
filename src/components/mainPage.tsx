@@ -82,8 +82,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
           memo: memo,
           status: selectedStatus.value,
           assignee: selectedAssignee === null ? null : selectedAssignee.value,
-        },
-        filePath
+        }
       );
       setCommand(newCommand);
       setMode(newMode);
