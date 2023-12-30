@@ -9,6 +9,7 @@ import { UUID } from "@/models/task";
 import { Task } from "@/models/task";
 import moment, { Moment } from "moment";
 import { MultiBox } from "./multibox";
+import { CreatableBox } from "./creatableBox";
 
 type EditBarProps = {
   mode: Mode;
@@ -159,7 +160,7 @@ function createContent(
                 key="a"
                 components={[
                   <label key={"assignee"}>Assignee:</label>,
-                  <SelectBox
+                  <CreatableBox
                     key={"assigneeInput"}
                     isDisabled={isDisabled}
                     defaultOption={selectedAssignee}
