@@ -104,7 +104,7 @@ function createContent(
           <input
             key={"titleInput"}
             name="title"
-            defaultValue={title}
+            value={title}
             disabled={isDisabled(mode)}
             ref={titleRef}
             onChange={(e) => {
@@ -220,7 +220,7 @@ function createContent(
                 name="start"
                 type="datetime-local"
                 disabled={isDisabled(mode)}
-                defaultValue={startDateTime?.format(dateFormat)}
+                value={startDateTime?.format(dateFormat)}
                 ref={startDateTimeRef}
                 onChange={(e) => {
                   setStartDateTime(moment(e.target.value));
@@ -239,7 +239,7 @@ function createContent(
                 name="end"
                 type="datetime-local"
                 disabled={isDisabled(mode)}
-                defaultValue={endDateTime?.format(dateFormat)}
+                value={endDateTime?.format(dateFormat)}
                 ref={endDateTimeRef}
                 onChange={(e) => {
                   setEndDateTime(moment(e.target.value));
@@ -257,7 +257,7 @@ function createContent(
                 key={"estimatedInput"}
                 name="estimatedTime"
                 type="number"
-                defaultValue={estimatedTime?.toString()}
+                value={estimatedTime?.toString()}
                 disabled={isDisabled(mode)}
                 ref={estimatedRef}
                 onChange={(e) => {
@@ -278,7 +278,7 @@ function createContent(
                 key={"spentInput"}
                 name="spentTime"
                 type="number"
-                defaultValue={spentTime?.toString()}
+                value={spentTime?.toString()}
                 disabled={isDisabled(mode)}
                 ref={spentRef}
                 onChange={(e) => {
@@ -302,7 +302,7 @@ function createContent(
           <input
             key={"memoInput"}
             name="memo"
-            defaultValue={memo}
+            value={memo}
             disabled={isDisabled(mode)}
             ref={memoRef}
             onChange={(e) => {
