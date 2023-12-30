@@ -1,11 +1,6 @@
-import { Mode } from "@/vim/mode";
 import { Key } from "./key";
 
-export const PurifyBar = ({ mode }: { mode: Mode }) => {
-  const isActive = mode == Mode.Normal;
-  if (!isActive) {
-    return null;
-  }
+export const PurifyBar = () => {
   return (
     <div className="purify-bar" style={{ display: "flex" }}>
       <div style={{ flex: 0 }}>
@@ -13,7 +8,7 @@ export const PurifyBar = ({ mode }: { mode: Mode }) => {
           label: "Purify",
           keys: ["p"],
           isSelectedArray: [false],
-          isDeadArray: [!isActive],
+          isDeadArray: [!false],
         })}
       </div>
       <input type="text" placeholder="text" style={{ flex: 1 }} />
