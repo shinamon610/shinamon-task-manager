@@ -42,8 +42,8 @@ type EditBarProps = {
   estimatedTime: number | null;
   setEstimatedTime: React.Dispatch<React.SetStateAction<number | null>>;
 
-  spentTime: number | null;
-  setSpentTime: React.Dispatch<React.SetStateAction<number | null>>;
+  spentTime: number;
+  setSpentTime: React.Dispatch<React.SetStateAction<number>>;
 
   startDateTime: Moment | null;
   setStartDateTime: React.Dispatch<React.SetStateAction<Moment | null>>;
@@ -220,7 +220,9 @@ function createContent(
                 name="start"
                 type="datetime-local"
                 disabled={isDisabled(mode)}
-                value={startDateTime?.format(dateFormat)}
+                value={
+                  startDateTime == null ? "" : startDateTime.format(dateFormat)
+                }
                 ref={startDateTimeRef}
                 onChange={(e) => {
                   setStartDateTime(moment(e.target.value));
@@ -239,7 +241,9 @@ function createContent(
                 name="end"
                 type="datetime-local"
                 disabled={isDisabled(mode)}
-                value={endDateTime?.format(dateFormat)}
+                value={
+                  endDateTime == null ? "" : endDateTime.format(dateFormat)
+                }
                 ref={endDateTimeRef}
                 onChange={(e) => {
                   setEndDateTime(moment(e.target.value));
@@ -257,7 +261,7 @@ function createContent(
                 key={"estimatedInput"}
                 name="estimatedTime"
                 type="number"
-                value={estimatedTime?.toString()}
+                value={estimatedTime == null ? "" : estimatedTime.toString()}
                 disabled={isDisabled(mode)}
                 ref={estimatedRef}
                 onChange={(e) => {
@@ -278,7 +282,7 @@ function createContent(
                 key={"spentInput"}
                 name="spentTime"
                 type="number"
-                value={spentTime?.toString()}
+                value={spentTime.toString()}
                 disabled={isDisabled(mode)}
                 ref={spentRef}
                 onChange={(e) => {

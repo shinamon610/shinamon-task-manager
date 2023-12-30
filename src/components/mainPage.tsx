@@ -49,7 +49,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
   );
   const targetsRef = useRef(null);
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
-  const [spentTime, setSpentTime] = useState<number | null>(null);
+  const [spentTime, setSpentTime] = useState<number>(0);
   const [startDateTime, setStartDateTime] = useState<Moment | null>(null);
   const [endDateTime, setEndDateTime] = useState<Moment | null>(null);
   const [memo, setMemo] = useState("");
