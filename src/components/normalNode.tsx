@@ -72,6 +72,7 @@ const NormalNode = memo(({ data, selected }: NodeProps) => {
         {createLabels(data.serialInput, data.mode, data.label, selected)}
       </NodeToolbar>
       <div className="node-content">{data.title}</div>
+      <div className="node-content">{data.assignee}</div>
       <Handle
         type="source"
         position={Position.Right}

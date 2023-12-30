@@ -76,7 +76,13 @@ function createNodesAndEdgesFromTasks(
   const labels = indexesToLabels(tasks.length);
   const nodes = zip(tasks, labels).map(([task, label]) => ({
     id: task.id,
-    data: { title: task.name, label, serialInput, mode },
+    data: {
+      title: task.name,
+      label,
+      serialInput,
+      mode,
+      assignee: task.assignee,
+    },
     position: { x: 0, y: 0 },
     connectable: false,
     type: "normalNode",
