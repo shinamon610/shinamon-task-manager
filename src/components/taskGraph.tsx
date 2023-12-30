@@ -73,6 +73,40 @@ type TaskGraphProps = {
   command: Command;
 };
 
+function border(
+  status: Status,
+  isSelected: boolean,
+  color: string | null
+): string {
+  if (isSelected) {
+    return "3px solid var(--accent)";
+  }
+  if (status === Status.Working) {
+    if (color == null) {
+      return "";
+    }
+    return `3px solid ${color}`;
+  }
+  return "";
+}
+
+function boxShadow(
+  status: Status,
+  isSelected: boolean,
+  color: string | null
+): string {
+  if (!isSelected) {
+    return "";
+  }
+  if (status === Status.Working) {
+    if (color == null) {
+      return "";
+    }
+    return `inset 0 0 0 2px ${color}`;
+  }
+  return "";
+}
+
 function createNodesAndEdgesFromTasks(
   tasks: Task[],
   assignees: Set<Option<Assignee>>,
@@ -83,27 +117,6 @@ function createNodesAndEdgesFromTasks(
   const nodes = zip(tasks, labels).map(([task, label]) => {
     const color =
       task.assignee == null ? null : getColor(assignees, task.assignee);
-
-    function border(status: Status, isSelected: boolean): string {
-      if (isSelected) {
-        return "3px solid var(--accent)";
-      }
-      console.log(status);
-      if (status === Status.Working) {
-        return `3px solid ${color}`;
-      }
-      return "";
-    }
-
-    function boxShadow(status: Status, isSelected: boolean): string {
-      if (!isSelected) {
-        return "";
-      }
-      if (status === Status.Working) {
-        return `inset 0 0 0 2px ${color}`;
-      }
-      return "";
-    }
 
     return {
       id: task.id,
@@ -120,9 +133,9 @@ function createNodesAndEdgesFromTasks(
       type: "normalNode",
       selected: task.isSelected,
       style: {
-        border: border(task.status, task.isSelected),
+        border: border(task.status, task.isSelected, color),
         padding: "3px",
-        boxShadow: boxShadow(task.status, task.isSelected),
+        boxShadow: boxShadow(task.status, task.isSelected, color),
       },
     };
   });
