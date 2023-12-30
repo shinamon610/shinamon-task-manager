@@ -1,3 +1,4 @@
+import { extractAssigneeOptions } from "@/models/assignee";
 import { Task } from "../models/task";
 import { saveTasks } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
@@ -13,7 +14,6 @@ import { KeyBar } from "@/components/KeyBar";
 import { PurifyBar } from "@/components/purifybar";
 import { preventKey } from "@/vim/preventKey";
 import { createSerialInput } from "@/vim/createSerialInput";
-import { loadInitialAssigneeOptions } from "@/models/assignee";
 import { UUID } from "../models/task";
 import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
@@ -28,7 +28,7 @@ type MainPageProps = {
 export function MainPage({ filePath, setFilePath }: MainPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [statuses, setStatuses] = useState(loadInitialStatusOptions());
-  const [assignees, setAssignees] = useState(loadInitialAssigneeOptions(""));
+  const [assignees, setAssignees] = useState<Set<Option<Assignee>>>(new Set());
   const [mode, setMode] = useState(Mode.Normal);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -160,6 +160,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
   useEffect(() => {
     loadTasks(filePath).then((tasks) => {
       setTasks(tasks);
+      setAssignees(extractAssigneeOptions(tasks));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -168,6 +169,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
     <div className={"homepage"}>
       <TaskGraph
         tasks={tasks}
+        assignees={assignees}
         serialInput={serialInput}
         mode={mode}
         command={command}

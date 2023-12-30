@@ -1,3 +1,6 @@
+import { Option } from "./selectBox";
+import { Assignee } from "@/models/assignee";
+import { getColor } from "@/models/assignee";
 import { zip } from "@/utils";
 import Dagre from "@dagrejs/dagre";
 import React, { useEffect } from "react";
@@ -63,6 +66,7 @@ const getLayoutedElements = (
 
 type TaskGraphProps = {
   tasks: Task[];
+  assignees: Set<Option<Assignee>>;
   serialInput: string;
   mode: Mode;
   command: Command;
@@ -70,6 +74,7 @@ type TaskGraphProps = {
 
 function createNodesAndEdgesFromTasks(
   tasks: Task[],
+  assignees: Set<Option<Assignee>>,
   serialInput: string,
   mode: Mode
 ): [Node[], Edge[]] {
@@ -82,6 +87,7 @@ function createNodesAndEdgesFromTasks(
       serialInput,
       mode,
       assignee: task.assignee,
+      color: task.assignee == null ? null : getColor(assignees, task.assignee),
     },
     position: { x: 0, y: 0 },
     connectable: false,
@@ -119,6 +125,7 @@ function createNodesAndEdgesFromTasks(
 
 function BaseNewTaskGraph({
   tasks,
+  assignees,
   serialInput,
   mode,
   command,
@@ -132,7 +139,7 @@ function BaseNewTaskGraph({
       return;
     }
     const layouted = getLayoutedElements(
-      ...createNodesAndEdgesFromTasks(tasks, serialInput, mode),
+      ...createNodesAndEdgesFromTasks(tasks, assignees, serialInput, mode),
       { direction: "LR" }
     );
     setNodes([...layouted.nodes]);
@@ -140,6 +147,7 @@ function BaseNewTaskGraph({
     setTimeout(() => {
       fitView();
     }, 10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tasks, setNodes, setEdges, serialInput, mode, command, fitView]);
 
   useEffect(() => {
@@ -163,6 +171,7 @@ function BaseNewTaskGraph({
 
 export default function TaskGraph({
   tasks,
+  assignees,
   serialInput,
   mode,
   command,
@@ -172,6 +181,7 @@ export default function TaskGraph({
       <ReactFlowProvider>
         <BaseNewTaskGraph
           tasks={tasks}
+          assignees={assignees}
           serialInput={serialInput}
           mode={mode}
           command={command}
