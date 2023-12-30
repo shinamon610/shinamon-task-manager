@@ -88,7 +88,10 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
       setMode(newMode);
       setTasks(newTasks);
       setSerialInput(newSerialInput);
-      if (newMode === Mode.NodeSelecting) {
+      if (
+        newMode === Mode.NodeSelecting ||
+        newCommand === Command.CreateTaskNode
+      ) {
         const selectedTask = getSelectedTask(newTasks);
         setTitle(selectedTask.name);
         setSelectedStatus({
