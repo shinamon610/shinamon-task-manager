@@ -96,9 +96,6 @@ function createContent(
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
   const dateFormat = "YYYY-MM-DDTHH:mm";
-  const isDisabled =
-    !flatten(selectingModes).includes(mode) &&
-    !flatten(inputtingModes).includes(mode);
 
   return (
     <>
@@ -109,7 +106,7 @@ function createContent(
             key={"titleInput"}
             name="title"
             defaultValue={title}
-            disabled={isDisabled}
+            disabled={isDisabled(mode)}
             ref={titleRef}
             onChange={(e) => {
               setTitle(e.target.value);
@@ -128,7 +125,7 @@ function createContent(
               <label key={"status"}>Status:</label>,
               <SelectBox
                 key={"statusInput"}
-                isDisabled={isDisabled}
+                isDisabled={isDisabled(mode)}
                 defaultOption={selectedStatus}
                 data={statuses}
                 setSelectedValue={setSelectedStatus}
@@ -144,7 +141,7 @@ function createContent(
               <label key={"assignee"}>Assignee:</label>,
               <CreatableBox
                 key={"assigneeInput"}
-                isDisabled={isDisabled}
+                isDisabled={isDisabled(mode)}
                 defaultOption={selectedAssignee}
                 data={assignees}
                 setData={setAssignees}
@@ -168,7 +165,7 @@ function createContent(
               <label key={"source"}>Sources:</label>,
               <MultiBox
                 key={"sourceInput"}
-                isDisabled={isDisabled}
+                isDisabled={isDisabled(mode)}
                 defaultOption={selectedSources}
                 data={
                   new Set(
@@ -191,7 +188,7 @@ function createContent(
               <label key={"target"}>Targets:</label>,
               <MultiBox
                 key={"targetInput"}
-                isDisabled={isDisabled}
+                isDisabled={isDisabled(mode)}
                 defaultOption={selectedTargets}
                 data={
                   new Set(
@@ -223,7 +220,7 @@ function createContent(
                 key={"startInput"}
                 name="start"
                 type="datetime-local"
-                disabled={isDisabled}
+                disabled={isDisabled(mode)}
                 defaultValue={startDateTime?.format(dateFormat)}
                 ref={startDateTimeRef}
                 onChange={(e) => {
@@ -242,7 +239,7 @@ function createContent(
                 key={"endInput"}
                 name="end"
                 type="datetime-local"
-                disabled={isDisabled}
+                disabled={isDisabled(mode)}
                 defaultValue={endDateTime?.format(dateFormat)}
                 ref={endDateTimeRef}
                 onChange={(e) => {
@@ -262,7 +259,7 @@ function createContent(
                 name="estimatedTime"
                 type="number"
                 defaultValue={estimatedTime?.toString()}
-                disabled={isDisabled}
+                disabled={isDisabled(mode)}
                 ref={estimatedRef}
                 onChange={(e) => {
                   setEstimatedTime(e.target.valueAsNumber);
@@ -283,7 +280,7 @@ function createContent(
                 name="spentTime"
                 type="number"
                 defaultValue={spentTime?.toString()}
-                disabled={isDisabled}
+                disabled={isDisabled(mode)}
                 ref={spentRef}
                 onChange={(e) => {
                   setSpentTime(e.target.valueAsNumber);
@@ -307,7 +304,7 @@ function createContent(
             key={"memoInput"}
             name="memo"
             defaultValue={memo}
-            disabled={isDisabled}
+            disabled={isDisabled(mode)}
             ref={memoRef}
             onChange={(e) => {
               setMemo(e.target.value);
@@ -322,9 +319,15 @@ function createContent(
         label={"Confirm"}
         keys={["ctrl|cmd|alt", "Enter"]}
         isSelectedArray={[false, false]}
-        isDeadArray={[isDisabled, isDisabled]}
+        isDeadArray={[isDisabled(mode), isDisabled(mode)]}
       />
     </>
+  );
+}
+function isDisabled(mode: Mode) {
+  return (
+    !flatten(selectingModes).includes(mode) &&
+    !flatten(inputtingModes).includes(mode)
   );
 }
 export const EditBar = (props: EditBarProps) => {
@@ -370,7 +373,7 @@ export const EditBar = (props: EditBarProps) => {
     <div
       className="edit-bar"
       style={
-        mode === Mode.NodeSelecting
+        isDisabled(mode)
           ? { padding: "3px" }
           : { border: "3px solid var(--accent)" }
       }
