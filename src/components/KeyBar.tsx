@@ -1,6 +1,7 @@
 import { zip } from "@/utils";
 import { Mode } from "@/vim/mode";
 import { Key } from "./key";
+import { selectString } from "@/vim/commands";
 
 export function KeyBar({ mode }: { mode: Mode }) {
   return <div className="top-bar">{createElements(mode)}</div>;
@@ -10,8 +11,8 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
   switch (mode) {
     case Mode.Normal:
       return [
-        ["New node", "Fit", "Select Another Location", "Purify"],
-        [["n"], ["f"], ["w"], ["p"]],
+        ["New node", "Fit", "Select Another Location", "Purify", "Select"],
+        [["n"], ["f"], ["w"], ["p"], selectString.split("")],
       ];
     case Mode.NodeSelecting:
       return [

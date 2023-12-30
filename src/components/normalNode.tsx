@@ -1,7 +1,6 @@
 import { Mode } from "@/vim/mode";
 import React, { memo } from "react";
 import { Handle, Position, NodeToolbar, NodeProps } from "reactflow";
-import { zip } from "@/utils";
 import { Key } from "./key";
 import { createLabelSelectArray } from "@/models/labels";
 
@@ -17,7 +16,7 @@ function createLabels(
 
     return [
       Key({
-        label: "select",
+        label: "",
         keys: l.split(""),
         isSelectedArray,
         isDeadArray: [false],
