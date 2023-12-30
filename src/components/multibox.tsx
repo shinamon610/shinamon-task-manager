@@ -4,8 +4,8 @@ import React, {
   useRef,
   useImperativeHandle,
 } from "react";
-import Select, { createFilter, components, SelectInstance } from "react-select";
-import { Option } from "./selectBox";
+import Select, { createFilter, SelectInstance } from "react-select";
+import { boxStyles, BoxRef, Option } from "./selectBox";
 
 type MultiBoxProps = {
   isDisabled: boolean;
@@ -14,13 +14,7 @@ type MultiBoxProps = {
   setSelectedValue: React.Dispatch<React.SetStateAction<Set<Option<string>>>>;
 };
 
-interface MultiBoxRef {
-  focus: () => void;
-  blur: () => void;
-  isMenuOpen: () => void;
-}
-
-export const MultiBox = forwardRef<MultiBoxRef, MultiBoxProps>(
+export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
   (props: MultiBoxProps, ref) => {
     const { isDisabled, defaultOption, data, setSelectedValue } = props;
 
@@ -37,14 +31,6 @@ export const MultiBox = forwardRef<MultiBoxRef, MultiBoxProps>(
       isMenuOpen: () => menuIsOpen,
     }));
 
-    const customStyles = {
-      control: (base: any, state: any) => ({
-        ...base,
-        backgroundColor: isDisabled ? "var(--active)" : "white",
-        borderColor: isDisabled ? "var(--active)" : base.borderColor,
-      }),
-    };
-
     return (
       <Select
         className="selectbox"
@@ -59,7 +45,7 @@ export const MultiBox = forwardRef<MultiBoxRef, MultiBoxProps>(
         isClearable
         isDisabled={isDisabled}
         menuPlacement="top"
-        styles={customStyles}
+        styles={boxStyles(isDisabled)}
         ref={selectRef}
         defaultValue={Array.from(defaultOption)}
         isMulti={true}

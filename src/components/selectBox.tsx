@@ -21,13 +21,22 @@ type SelectBoxProps<S> = {
     | React.Dispatch<React.SetStateAction<Option<S> | null>>;
 };
 
-interface SelectBoxRef {
+export interface BoxRef {
   focus: () => void;
   blur: () => void;
   isMenuOpen: () => void;
 }
 
-export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
+export function boxStyles(isDisabled: boolean) {
+  return {
+    control: (base: any, state: any) => ({
+      ...base,
+      backgroundColor: isDisabled ? "var(--active)" : "white",
+      borderColor: isDisabled ? "var(--active)" : base.borderColor,
+    }),
+  };
+}
+export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
   (props: SelectBoxProps<any>, ref) => {
     const { isDisabled, defaultOption, data, setData, setSelectedValue } =
       props;
@@ -45,14 +54,6 @@ export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
       isMenuOpen: () => menuIsOpen,
     }));
 
-    const customStyles = {
-      control: (base: any, state: any) => ({
-        ...base,
-        backgroundColor: isDisabled ? "var(--active)" : "white",
-        borderColor: isDisabled ? "var(--active)" : base.borderColor,
-      }),
-    };
-
     return (
       <Select
         className="selectbox"
@@ -66,7 +67,7 @@ export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
         isClearable
         isDisabled={isDisabled}
         menuPlacement="top"
-        styles={customStyles}
+        styles={boxStyles(isDisabled)}
         ref={selectRef}
         defaultValue={defaultOption}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
