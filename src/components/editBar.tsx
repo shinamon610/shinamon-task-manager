@@ -315,12 +315,6 @@ function createContent(
         ratios={[0, 1]}
       />
       <hr />
-      <Key
-        label={"Confirm"}
-        keys={["ctrl|cmd|alt", "Enter"]}
-        isSelectedArray={[false, false]}
-        isDeadArray={[isDisabled(mode), isDisabled(mode)]}
-      />
     </>
   );
 }

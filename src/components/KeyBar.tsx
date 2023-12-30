@@ -6,17 +6,17 @@ export function KeyBar({ mode }: { mode: Mode }) {
   return <div className="top-bar">{createElements(mode)}</div>;
 }
 
-function createLabelsAndKeys(mode: Mode): [string[], string[]] {
+function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
   switch (mode) {
     case Mode.Normal:
       return [
         ["New node", "Fit", "Select Another Location", "Purify"],
-        ["n", "f", "w", "p"],
+        [["n"], ["f"], ["w"], ["p"]],
       ];
     case Mode.NodeSelecting:
       return [
         ["Edit", "Delete"],
-        ["e", "d"],
+        [["e"], ["d"]],
       ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
@@ -38,6 +38,7 @@ function createLabelsAndKeys(mode: Mode): [string[], string[]] {
     case Mode.EndDateTimeInputting:
     case Mode.MemoSelecting:
     case Mode.MemoInputting:
+      return [["Confirm"], [["ctrl|cmd|alt", "Enter"]]];
     case Mode.PurifyInputting:
       return [[], []];
   }
@@ -47,7 +48,7 @@ function createElements(mode: Mode): React.JSX.Element[] {
   return zip(labels, keys).map(([label, key]) => {
     return Key({
       label: label,
-      keys: [key],
+      keys: [...key],
       isSelectedArray: [false],
       isDeadArray: [false],
     });
