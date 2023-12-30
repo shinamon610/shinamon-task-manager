@@ -11,8 +11,8 @@ function createElements(mode: Mode): React.JSX.Element[] {
   if (!isActive) {
     return [];
   }
-  const labels = ["New node", "Fit", "Save"];
-  const keys = ["n", "f", "s"];
+  const labels = ["New node", "Fit", "Select Another Location"];
+  const keys = ["n", "f", "w"];
   return zip(labels, keys).map(([label, key]) => {
     return Key({
       label: label,

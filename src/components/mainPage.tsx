@@ -1,3 +1,4 @@
+import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
 import { getSelectedTask, loadInitialTasks } from "../models/task";
@@ -126,6 +127,14 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
         setStartDateTime(selectedTask.startTime);
         setEndDateTime(selectedTask.endTime);
         setMemo(selectedTask.memo);
+      }
+      if (newCommand === Command.SelectAnotherLocation) {
+        selectThenSaveFilePath().then((newFilePath) => {
+          if (newFilePath === null) {
+            return;
+          }
+          setFilePath(newFilePath);
+        });
       }
     };
     window.addEventListener("keydown", handle);

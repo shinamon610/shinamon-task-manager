@@ -38,6 +38,7 @@ export enum Command {
   Nothing,
   Cancel,
   ConfirmEdit,
+  SelectAnotherLocation,
 }
 
 export const selectString = "agi";
@@ -160,6 +161,9 @@ export function keyEventToCommand(
       }
       if (key == "s") {
         return Command.Save;
+      }
+      if (key === "w") {
+        return Command.SelectAnotherLocation;
       }
       if (key == "p") {
         return Command.Purify;
