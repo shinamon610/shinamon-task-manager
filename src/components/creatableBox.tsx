@@ -4,7 +4,7 @@ import React, {
   useRef,
   useImperativeHandle,
 } from "react";
-import Select, { SelectInstance } from "react-select";
+import { SelectInstance } from "react-select";
 import { Option, BoxRef, boxStyles } from "./selectBox";
 import CreatableSelect from "react-select/creatable";
 
