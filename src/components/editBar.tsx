@@ -96,7 +96,6 @@ function createContent(
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
   const dateFormat = "YYYY-MM-DDTHH:mm";
-
   return (
     <>
       <FlexContainer

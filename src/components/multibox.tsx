@@ -47,7 +47,7 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         menuPlacement="top"
         styles={boxStyles(isDisabled)}
         ref={selectRef}
-        defaultValue={Array.from(defaultOption)}
+        value={Array.from(defaultOption)}
         isMulti={true}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {
