@@ -131,9 +131,16 @@ function BaseNewTaskGraph({
     );
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
-    fitView();
-  }, [tasks, setNodes, setEdges, serialInput, mode, command, fitView]);
+  }, [tasks, setNodes, setEdges, serialInput, mode, command]);
 
+  useEffect(() => {
+    if (mode === Mode.NodeSelecting || command === Command.CreateTaskNode) {
+      // ちょっと待たないとeditbarが描写された後にfitしてくれない
+      setTimeout(() => {
+        fitView();
+      }, 10);
+    }
+  }, [command, mode, fitView]);
   return (
     <ReactFlow
       nodes={nodes}
