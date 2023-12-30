@@ -1,5 +1,4 @@
 import { UserInput, getSelectedTask } from "@/models/task";
-import { saveTasks } from "@/models/file";
 import {
   updateTasks,
   unSelectAll,
@@ -132,9 +131,6 @@ export function createModeAndTasks(
     case Command.InputMemo:
       return [Mode.MemoInputting, tasks];
     case Command.Fit:
-      return [Mode.Normal, tasks];
-    case Command.Save:
-      saveTasks(tasks, filePath);
       return [Mode.Normal, tasks];
     case Command.SelectTaskNode:
       const [newMode, newTasks] = selectTask(tasks, serialInput);

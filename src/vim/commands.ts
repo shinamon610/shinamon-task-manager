@@ -27,7 +27,6 @@ export enum Command {
   InputMemo,
   Purify,
   Fit,
-  Save,
   ZoomIn,
   ZoomOut,
   PanLeft,
@@ -158,9 +157,6 @@ export function keyEventToCommand(
       }
       if (key == "f") {
         return Command.Fit;
-      }
-      if (key == "s") {
-        return Command.Save;
       }
       if (key === "w") {
         return Command.SelectAnotherLocation;

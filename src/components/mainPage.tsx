@@ -1,3 +1,4 @@
+import { saveTasks } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
@@ -146,6 +147,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
           setEndDateTime(moment());
         }
       }
+      saveTasks(newTasks, filePath);
     };
     window.addEventListener("keydown", handle);
     return () => {
