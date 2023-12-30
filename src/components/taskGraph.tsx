@@ -129,7 +129,7 @@ function createNodesAndEdgesFromTasks(
 
   const edges = tasks.flatMap((task) =>
     task.to.map((targetId) => {
-      const color = task.isSelected ? "#ff8c00" : "#4db8ff"; //var使えない、なんで?
+      const color = task.isSelected ? "var(--accent)" : "var(--active)";
       return {
         id: `e${task.id}-${targetId}`,
         source: task.id,
@@ -139,7 +139,7 @@ function createNodesAndEdgesFromTasks(
           type: MarkerType.ArrowClosed,
           width: 20,
           height: 20,
-          color,
+          color: color,
         },
         style: {
           strokeWidth: 2,
@@ -148,7 +148,6 @@ function createNodesAndEdgesFromTasks(
       };
     })
   );
-
   return [nodes, edges];
 }
 
