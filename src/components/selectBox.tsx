@@ -13,11 +13,9 @@ export type Option<S> = {
 
 type SelectBoxProps<S> = {
   isDisabled: boolean;
-  defaultOption: Option<S> | null;
+  defaultOption: Option<S>;
   data: Set<Option<S>>;
-  setSelectedValue:
-    | React.Dispatch<React.SetStateAction<Option<S>>>
-    | React.Dispatch<React.SetStateAction<Option<S> | null>>;
+  setSelectedValue: React.Dispatch<React.SetStateAction<Option<S>>>;
 };
 
 export interface BoxRef {
@@ -60,6 +58,9 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
         filterOption={createFilter({ ignoreAccents: false })}
         onChange={(newValue) => {
           const nv = newValue as Option<any>;
+          if (newValue == null) {
+            return;
+          }
           setSelectedValue(nv);
         }}
         placeholder=""
@@ -68,7 +69,7 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
         menuPlacement="top"
         styles={boxStyles(isDisabled)}
         ref={selectRef}
-        defaultValue={defaultOption}
+        value={defaultOption}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {
           setInnerMenuIsOpen(false);
