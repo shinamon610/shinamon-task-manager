@@ -36,7 +36,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
   // edit barの要素
   const [title, setTitle] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<Option<Status>>({
-    value: "",
+    value: Status.Pending,
     label: "",
   });
   const [selectedAssignee, setSelectedAssignee] =
@@ -96,7 +96,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
         setTitle(selectedTask.name);
         setSelectedStatus({
           value: selectedTask.status,
-          label: selectedTask.status,
+          label: selectedTask.status.toString(),
         });
         setSelectedAssignee(
           selectedTask.assignee === null

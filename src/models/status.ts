@@ -1,14 +1,13 @@
 import { Option } from "@/components/selectBox";
 
-export enum DefaultStatus {
+export enum Status {
   Working = "Working",
   Pending = "Pending",
   Done = "Done",
 }
-type UserInputStatus = string;
-export type Status = DefaultStatus | UserInputStatus;
+
 export function loadInitialStatusOptions(): Set<Option<Status>> {
   return new Set(
-    Object.keys(DefaultStatus).map((key) => ({ value: key, label: key }))
+    Object.values(Status).map((key) => ({ value: key, label: key.toString() }))
   );
 }
