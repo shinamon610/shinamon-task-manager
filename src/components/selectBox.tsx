@@ -11,7 +11,7 @@ export type Option<S> = {
   label: string;
 };
 
-type SelectBoxProps<S, T> = {
+type SelectBoxProps<S> = {
   isDisabled: boolean;
   isMulti: boolean;
   defaultOption: Option<S> | Set<Option<S>> | null;
@@ -29,8 +29,8 @@ interface SelectBoxRef {
   isMenuOpen: () => void;
 }
 
-export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any, any>>(
-  (props: SelectBoxProps<any, any>, ref) => {
+export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
+  (props: SelectBoxProps<any>, ref) => {
     const {
       isDisabled,
       isMulti,
