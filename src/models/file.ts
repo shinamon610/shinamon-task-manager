@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Task } from "./task";
 import {
   BaseDirectory,
@@ -63,5 +64,17 @@ export async function saveTasks(tasks: Task[], filePath: string) {
 
 export async function loadTasks(filePath: string): Promise<Task[]> {
   const jsonContent = await readTextFile(filePath);
-  return JSON.parse(jsonContent) as Task[];
+  const tasks: Task[] = JSON.parse(jsonContent);
+
+  // 各タスクの日時関連フィールドをmomentオブジェクトに変換
+  tasks.forEach((task) => {
+    if (task.startTime) {
+      task.startTime = moment(task.startTime);
+    }
+    if (task.endTime) {
+      task.endTime = moment(task.endTime);
+    }
+  });
+
+  return tasks;
 }
