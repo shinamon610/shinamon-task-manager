@@ -1,8 +1,9 @@
+import { Task } from "../models/task";
 import { saveTasks } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
-import { getSelectedTask, loadInitialTasks } from "../models/task";
+import { getSelectedTask } from "../models/task";
 import { loadInitialStatusOptions } from "@/models/status";
 import { Mode, createModeAndTasks } from "@/vim/mode";
 import TaskGraph from "@/components/taskGraph";
@@ -18,13 +19,14 @@ import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
 import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
+import { loadTasks } from "@/models/file";
 
 type MainPageProps = {
   filePath: string;
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
 };
 export function MainPage({ filePath, setFilePath }: MainPageProps) {
-  const [tasks, setTasks] = useState(loadInitialTasks(""));
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [statuses, setStatuses] = useState(loadInitialStatusOptions(""));
   const [assignees, setAssignees] = useState(loadInitialAssigneeOptions(""));
   const [mode, setMode] = useState(Mode.Normal);
@@ -154,6 +156,13 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
       window.removeEventListener("keydown", handle);
     };
   });
+
+  useEffect(() => {
+    loadTasks(filePath).then((tasks) => {
+      setTasks(tasks);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={"homepage"}>

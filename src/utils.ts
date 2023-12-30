@@ -19,7 +19,7 @@ export function combPair<T>(a: T[][], b: T[]): T[][] {
 }
 
 export function flattenStrings(targets: string[][]): string[] {
-  return targets.map((target) => target.reduce((a, b) => a + b));
+  return targets.map((target) => target.reduce((a, b) => a + b, ""));
 }
 
 export function getNextItem<T>(items: T[][], x: number, y: number): T {

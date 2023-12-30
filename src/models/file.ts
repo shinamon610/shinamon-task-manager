@@ -8,7 +8,6 @@ import {
 } from "@tauri-apps/api/fs";
 import { save } from "@tauri-apps/api/dialog";
 import { appConfigDir } from "@tauri-apps/api/path";
-import { join } from "@tauri-apps/api/path";
 
 function selectFilePath(defaultPath: string): Promise<string | null> {
   return save({
@@ -60,4 +59,9 @@ export function loadInitialFilePath(): Promise<string | null> {
 export async function saveTasks(tasks: Task[], filePath: string) {
   const jsonContent = JSON.stringify(tasks);
   await writeTextFile(filePath, jsonContent);
+}
+
+export async function loadTasks(filePath: string): Promise<Task[]> {
+  const jsonContent = await readTextFile(filePath);
+  return JSON.parse(jsonContent) as Task[];
 }

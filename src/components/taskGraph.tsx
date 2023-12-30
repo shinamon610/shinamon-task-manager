@@ -122,6 +122,9 @@ function BaseNewTaskGraph({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
+    if (tasks.length === 0) {
+      return;
+    }
     const layouted = getLayoutedElements(
       ...createNodesAndEdgesFromTasks(tasks, serialInput, mode),
       { direction: "LR" }
