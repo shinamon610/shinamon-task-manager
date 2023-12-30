@@ -1,3 +1,4 @@
+import { Status } from "@/models/status";
 import { Option } from "./selectBox";
 import { Assignee } from "@/models/assignee";
 import { getColor } from "@/models/assignee";
@@ -79,24 +80,52 @@ function createNodesAndEdgesFromTasks(
   mode: Mode
 ): [Node[], Edge[]] {
   const labels = indexesToLabels(tasks.length);
-  const nodes = zip(tasks, labels).map(([task, label]) => ({
-    id: task.id,
-    data: {
-      title: task.name,
-      label,
-      serialInput,
-      mode,
-      assignee: task.assignee,
-      color: task.assignee == null ? null : getColor(assignees, task.assignee),
-    },
-    position: { x: 0, y: 0 },
-    connectable: false,
-    type: "normalNode",
-    selected: task.isSelected,
-    style: task.isSelected
-      ? { border: "3px solid var(--accent)", padding: "2px" }
-      : {},
-  }));
+  const nodes = zip(tasks, labels).map(([task, label]) => {
+    const color =
+      task.assignee == null ? null : getColor(assignees, task.assignee);
+
+    function border(status: Status, isSelected: boolean): string {
+      if (isSelected) {
+        return "3px solid var(--accent)";
+      }
+      console.log(status);
+      if (status === Status.Working) {
+        return `3px solid ${color}`;
+      }
+      return "";
+    }
+
+    function boxShadow(status: Status, isSelected: boolean): string {
+      if (!isSelected) {
+        return "";
+      }
+      if (status === Status.Working) {
+        return `inset 0 0 0 2px ${color}`;
+      }
+      return "";
+    }
+
+    return {
+      id: task.id,
+      data: {
+        title: task.name,
+        label,
+        serialInput,
+        mode,
+        assignee: task.assignee,
+        color,
+      },
+      position: { x: 0, y: 0 },
+      connectable: false,
+      type: "normalNode",
+      selected: task.isSelected,
+      style: {
+        border: border(task.status, task.isSelected),
+        padding: "3px",
+        boxShadow: boxShadow(task.status, task.isSelected),
+      },
+    };
+  });
 
   const edges = tasks.flatMap((task) =>
     task.to.map((targetId) => {
