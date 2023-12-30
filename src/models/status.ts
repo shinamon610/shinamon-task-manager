@@ -7,9 +7,7 @@ export enum DefaultStatus {
 }
 type UserInputStatus = string;
 export type Status = DefaultStatus | UserInputStatus;
-export function loadInitialStatusOptions(
-  filePath: string
-): Set<Option<Status>> {
+export function loadInitialStatusOptions(): Set<Option<Status>> {
   return new Set(
     Object.keys(DefaultStatus).map((key) => ({ value: key, label: key }))
   );

@@ -27,7 +27,7 @@ type MainPageProps = {
 };
 export function MainPage({ filePath, setFilePath }: MainPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [statuses, setStatuses] = useState(loadInitialStatusOptions(""));
+  const [statuses, setStatuses] = useState(loadInitialStatusOptions());
   const [assignees, setAssignees] = useState(loadInitialAssigneeOptions(""));
   const [mode, setMode] = useState(Mode.Normal);
   const [serialInput, setSerialInput] = useState("");
