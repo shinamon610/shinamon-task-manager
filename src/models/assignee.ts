@@ -4,7 +4,22 @@ import { Task } from "./task";
 export type Assignee = string;
 type Color = string;
 
-const colorlist: Color[] = ["blueviolet", "chartreuse"];
+const colorlist: Color[] = [
+  "blueviolet",
+  "brown",
+  "Green",
+  "Gold",
+  "DeepPink",
+  "DarkSlateBlue",
+  "DarkRed",
+  "DarkGreen",
+  "DarkGoldenRod",
+  "DarkCyan",
+  "DarkBlue",
+  "Crimson",
+  "Chocolate",
+  "yellow",
+];
 
 export function extractAssigneeOptions(tasks: Task[]): Set<Option<Assignee>> {
   return new Set(
