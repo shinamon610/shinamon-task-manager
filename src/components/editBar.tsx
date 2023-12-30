@@ -91,6 +91,7 @@ function createContent(
   endDateTimeRef: MutableRefObject<null>,
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
+  const dateFormat = "YYYY-MM-DDTHH:mm";
   switch (mode) {
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
@@ -293,7 +294,7 @@ function createContent(
                     name="start"
                     type="datetime-local"
                     disabled={isDisabled}
-                    defaultValue={startDateTime?.format("YYYY-MM-DDTHH:mm")}
+                    defaultValue={startDateTime?.format(dateFormat)}
                     ref={startDateTimeRef}
                     onChange={(e) => {
                       setStartDateTime(moment(e.target.value));
@@ -312,7 +313,7 @@ function createContent(
                     name="end"
                     type="datetime-local"
                     disabled={isDisabled}
-                    defaultValue={endDateTime?.format("YYYY-MM-DDTHH:mm")}
+                    defaultValue={endDateTime?.format(dateFormat)}
                     ref={endDateTimeRef}
                     onChange={(e) => {
                       setEndDateTime(moment(e.target.value));
