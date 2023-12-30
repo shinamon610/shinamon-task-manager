@@ -1,3 +1,4 @@
+import { BottomBar } from "./bottombar";
 import { extractAssigneeOptions } from "@/models/assignee";
 import { Task } from "../models/task";
 import { saveTasks } from "@/models/file";
@@ -10,8 +11,6 @@ import { Mode, createModeAndTasks } from "@/vim/mode";
 import TaskGraph from "@/components/taskGraph";
 import { Command } from "@/vim/commands";
 import { EditBar } from "@/components/editBar";
-import { KeyBar } from "@/components/KeyBar";
-import { PurifyBar } from "@/components/purifybar";
 import { preventKey } from "@/vim/preventKey";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { UUID } from "../models/task";
@@ -174,8 +173,7 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
         mode={mode}
         command={command}
       />
-      <KeyBar mode={mode} />
-      <PurifyBar mode={mode} />
+      <BottomBar mode={mode} />
       <EditBar
         mode={mode}
         tasks={tasks}
