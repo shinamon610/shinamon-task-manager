@@ -121,8 +121,10 @@ function handleInputMode(
     return selectingCommands[ix][iy];
   }
   if (key === "Enter" || key === "Tab") {
+    // event.isComposingが使えないことが判明した。変換候補が表示されている状態でデフォルトの選択肢をEnterするとisComposingがfalseのままになっている
+    // event.keyCodeが代わりに使えるということで、非推奨だが使う
     if (
-      event.isComposing || //@ts-ignore
+      event.keyCode !== 13 || //@ts-ignore
       sourcesRef?.current?.isMenuOpen() || //@ts-ignore
       targetsRef?.current?.isMenuOpen()
     ) {
