@@ -141,6 +141,8 @@ function createNodesAndEdgesFromTasks(
         border,
         padding,
         boxShadow: boxShadow(task.status, task.isSelected, color),
+        background:
+          task.status === Status.Done ? "var(--inactive)" : "var(--active)",
       },
     };
   });
