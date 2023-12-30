@@ -131,11 +131,13 @@ function BaseNewTaskGraph({
     );
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
-  }, [tasks, setNodes, setEdges, serialInput, mode, command]);
+    setTimeout(() => {
+      fitView();
+    }, 10);
+  }, [tasks, setNodes, setEdges, serialInput, mode, command, fitView]);
 
   useEffect(() => {
-    if (mode === Mode.NodeSelecting || command === Command.CreateTaskNode) {
-      // ちょっと待たないとeditbarが描写された後にfitしてくれない
+    if (command === Command.Fit) {
       setTimeout(() => {
         fitView();
       }, 10);
