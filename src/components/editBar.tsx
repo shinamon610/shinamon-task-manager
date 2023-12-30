@@ -1,4 +1,6 @@
+import { flatten } from "@/utils";
 import { Mode } from "@/vim/mode";
+import { selectingModes, inputtingModes } from "@/vim/mode";
 import { MutableRefObject, useRef, useEffect } from "react";
 import { Option, SelectBox } from "./selectBox";
 import { Key } from "./key";
@@ -94,269 +96,245 @@ function createContent(
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
   const dateFormat = "YYYY-MM-DDTHH:mm";
-  switch (mode) {
-    case Mode.TitleSelecting:
-    case Mode.TitleInputting:
-    case Mode.StatusSelecting:
-    case Mode.StatusInputting:
-    case Mode.AssigneeSelecting:
-    case Mode.AssigneeInputting:
-    case Mode.SourcesSelecting:
-    case Mode.SourcesInputting:
-    case Mode.TargetsSelecting:
-    case Mode.TargetsInputting:
-    case Mode.EstimatedTimeSelecting:
-    case Mode.EstimatedTimeInputting:
-    case Mode.SpentTimeSelecting:
-    case Mode.SpentTimeInputting:
-    case Mode.StartDateTimeSelecting:
-    case Mode.StartDateTimeInputting:
-    case Mode.EndDateTimeSelecting:
-    case Mode.EndDateTimeInputting:
-    case Mode.MemoSelecting:
-    case Mode.MemoInputting:
-    case Mode.NodeSelecting:
-      const isDisabled = mode === Mode.NodeSelecting;
-      return (
-        <>
+  const isDisabled =
+    !flatten(selectingModes).includes(mode) &&
+    !flatten(inputtingModes).includes(mode);
+
+  return (
+    <>
+      <FlexContainer
+        components={[
+          <label key={"title"}>Title:</label>,
+          <input
+            key={"titleInput"}
+            name="title"
+            defaultValue={title}
+            disabled={isDisabled}
+            ref={titleRef}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />,
+        ]}
+        isSelected={mode === Mode.TitleSelecting}
+        ratios={[0, 1]}
+      />
+      <hr />
+      <FlexContainer
+        components={[
           <FlexContainer
+            key={"s"}
             components={[
-              <label key={"title"}>Title:</label>,
+              <label key={"status"}>Status:</label>,
+              <SelectBox
+                key={"statusInput"}
+                isDisabled={isDisabled}
+                defaultOption={selectedStatus}
+                data={statuses}
+                setSelectedValue={setSelectedStatus}
+                ref={statusRef}
+              />,
+            ]}
+            isSelected={mode === Mode.StatusSelecting}
+            ratios={[0, 1]}
+          />,
+          <FlexContainer
+            key="a"
+            components={[
+              <label key={"assignee"}>Assignee:</label>,
+              <CreatableBox
+                key={"assigneeInput"}
+                isDisabled={isDisabled}
+                defaultOption={selectedAssignee}
+                data={assignees}
+                setData={setAssignees}
+                setSelectedValue={setSelectedAssignee}
+                ref={assigneeRef}
+              />,
+            ]}
+            isSelected={mode === Mode.AssigneeSelecting}
+            ratios={[0, 1]}
+          />,
+        ]}
+        isSelected={false}
+        ratios={[1, 1]}
+      />
+      <hr />
+      <FlexContainer
+        components={[
+          <FlexContainer
+            key={"sourceflex"}
+            components={[
+              <label key={"source"}>Sources:</label>,
+              <MultiBox
+                key={"sourceInput"}
+                isDisabled={isDisabled}
+                defaultOption={selectedSources}
+                data={
+                  new Set(
+                    tasks.map((task) => ({
+                      value: task.id,
+                      label: task.name,
+                    }))
+                  )
+                }
+                setSelectedValue={setSelectedSources}
+                ref={sourcesRef}
+              />,
+            ]}
+            isSelected={mode === Mode.SourcesSelecting}
+            ratios={[0, 1]}
+          />,
+          <FlexContainer
+            key={"targetflex"}
+            components={[
+              <label key={"target"}>Targets:</label>,
+              <MultiBox
+                key={"targetInput"}
+                isDisabled={isDisabled}
+                defaultOption={selectedTargets}
+                data={
+                  new Set(
+                    tasks.map((task) => ({
+                      value: task.id,
+                      label: task.name,
+                    }))
+                  )
+                }
+                setSelectedValue={setSelectedTargets}
+                ref={targetsRef}
+              />,
+            ]}
+            isSelected={mode === Mode.TargetsSelecting}
+            ratios={[0, 1]}
+          />,
+        ]}
+        isSelected={false}
+        ratios={[1, 1]}
+      />
+      <hr />
+      <FlexContainer
+        components={[
+          <FlexContainer
+            key={"estimatedFlex"}
+            components={[
+              <label key={"estimated"}>Estimated:</label>,
               <input
-                key={"titleInput"}
-                name="title"
-                defaultValue={title}
+                key={"estimatedInput"}
+                name="estimatedTime"
+                type="number"
+                defaultValue={estimatedTime?.toString()}
                 disabled={isDisabled}
-                ref={titleRef}
+                ref={estimatedRef}
                 onChange={(e) => {
-                  setTitle(e.target.value);
+                  setEstimatedTime(e.target.valueAsNumber);
+                }}
+                style={{ textAlign: "right" }}
+              />,
+              <label key={"ehours"}>Hours</label>,
+            ]}
+            isSelected={mode === Mode.EstimatedTimeSelecting}
+            ratios={[0, 1, 0]}
+          />,
+          <FlexContainer
+            key={"spentFlex"}
+            components={[
+              <label key={"spent"}>Spent:</label>,
+              <input
+                key={"spentInput"}
+                name="spentTime"
+                type="number"
+                defaultValue={spentTime?.toString()}
+                disabled={isDisabled}
+                ref={spentRef}
+                onChange={(e) => {
+                  setSpentTime(e.target.valueAsNumber);
+                }}
+                style={{ textAlign: "right" }}
+              />,
+              <label key={"shours"}>Hours</label>,
+            ]}
+            isSelected={mode === Mode.SpentTimeSelecting}
+            ratios={[0, 1, 0]}
+          />,
+        ]}
+        isSelected={false}
+        ratios={[1, 1]}
+      />
+      <FlexContainer
+        components={[
+          <FlexContainer
+            key={"startFlex"}
+            components={[
+              <label key={"start"}>Start:</label>,
+              <input
+                key={"startInput"}
+                name="start"
+                type="datetime-local"
+                disabled={isDisabled}
+                defaultValue={startDateTime?.format(dateFormat)}
+                ref={startDateTimeRef}
+                onChange={(e) => {
+                  setStartDateTime(moment(e.target.value));
                 }}
               />,
             ]}
-            isSelected={mode === Mode.TitleSelecting}
+            isSelected={mode === Mode.StartDateTimeSelecting}
             ratios={[0, 1]}
-          />
-          <hr />
+          />,
           <FlexContainer
+            key={"endFlex"}
             components={[
-              <FlexContainer
-                key={"s"}
-                components={[
-                  <label key={"status"}>Status:</label>,
-                  <SelectBox
-                    key={"statusInput"}
-                    isDisabled={isDisabled}
-                    defaultOption={selectedStatus}
-                    data={statuses}
-                    setSelectedValue={setSelectedStatus}
-                    ref={statusRef}
-                  />,
-                ]}
-                isSelected={mode === Mode.StatusSelecting}
-                ratios={[0, 1]}
-              />,
-              <FlexContainer
-                key="a"
-                components={[
-                  <label key={"assignee"}>Assignee:</label>,
-                  <CreatableBox
-                    key={"assigneeInput"}
-                    isDisabled={isDisabled}
-                    defaultOption={selectedAssignee}
-                    data={assignees}
-                    setData={setAssignees}
-                    setSelectedValue={setSelectedAssignee}
-                    ref={assigneeRef}
-                  />,
-                ]}
-                isSelected={mode === Mode.AssigneeSelecting}
-                ratios={[0, 1]}
-              />,
-            ]}
-            isSelected={false}
-            ratios={[1, 1]}
-          />
-          <hr />
-          <FlexContainer
-            components={[
-              <FlexContainer
-                key={"sourceflex"}
-                components={[
-                  <label key={"source"}>Sources:</label>,
-                  <MultiBox
-                    key={"sourceInput"}
-                    isDisabled={isDisabled}
-                    defaultOption={selectedSources}
-                    data={
-                      new Set(
-                        tasks.map((task) => ({
-                          value: task.id,
-                          label: task.name,
-                        }))
-                      )
-                    }
-                    setSelectedValue={setSelectedSources}
-                    ref={sourcesRef}
-                  />,
-                ]}
-                isSelected={mode === Mode.SourcesSelecting}
-                ratios={[0, 1]}
-              />,
-              <FlexContainer
-                key={"targetflex"}
-                components={[
-                  <label key={"target"}>Targets:</label>,
-                  <MultiBox
-                    key={"targetInput"}
-                    isDisabled={isDisabled}
-                    defaultOption={selectedTargets}
-                    data={
-                      new Set(
-                        tasks.map((task) => ({
-                          value: task.id,
-                          label: task.name,
-                        }))
-                      )
-                    }
-                    setSelectedValue={setSelectedTargets}
-                    ref={targetsRef}
-                  />,
-                ]}
-                isSelected={mode === Mode.TargetsSelecting}
-                ratios={[0, 1]}
-              />,
-            ]}
-            isSelected={false}
-            ratios={[1, 1]}
-          />
-          <hr />
-          <FlexContainer
-            components={[
-              <FlexContainer
-                key={"estimatedFlex"}
-                components={[
-                  <label key={"estimated"}>Estimated:</label>,
-                  <input
-                    key={"estimatedInput"}
-                    name="estimatedTime"
-                    type="number"
-                    defaultValue={estimatedTime?.toString()}
-                    disabled={isDisabled}
-                    ref={estimatedRef}
-                    onChange={(e) => {
-                      setEstimatedTime(e.target.valueAsNumber);
-                    }}
-                    style={{ textAlign: "right" }}
-                  />,
-                  <label key={"ehours"}>Hours</label>,
-                ]}
-                isSelected={mode === Mode.EstimatedTimeSelecting}
-                ratios={[0, 1, 0]}
-              />,
-              <FlexContainer
-                key={"spentFlex"}
-                components={[
-                  <label key={"spent"}>Spent:</label>,
-                  <input
-                    key={"spentInput"}
-                    name="spentTime"
-                    type="number"
-                    defaultValue={spentTime?.toString()}
-                    disabled={isDisabled}
-                    ref={spentRef}
-                    onChange={(e) => {
-                      setSpentTime(e.target.valueAsNumber);
-                    }}
-                    style={{ textAlign: "right" }}
-                  />,
-                  <label key={"shours"}>Hours</label>,
-                ]}
-                isSelected={mode === Mode.SpentTimeSelecting}
-                ratios={[0, 1, 0]}
-              />,
-            ]}
-            isSelected={false}
-            ratios={[1, 1]}
-          />
-          <FlexContainer
-            components={[
-              <FlexContainer
-                key={"startFlex"}
-                components={[
-                  <label key={"start"}>Start:</label>,
-                  <input
-                    key={"startInput"}
-                    name="start"
-                    type="datetime-local"
-                    disabled={isDisabled}
-                    defaultValue={startDateTime?.format(dateFormat)}
-                    ref={startDateTimeRef}
-                    onChange={(e) => {
-                      setStartDateTime(moment(e.target.value));
-                    }}
-                  />,
-                ]}
-                isSelected={mode === Mode.StartDateTimeSelecting}
-                ratios={[0, 1]}
-              />,
-              <FlexContainer
-                key={"endFlex"}
-                components={[
-                  <label key={"end"}>End:</label>,
-                  <input
-                    key={"endInput"}
-                    name="end"
-                    type="datetime-local"
-                    disabled={isDisabled}
-                    defaultValue={endDateTime?.format(dateFormat)}
-                    ref={endDateTimeRef}
-                    onChange={(e) => {
-                      setEndDateTime(moment(e.target.value));
-                    }}
-                  />,
-                ]}
-                isSelected={mode === Mode.EndDateTimeSelecting}
-                ratios={[0, 1]}
-              />,
-            ]}
-            isSelected={false}
-            ratios={[1, 1]}
-          />
-          <hr />
-          <FlexContainer
-            components={[
-              <label key={"memo"}>Memo:</label>,
+              <label key={"end"}>End:</label>,
               <input
-                key={"memoInput"}
-                name="memo"
-                defaultValue={memo}
+                key={"endInput"}
+                name="end"
+                type="datetime-local"
                 disabled={isDisabled}
-                ref={memoRef}
+                defaultValue={endDateTime?.format(dateFormat)}
+                ref={endDateTimeRef}
                 onChange={(e) => {
-                  setMemo(e.target.value);
+                  setEndDateTime(moment(e.target.value));
                 }}
               />,
             ]}
-            isSelected={mode === Mode.MemoSelecting}
+            isSelected={mode === Mode.EndDateTimeSelecting}
             ratios={[0, 1]}
-          />
-          <hr />
-          <Key
-            label={"Confirm"}
-            keys={["ctrl|cmd|alt", "Enter"]}
-            isSelectedArray={[false, false]}
-            isDeadArray={[isDisabled, isDisabled]}
-          />
-        </>
-      );
-    case Mode.Normal:
-    case Mode.PurifyInputting:
-      return null;
-  }
+          />,
+        ]}
+        isSelected={false}
+        ratios={[1, 1]}
+      />
+      <hr />
+      <FlexContainer
+        components={[
+          <label key={"memo"}>Memo:</label>,
+          <input
+            key={"memoInput"}
+            name="memo"
+            defaultValue={memo}
+            disabled={isDisabled}
+            ref={memoRef}
+            onChange={(e) => {
+              setMemo(e.target.value);
+            }}
+          />,
+        ]}
+        isSelected={mode === Mode.MemoSelecting}
+        ratios={[0, 1]}
+      />
+      <hr />
+      <Key
+        label={"Confirm"}
+        keys={["ctrl|cmd|alt", "Enter"]}
+        isSelectedArray={[false, false]}
+        isDeadArray={[isDisabled, isDisabled]}
+      />
+    </>
+  );
 }
 export const EditBar = (props: EditBarProps) => {
   const mode = props.mode;
-  const isOpen = mode == Mode.TitleSelecting || Mode.NodeSelecting;
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);
@@ -394,7 +372,7 @@ export const EditBar = (props: EditBarProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  return isOpen ? (
+  return (
     <div
       className="edit-bar"
       style={
@@ -415,5 +393,5 @@ export const EditBar = (props: EditBarProps) => {
         memoRef
       )}
     </div>
-  ) : null;
+  );
 };
