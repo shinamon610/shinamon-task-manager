@@ -216,6 +216,44 @@ function createContent(
       <FlexContainer
         components={[
           <FlexContainer
+            key={"startFlex"}
+            components={[
+              <label key={"start"}>Start:</label>,
+              <input
+                key={"startInput"}
+                name="start"
+                type="datetime-local"
+                disabled={isDisabled}
+                defaultValue={startDateTime?.format(dateFormat)}
+                ref={startDateTimeRef}
+                onChange={(e) => {
+                  setStartDateTime(moment(e.target.value));
+                }}
+              />,
+            ]}
+            isSelected={mode === Mode.StartDateTimeSelecting}
+            ratios={[0, 1]}
+          />,
+          <FlexContainer
+            key={"endFlex"}
+            components={[
+              <label key={"end"}>End:</label>,
+              <input
+                key={"endInput"}
+                name="end"
+                type="datetime-local"
+                disabled={isDisabled}
+                defaultValue={endDateTime?.format(dateFormat)}
+                ref={endDateTimeRef}
+                onChange={(e) => {
+                  setEndDateTime(moment(e.target.value));
+                }}
+              />,
+            ]}
+            isSelected={mode === Mode.EndDateTimeSelecting}
+            ratios={[0, 1]}
+          />,
+          <FlexContainer
             key={"estimatedFlex"}
             components={[
               <label key={"estimated"}>Estimated:</label>,
@@ -259,51 +297,7 @@ function createContent(
           />,
         ]}
         isSelected={false}
-        ratios={[1, 1]}
-      />
-      <FlexContainer
-        components={[
-          <FlexContainer
-            key={"startFlex"}
-            components={[
-              <label key={"start"}>Start:</label>,
-              <input
-                key={"startInput"}
-                name="start"
-                type="datetime-local"
-                disabled={isDisabled}
-                defaultValue={startDateTime?.format(dateFormat)}
-                ref={startDateTimeRef}
-                onChange={(e) => {
-                  setStartDateTime(moment(e.target.value));
-                }}
-              />,
-            ]}
-            isSelected={mode === Mode.StartDateTimeSelecting}
-            ratios={[0, 1]}
-          />,
-          <FlexContainer
-            key={"endFlex"}
-            components={[
-              <label key={"end"}>End:</label>,
-              <input
-                key={"endInput"}
-                name="end"
-                type="datetime-local"
-                disabled={isDisabled}
-                defaultValue={endDateTime?.format(dateFormat)}
-                ref={endDateTimeRef}
-                onChange={(e) => {
-                  setEndDateTime(moment(e.target.value));
-                }}
-              />,
-            ]}
-            isSelected={mode === Mode.EndDateTimeSelecting}
-            ratios={[0, 1]}
-          />,
-        ]}
-        isSelected={false}
-        ratios={[1, 1]}
+        ratios={[1, 1, 1, 1]}
       />
       <hr />
       <FlexContainer

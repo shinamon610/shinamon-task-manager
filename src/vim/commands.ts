@@ -50,16 +50,24 @@ const selectingCommands = [
   [Command.SelectTitle],
   [Command.SelectStatus, Command.SelectAssignee],
   [Command.SelectSources, Command.SelectTargets],
-  [Command.SelectEstimatedTime, Command.SelectSpentTime],
-  [Command.SelectStartDateTime, Command.SelectEndDateTime],
+  [
+    Command.SelectStartDateTime,
+    Command.SelectEndDateTime,
+    Command.SelectEstimatedTime,
+    Command.SelectSpentTime,
+  ],
   [Command.SelectMemo],
 ];
 const inputtingCommands = [
   [Command.InputTitle],
   [Command.InputStatus, Command.InputAssignee],
   [Command.InputSources, Command.InputTargets],
-  [Command.InputEstimatedTime, Command.InputSpentTime],
-  [Command.InputStartDateTime, Command.InputEndDateTime],
+  [
+    Command.InputStartDateTime,
+    Command.InputEndDateTime,
+    Command.InputEstimatedTime,
+    Command.InputSpentTime,
+  ],
   [Command.InputMemo],
 ];
 

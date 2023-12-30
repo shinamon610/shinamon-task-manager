@@ -38,16 +38,24 @@ export const selectingModes = [
   [Mode.TitleSelecting],
   [Mode.StatusSelecting, Mode.AssigneeSelecting],
   [Mode.SourcesSelecting, Mode.TargetsSelecting],
-  [Mode.EstimatedTimeSelecting, Mode.SpentTimeSelecting],
-  [Mode.StartDateTimeSelecting, Mode.EndDateTimeSelecting],
+  [
+    Mode.StartDateTimeSelecting,
+    Mode.EndDateTimeSelecting,
+    Mode.EstimatedTimeSelecting,
+    Mode.SpentTimeSelecting,
+  ],
   [Mode.MemoSelecting],
 ];
 export const inputtingModes = [
   [Mode.TitleInputting],
   [Mode.StatusInputting, Mode.AssigneeInputting],
   [Mode.SourcesInputting, Mode.TargetsInputting],
-  [Mode.EstimatedTimeInputting, Mode.SpentTimeInputting],
-  [Mode.StartDateTimeInputting, Mode.EndDateTimeInputting],
+  [
+    Mode.StartDateTimeInputting,
+    Mode.EndDateTimeInputting,
+    Mode.EstimatedTimeInputting,
+    Mode.SpentTimeInputting,
+  ],
   [Mode.MemoInputting],
 ];
 
