@@ -145,7 +145,6 @@ function createContent(
                   <SelectBox
                     key={"statusInput"}
                     isDisabled={isDisabled}
-                    isMulti={false}
                     defaultOption={selectedStatus}
                     data={statuses}
                     setData={setStatuses}
@@ -163,7 +162,6 @@ function createContent(
                   <SelectBox
                     key={"assigneeInput"}
                     isDisabled={isDisabled}
-                    isMulti={false}
                     defaultOption={selectedAssignee}
                     data={assignees}
                     setData={setAssignees}

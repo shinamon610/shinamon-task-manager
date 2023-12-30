@@ -4,7 +4,7 @@ import React, {
   useRef,
   useImperativeHandle,
 } from "react";
-import Select, { createFilter, components, SelectInstance } from "react-select";
+import Select, { createFilter, SelectInstance } from "react-select";
 
 export type Option<S> = {
   value: S;
@@ -13,13 +13,11 @@ export type Option<S> = {
 
 type SelectBoxProps<S> = {
   isDisabled: boolean;
-  isMulti: boolean;
-  defaultOption: Option<S> | Set<Option<S>> | null;
+  defaultOption: Option<S> | null;
   data: Set<Option<S>>;
   setData: React.Dispatch<React.SetStateAction<Set<Option<S>>>> | null;
   setSelectedValue:
     | React.Dispatch<React.SetStateAction<Option<S>>>
-    | React.Dispatch<React.SetStateAction<Set<Option<S>>>>
     | React.Dispatch<React.SetStateAction<Option<S> | null>>;
 };
 
@@ -31,14 +29,8 @@ interface SelectBoxRef {
 
 export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
   (props: SelectBoxProps<any>, ref) => {
-    const {
-      isDisabled,
-      isMulti,
-      defaultOption,
-      data,
-      setData,
-      setSelectedValue,
-    } = props;
+    const { isDisabled, defaultOption, data, setData, setSelectedValue } =
+      props;
 
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
@@ -53,18 +45,6 @@ export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
       isMenuOpen: () => menuIsOpen,
     }));
 
-    // const handleInputChange = (
-    //   inputValue: string,
-    //   { action }: { action: string }
-    // ) => {
-    //   if (action === "input-change") {
-    //     const newOption = { value: inputValue, label: inputValue };
-    //     if (!options.some((option) => option.value === inputValue)) {
-    //       setOptions((currentOptions) => [...currentOptions, newOption]);
-    //     }
-    //   }
-    // };
-
     const customStyles = {
       control: (base: any, state: any) => ({
         ...base,
@@ -72,14 +52,6 @@ export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
         borderColor: isDisabled ? "var(--active)" : base.borderColor,
       }),
     };
-
-    // defaultOptionがSetかどうかをチェックする関数
-    const isSet = (obj: any): obj is Set<any> => obj instanceof Set;
-
-    // defaultValueを決定する
-    const defaultValue = isSet(defaultOption)
-      ? Array.from(defaultOption)
-      : defaultOption;
 
     return (
       <Select
@@ -96,8 +68,7 @@ export const SelectBox = forwardRef<SelectBoxRef, SelectBoxProps<any>>(
         menuPlacement="top"
         styles={customStyles}
         ref={selectRef}
-        defaultValue={defaultValue}
-        isMulti={isMulti}
+        defaultValue={defaultOption}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {
           setInnerMenuIsOpen(false);
