@@ -144,6 +144,7 @@ function createContent(
                 setSelectedValue={setSelectedAssignee}
                 ref={assigneeRef}
                 toLabel={idf}
+                autoFocus={false}
               />,
             ]}
             isSelected={mode === Mode.AssigneeSelecting}

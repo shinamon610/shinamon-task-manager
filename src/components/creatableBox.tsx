@@ -14,8 +14,11 @@ type CreatableBoxProps = {
   defaultOption: string | null;
   data: Set<string>;
   setData: React.Dispatch<React.SetStateAction<Set<string>>>;
-  setSelectedValue: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedValue:
+    | React.Dispatch<React.SetStateAction<string | null>>
+    | React.Dispatch<React.SetStateAction<string>>;
   toLabel: (value: string) => string;
+  autoFocus: boolean;
 };
 
 export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps>(
@@ -27,6 +30,7 @@ export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps>(
       setData,
       setSelectedValue,
       toLabel,
+      autoFocus,
     } = props;
 
     const selectRef = useRef<SelectInstance>(null);
@@ -72,6 +76,7 @@ export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps>(
         onKeyDown={(e) => {
           setMenuIsOpen(innerMenuIsOpen);
         }}
+        autoFocus={autoFocus}
       />
     );
   }

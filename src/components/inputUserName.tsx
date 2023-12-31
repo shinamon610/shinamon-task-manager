@@ -1,48 +1,47 @@
+import { CreatableBox } from "./creatableBox";
 import React from "react";
 import { FlexContainer } from "./flexContainer";
+import { idf } from "@/utils";
 
 type InputUserNameProps = {
   userName: string;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
-  setConfirmedUserName: React.Dispatch<React.SetStateAction<boolean>>;
+  assignees: Set<string>;
+  setAssignees: React.Dispatch<React.SetStateAction<Set<string>>>;
 };
 
 export function InputUserName({
   userName,
   setUserName,
-  setConfirmedUserName,
+  assignees,
+  setAssignees,
 }: InputUserNameProps) {
   return (
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
       }}
     >
-      <FlexContainer
-        components={[
-          <label key={"u"} style={{ backgroundColor: "white" }}>
-            UserName:
-          </label>,
-          <input
-            key={"in"}
-            value={userName}
-            onChange={(e) => {
-              setUserName(e.target.value);
-            }}
-            onKeyDown={(e) => {
-              if (e.keyCode === 13) {
-                setConfirmedUserName(true);
-              }
-            }}
-            autoFocus
-          ></input>,
-        ]}
-        isSelected={true}
-        ratios={[0, 1]}
-      />
+      <div>
+        <label key={"userName"} style={{ backgroundColor: "white" }}>
+          UserName:
+        </label>
+        <CreatableBox
+          key={"userNameInput"}
+          isDisabled={false}
+          defaultOption={userName}
+          data={assignees}
+          setData={setAssignees}
+          setSelectedValue={setUserName}
+          ref={null}
+          toLabel={idf}
+          autoFocus={true}
+        />
+      </div>
     </div>
   );
 }

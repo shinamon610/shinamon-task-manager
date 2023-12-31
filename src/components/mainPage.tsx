@@ -24,13 +24,13 @@ type MainPageProps = {
   filePath: string;
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
   userName: string;
-  setConfirmedUserName: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserName: React.Dispatch<React.SetStateAction<string>>;
 };
 export function MainPage({
   filePath,
   setFilePath,
   userName,
-  setConfirmedUserName,
+  setUserName,
 }: MainPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [statuses, setStatuses] = useState(loadInitialStatusOptions());
@@ -150,7 +150,7 @@ export function MainPage({
         }
       }
       if (newCommand === Command.Rename) {
-        setConfirmedUserName(false);
+        setUserName("");
       }
       saveTasks(newTasks, filePath);
     };

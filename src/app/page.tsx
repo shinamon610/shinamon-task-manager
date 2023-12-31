@@ -5,11 +5,15 @@ import { loadInitialFilePath } from "@/models/file";
 import { useState, useEffect } from "react";
 import { Assignee } from "@/models/assignee";
 import { InputUserName } from "@/components/inputUserName";
+import { loadTasks } from "@/models/file";
+import { Task } from "@/models/task";
+import { extractAssignees } from "@/models/assignee";
 
 const HomePage = () => {
   const [filePath, setFilePath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
-  const [confirmedUserName, setConfirmedUserName] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
 
   useEffect(() => {
     loadInitialFilePath().then((newFilePath) => {
@@ -17,25 +21,31 @@ const HomePage = () => {
         return;
       }
       setFilePath(newFilePath);
+      loadTasks(newFilePath).then((tasks) => {
+        setTasks(tasks);
+        setAssignees(extractAssignees(tasks));
+      });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={"homepage"}>
       {filePath === "" ? (
         <SelectSaveLocation setFilePath={setFilePath} />
-      ) : confirmedUserName ? (
+      ) : userName === "" ? (
+        <InputUserName
+          userName={userName}
+          setUserName={setUserName}
+          assignees={assignees}
+          setAssignees={setAssignees}
+        />
+      ) : (
         <MainPage
           filePath={filePath}
           setFilePath={setFilePath}
           userName={userName}
-          setConfirmedUserName={setConfirmedUserName}
-        />
-      ) : (
-        <InputUserName
-          userName={userName}
           setUserName={setUserName}
-          setConfirmedUserName={setConfirmedUserName}
         />
       )}
     </div>
