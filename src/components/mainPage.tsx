@@ -95,7 +95,8 @@ export function MainPage({
           memo: memo,
           status: selectedStatus.value,
           assignee: selectedAssignee,
-        }
+        },
+        userName
       );
       setCommand(newCommand);
       setMode(newMode);

@@ -42,7 +42,16 @@ export function getFromTaskIDs(targetID: UUID, tasks: Task[]): UUID[] {
     .map((task) => task.id);
 }
 
-export function createTask(userInput: UserInput): Task {
+export function createTask(userInput: UserInput, userName: Assignee): Task {
+  function assignee(): Assignee | null {
+    if (userInput.assignee != null && userInput.assignee !== "") {
+      return userInput.assignee;
+    }
+    if (userInput.status === Status.Working) {
+      return userName;
+    }
+    return null;
+  }
   return {
     id: uuidv4(),
     name: userInput.name || "no name",
@@ -54,7 +63,7 @@ export function createTask(userInput: UserInput): Task {
     priority: 0,
     memo: userInput.memo || "",
     status: userInput.status || Status.Pending,
-    assignee: userInput.assignee || null,
+    assignee: assignee(),
     isSelected: true,
   };
 }
@@ -124,8 +133,12 @@ function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
   });
 }
 
-export function updateTasks(tasks: Task[], userInfo: UserInput): Task[] {
-  const newTask = createTask(userInfo);
+export function updateTasks(
+  tasks: Task[],
+  userInfo: UserInput,
+  userName: string
+): Task[] {
+  const newTask = createTask(userInfo, userName);
   const oldSelectedTask = getSelectedTask(tasks);
   return createEdge(
     deleteEdge(updateSelectedTask(tasks, newTask), oldSelectedTask.id),

@@ -64,23 +64,27 @@ export function createModeAndTasks(
   command: Command,
   tasks: Task[],
   serialInput: string,
-  userInput: UserInput
+  userInput: UserInput,
+  userName: string
 ): [Mode, Task[]] {
   switch (command) {
     case Command.CreateTaskNode:
-      const newTask = createTask({
-        name: "",
-        startTime: null,
-        endTime: null,
-        estimatedTime: null,
-        spentTime: null,
-        to: [],
-        from: [],
-        priority: null,
-        memo: null,
-        status: null,
-        assignee: null,
-      });
+      const newTask = createTask(
+        {
+          name: "",
+          startTime: null,
+          endTime: null,
+          estimatedTime: null,
+          spentTime: null,
+          to: [],
+          from: [],
+          priority: null,
+          memo: null,
+          status: null,
+          assignee: null,
+        },
+        userName
+      );
       return [Mode.TitleSelecting, [...unSelectAll(tasks), newTask]];
     case Command.DeleteTaskNode:
       const idToDelete = getSelectedTask(tasks).id;
@@ -155,7 +159,7 @@ export function createModeAndTasks(
     case Command.PanRight:
       return [mode, tasks];
     case Command.ConfirmEdit:
-      return [Mode.Normal, updateTasks(tasks, userInput)];
+      return [Mode.Normal, updateTasks(tasks, userInput, userName)];
     case Command.SelectAnotherLocation:
     case Command.Rename:
       return [Mode.Normal, tasks];

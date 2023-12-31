@@ -55,8 +55,13 @@ export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps>(
         options={Array.from(data).map(toOptionLocal)}
         components={{ DropdownIndicator: null }}
         onChange={(newValue) => {
-          const nv = newValue as Option<string>;
-          setSelectedValue(nv.value);
+          // 基本的にoptionが入ってくるが、何もないのにバックスペースを押した時とかはnullが入ってくる。
+          if (newValue == null) {
+            setSelectedValue("");
+          } else {
+            const nv = newValue as Option<string>;
+            setSelectedValue(nv.value);
+          }
         }}
         placeholder=""
         isClearable
