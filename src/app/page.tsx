@@ -46,6 +46,10 @@ const HomePage = () => {
           setFilePath={setFilePath}
           userName={userName}
           setUserName={setUserName}
+          tasks={tasks}
+          setTasks={setTasks}
+          assignees={assignees}
+          setAssignees={setAssignees}
         />
       )}
     </div>

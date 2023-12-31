@@ -25,16 +25,22 @@ type MainPageProps = {
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
   userName: string;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  assignees: Set<Assignee>;
+  setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 };
 export function MainPage({
   filePath,
   setFilePath,
   userName,
   setUserName,
+  tasks,
+  setTasks,
+  assignees,
+  setAssignees,
 }: MainPageProps) {
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [statuses, setStatuses] = useState(loadInitialStatusOptions());
-  const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
   const [mode, setMode] = useState(Mode.Normal);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
