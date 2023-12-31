@@ -1,7 +1,7 @@
 import { BottomBar } from "./bottombar";
 import { extractAssignees } from "@/models/assignee";
 import { Task } from "../models/task";
-import { saveTasks } from "@/models/file";
+import { saveData } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
@@ -18,7 +18,7 @@ import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
 import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
-import { loadTasks } from "@/models/file";
+import { loadData } from "@/models/file";
 
 type MainPageProps = {
   filePath: string;
@@ -158,21 +158,13 @@ export function MainPage({
       if (newCommand === Command.Rename) {
         setUserName("");
       }
-      saveTasks(newTasks, filePath);
+      saveData({ tasks: newTasks, userName }, filePath);
     };
     window.addEventListener("keydown", handle);
     return () => {
       window.removeEventListener("keydown", handle);
     };
   });
-
-  useEffect(() => {
-    loadTasks(filePath).then((tasks) => {
-      setTasks(tasks);
-      setAssignees(extractAssignees(tasks).add(userName));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className={"homepage"}>

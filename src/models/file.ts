@@ -57,14 +57,18 @@ export function loadInitialFilePath(): Promise<string | null> {
   });
 }
 
-export async function saveTasks(tasks: Task[], filePath: string) {
-  const jsonContent = JSON.stringify(tasks);
+type DataToSave = {
+  tasks: Task[];
+  userName: string;
+};
+export async function saveData(data: DataToSave, filePath: string) {
+  const jsonContent = JSON.stringify(data);
   await writeTextFile(filePath, jsonContent);
 }
 
-export async function loadTasks(filePath: string): Promise<Task[]> {
+export async function loadData(filePath: string): Promise<DataToSave> {
   const jsonContent = await readTextFile(filePath);
-  const tasks: Task[] = JSON.parse(jsonContent);
+  const { tasks, userName }: DataToSave = JSON.parse(jsonContent);
 
   // 各タスクの日時関連フィールドをmomentオブジェクトに変換
   tasks.forEach((task) => {
@@ -76,5 +80,5 @@ export async function loadTasks(filePath: string): Promise<Task[]> {
     }
   });
 
-  return tasks;
+  return { tasks, userName };
 }

@@ -5,7 +5,7 @@ import { loadInitialFilePath } from "@/models/file";
 import { useState, useEffect } from "react";
 import { Assignee } from "@/models/assignee";
 import { InputUserName } from "@/components/inputUserName";
-import { loadTasks } from "@/models/file";
+import { loadData } from "@/models/file";
 import { Task } from "@/models/task";
 import { extractAssignees } from "@/models/assignee";
 
@@ -21,9 +21,10 @@ const HomePage = () => {
         return;
       }
       setFilePath(newFilePath);
-      loadTasks(newFilePath).then((tasks) => {
-        setTasks(tasks);
-        setAssignees(extractAssignees(tasks));
+      loadData(newFilePath).then((data) => {
+        setTasks(data.tasks);
+        setAssignees(extractAssignees(data.tasks).add(data.userName));
+        setUserName(data.userName);
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
