@@ -155,6 +155,9 @@ export function MainPage({
           setEndDateTime(moment());
         }
       }
+      if (newCommand === Command.Rename) {
+        setConfirmedUserName(false);
+      }
       saveTasks(newTasks, filePath);
     };
     window.addEventListener("keydown", handle);

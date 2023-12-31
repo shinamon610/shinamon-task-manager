@@ -157,6 +157,7 @@ export function createModeAndTasks(
     case Command.ConfirmEdit:
       return [Mode.Normal, updateTasks(tasks, userInput)];
     case Command.SelectAnotherLocation:
+    case Command.Rename:
       return [Mode.Normal, tasks];
   }
 }

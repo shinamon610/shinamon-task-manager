@@ -38,6 +38,7 @@ export enum Command {
   Cancel,
   ConfirmEdit,
   SelectAnotherLocation,
+  Rename,
 }
 
 export const selectString = "agi";
@@ -159,26 +160,29 @@ export function keyEventToCommand(
   console.log(key);
   switch (mode) {
     case Mode.Normal:
-      if (key === "Escape" || key == "c" || key == "Backspace") {
+      if (key === "Escape" || key === "c" || key === "Backspace") {
         return Command.Cancel;
       }
-      if (key == "n") {
+      if (key === "n") {
         return Command.CreateTaskNode;
       }
-      if (key == "f") {
+      if (key === "f") {
         return Command.Fit;
       }
       if (key === "w") {
         return Command.SelectAnotherLocation;
       }
-      if (key == "p") {
+      if (key === "p") {
         return Command.Purify;
       }
-      if (key == "+") {
+      if (key === "+") {
         return Command.ZoomIn;
       }
-      if (key == "-") {
+      if (key === "-") {
         return Command.ZoomOut;
+      }
+      if (key === "r") {
+        return Command.Rename;
       }
       if (leftStrings.includes(key)) {
         return Command.PanLeft;
@@ -197,13 +201,13 @@ export function keyEventToCommand(
       }
       return Command.Nothing;
     case Mode.NodeSelecting:
-      if (key === "Escape" || key == "c" || key == "Backspace") {
+      if (key === "Escape" || key === "c" || key === "Backspace") {
         return Command.Cancel;
       }
-      if (key == "d") {
+      if (key === "d") {
         return Command.DeleteTaskNode;
       }
-      if (key == "e") {
+      if (key === "e") {
         return Command.SelectTitle;
       }
       return Command.Nothing;
