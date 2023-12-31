@@ -21,22 +21,16 @@ const colorlist: Color[] = [
   "yellow",
 ];
 
-export function extractAssigneeOptions(tasks: Task[]): Set<Option<Assignee>> {
+export function extractAssignees(tasks: Task[]): Set<Assignee> {
   return new Set(
     tasks
-      .map((task) => ({ value: task.assignee, label: task.assignee }))
-      .filter((option) => option.value != null) as Option<Assignee>[]
+      .map((task) => task.assignee)
+      .filter((assignee) => assignee != null) as Assignee[]
   );
 }
 
-export function getColor(
-  options: Set<Option<Assignee>>,
-  assignee: Assignee
-): Color {
-  const assignees = new Set<Assignee>(
-    Array.from(options).map(({ value }) => value)
-  );
-  const index = Array.from(assignees.add(assignee))
+export function getColor(options: Set<Assignee>, assignee: Assignee): Color {
+  const index = Array.from(options.add(assignee))
     .sort()
     .findIndex((a) => a === assignee);
   return colorlist[index % colorlist.length];

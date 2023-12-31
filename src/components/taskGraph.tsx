@@ -67,7 +67,7 @@ const getLayoutedElements = (
 
 type TaskGraphProps = {
   tasks: Task[];
-  assignees: Set<Option<Assignee>>;
+  assignees: Set<Assignee>;
   serialInput: string;
   mode: Mode;
   command: Command;
@@ -109,7 +109,7 @@ function boxShadow(
 
 function createNodesAndEdgesFromTasks(
   tasks: Task[],
-  assignees: Set<Option<Assignee>>,
+  assignees: Set<Assignee>,
   serialInput: string,
   mode: Mode
 ): [Node[], Edge[]] {

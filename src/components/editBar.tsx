@@ -1,9 +1,8 @@
-import { flatten } from "@/utils";
+import { flatten, idf } from "@/utils";
 import { Mode } from "@/vim/mode";
 import { selectingModes, inputtingModes } from "@/vim/mode";
 import { MutableRefObject, useRef, useEffect } from "react";
 import { Option, SelectBox } from "./selectBox";
-import { Key } from "./key";
 import { FlexContainer } from "./flexContainer";
 import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
@@ -24,12 +23,10 @@ type EditBarProps = {
   statuses: Set<Option<Status>>;
   setStatuses: React.Dispatch<React.SetStateAction<Set<Option<Status>>>>;
 
-  selectedAssignee: Option<Assignee> | null;
-  setSelectedAssignee: React.Dispatch<
-    React.SetStateAction<Option<Assignee> | null>
-  >;
-  assignees: Set<Option<Assignee>>;
-  setAssignees: React.Dispatch<React.SetStateAction<Set<Option<Assignee>>>>;
+  selectedAssignee: Assignee | null;
+  setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>;
+  assignees: Set<Assignee>;
+  setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 
   selectedSources: Set<Option<UUID>>;
   setSelectedSources: React.Dispatch<React.SetStateAction<Set<Option<UUID>>>>;
@@ -146,6 +143,7 @@ function createContent(
                 setData={setAssignees}
                 setSelectedValue={setSelectedAssignee}
                 ref={assigneeRef}
+                toLabel={idf}
               />,
             ]}
             isSelected={mode === Mode.AssigneeSelecting}

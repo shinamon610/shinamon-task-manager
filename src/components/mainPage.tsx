@@ -1,5 +1,5 @@
 import { BottomBar } from "./bottombar";
-import { extractAssigneeOptions } from "@/models/assignee";
+import { extractAssignees } from "@/models/assignee";
 import { Task } from "../models/task";
 import { saveTasks } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
@@ -34,7 +34,7 @@ export function MainPage({
 }: MainPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [statuses, setStatuses] = useState(loadInitialStatusOptions());
-  const [assignees, setAssignees] = useState<Set<Option<Assignee>>>(new Set());
+  const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
   const [mode, setMode] = useState(Mode.Normal);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -45,8 +45,9 @@ export function MainPage({
     value: Status.Pending,
     label: "",
   });
-  const [selectedAssignee, setSelectedAssignee] =
-    useState<Option<Assignee> | null>(null);
+  const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
+    null
+  );
   const [selectedSources, setSelectedSources] = useState<Set<Option<UUID>>>(
     new Set<Option<UUID>>([])
   );
@@ -87,7 +88,7 @@ export function MainPage({
           priority: null,
           memo: memo,
           status: selectedStatus.value,
-          assignee: selectedAssignee === null ? null : selectedAssignee.value,
+          assignee: selectedAssignee,
         }
       );
       setCommand(newCommand);
@@ -104,14 +105,7 @@ export function MainPage({
           value: selectedTask.status,
           label: selectedTask.status.toString(),
         });
-        setSelectedAssignee(
-          selectedTask.assignee === null
-            ? null
-            : {
-                value: selectedTask.assignee,
-                label: selectedTask.assignee,
-              }
-        );
+        setSelectedAssignee(selectedTask.assignee);
         setSelectedSources(
           new Set<Option<UUID>>(
             newTasks
@@ -169,9 +163,7 @@ export function MainPage({
   useEffect(() => {
     loadTasks(filePath).then((tasks) => {
       setTasks(tasks);
-      setAssignees(
-        extractAssigneeOptions(tasks).add({ value: userName, label: userName })
-      );
+      setAssignees(extractAssignees(tasks).add(userName));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

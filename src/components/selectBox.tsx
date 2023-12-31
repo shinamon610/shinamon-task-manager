@@ -11,6 +11,15 @@ export type Option<S> = {
   label: string;
 };
 
+export function toOption<S>(
+  toLabel: (value: S) => string
+): (value: S) => Option<S> {
+  return (value: S) => ({
+    value,
+    label: toLabel(value),
+  });
+}
+
 type SelectBoxProps<S> = {
   isDisabled: boolean;
   defaultOption: Option<S>;

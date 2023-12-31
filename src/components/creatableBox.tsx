@@ -7,23 +7,34 @@ import React, {
 import { SelectInstance } from "react-select";
 import { Option, BoxRef, boxStyles } from "./selectBox";
 import CreatableSelect from "react-select/creatable";
+import { toOption } from "./selectBox";
 
-type CreatableBoxProps<S> = {
+type CreatableBoxProps = {
   isDisabled: boolean;
-  defaultOption: Option<S> | null;
-  data: Set<Option<S>>;
-  setData: React.Dispatch<React.SetStateAction<Set<Option<S>>>>;
-  setSelectedValue: React.Dispatch<React.SetStateAction<Option<S> | null>>;
+  defaultOption: string | null;
+  data: Set<string>;
+  setData: React.Dispatch<React.SetStateAction<Set<string>>>;
+  setSelectedValue: React.Dispatch<React.SetStateAction<string | null>>;
+  toLabel: (value: string) => string;
 };
 
-export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps<any>>(
-  (props: CreatableBoxProps<any>, ref) => {
-    const { isDisabled, defaultOption, data, setData, setSelectedValue } =
-      props;
+export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps>(
+  (props: CreatableBoxProps, ref) => {
+    const {
+      isDisabled,
+      defaultOption,
+      data,
+      setData,
+      setSelectedValue,
+      toLabel,
+    } = props;
 
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+
+    const toOptionLocal = toOption(toLabel);
+
     useImperativeHandle(ref, () => ({
       focus: () => {
         selectRef.current?.focus();
@@ -37,11 +48,11 @@ export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps<any>>(
     return (
       <CreatableSelect
         className="selectbox"
-        options={Array.from(data)}
+        options={Array.from(data).map(toOptionLocal)}
         components={{ DropdownIndicator: null }}
         onChange={(newValue) => {
-          const nv = newValue as Option<any>;
-          setSelectedValue(nv);
+          const nv = newValue as Option<string>;
+          setSelectedValue(nv.value);
         }}
         placeholder=""
         isClearable
@@ -49,12 +60,10 @@ export const CreatableBox = forwardRef<BoxRef, CreatableBoxProps<any>>(
         menuPlacement="top"
         styles={boxStyles(isDisabled)}
         ref={selectRef}
-        value={defaultOption}
+        value={defaultOption == null ? "" : toOptionLocal(defaultOption)}
         onCreateOption={(newValue) => {
-          console.log(newValue);
-          const newOption = { label: newValue, value: newValue };
-          setData(new Set([...Array.from(data), newOption]));
-          setSelectedValue(newOption);
+          setData(new Set([...Array.from(data), newValue]));
+          setSelectedValue(newValue);
         }}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {
