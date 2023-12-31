@@ -23,8 +23,15 @@ import { loadTasks } from "@/models/file";
 type MainPageProps = {
   filePath: string;
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
+  userName: string;
+  setConfirmedUserName: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export function MainPage({ filePath, setFilePath }: MainPageProps) {
+export function MainPage({
+  filePath,
+  setFilePath,
+  userName,
+  setConfirmedUserName,
+}: MainPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [statuses, setStatuses] = useState(loadInitialStatusOptions());
   const [assignees, setAssignees] = useState<Set<Option<Assignee>>>(new Set());
@@ -159,7 +166,9 @@ export function MainPage({ filePath, setFilePath }: MainPageProps) {
   useEffect(() => {
     loadTasks(filePath).then((tasks) => {
       setTasks(tasks);
-      setAssignees(extractAssigneeOptions(tasks));
+      setAssignees(
+        extractAssigneeOptions(tasks).add({ value: userName, label: userName })
+      );
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

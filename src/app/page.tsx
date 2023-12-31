@@ -25,7 +25,12 @@ const HomePage = () => {
       {filePath === "" ? (
         <SelectSaveLocation setFilePath={setFilePath} />
       ) : confirmedUserName ? (
-        <MainPage filePath={filePath} setFilePath={setFilePath} />
+        <MainPage
+          filePath={filePath}
+          setFilePath={setFilePath}
+          userName={userName}
+          setConfirmedUserName={setConfirmedUserName}
+        />
       ) : (
         <InputUserName
           userName={userName}
