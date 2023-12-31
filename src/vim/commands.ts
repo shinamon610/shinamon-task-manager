@@ -26,13 +26,6 @@ export enum Command {
   SelectMemo,
   InputMemo,
   Purify,
-  Fit,
-  ZoomIn,
-  ZoomOut,
-  PanLeft,
-  PanDown,
-  PanUp,
-  PanRight,
   SelectTaskNode,
   Nothing,
   Cancel,
@@ -166,35 +159,14 @@ export function keyEventToCommand(
       if (key === "n") {
         return Command.CreateTaskNode;
       }
-      if (key === "f") {
-        return Command.Fit;
-      }
       if (key === "w") {
         return Command.SelectAnotherLocation;
       }
       if (key === "p") {
         return Command.Purify;
       }
-      if (key === "+") {
-        return Command.ZoomIn;
-      }
-      if (key === "-") {
-        return Command.ZoomOut;
-      }
       if (key === "r") {
         return Command.Rename;
-      }
-      if (leftStrings.includes(key)) {
-        return Command.PanLeft;
-      }
-      if (downStrings.includes(key)) {
-        return Command.PanDown;
-      }
-      if (upStrings.includes(key)) {
-        return Command.PanUp;
-      }
-      if (rightStrings.includes(key)) {
-        return Command.PanRight;
       }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;

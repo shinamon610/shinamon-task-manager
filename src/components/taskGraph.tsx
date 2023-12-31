@@ -219,13 +219,6 @@ function BaseNewTaskGraph({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tasks, setNodes, setEdges, serialInput, mode, command, fitView]);
 
-  useEffect(() => {
-    if (command === Command.Fit) {
-      setTimeout(() => {
-        fitView();
-      }, 10);
-    }
-  }, [command, mode, fitView]);
   return (
     <ReactFlow
       nodes={nodes}

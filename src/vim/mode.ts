@@ -141,8 +141,6 @@ export function createModeAndTasks(
       return [Mode.MemoSelecting, tasks];
     case Command.InputMemo:
       return [Mode.MemoInputting, tasks];
-    case Command.Fit:
-      return [Mode.Normal, tasks];
     case Command.SelectTaskNode:
       const [newMode, newTasks] = selectTask(tasks, serialInput);
       return [newMode, newTasks];
@@ -151,13 +149,7 @@ export function createModeAndTasks(
     case Command.Cancel:
       return [Mode.Normal, unSelectAll(tasks)];
     case Command.Purify:
-    case Command.ZoomIn:
-    case Command.ZoomOut:
-    case Command.PanLeft:
-    case Command.PanDown:
-    case Command.PanUp:
-    case Command.PanRight:
-      return [mode, tasks];
+      return [Mode.PurifyInputting, tasks];
     case Command.ConfirmEdit:
       return [Mode.Normal, updateTasks(tasks, userInput, userName)];
     case Command.SelectAnotherLocation:
