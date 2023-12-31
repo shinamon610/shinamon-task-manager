@@ -1,5 +1,4 @@
 import { Status } from "@/models/status";
-import { Option } from "./selectBox";
 import { Assignee } from "@/models/assignee";
 import { getColor } from "@/models/assignee";
 import { zip } from "@/utils";
@@ -199,7 +198,7 @@ function BaseNewTaskGraph({
   mode,
   command,
 }: TaskGraphProps) {
-  const { setViewport, zoomIn, zoomOut, fitView } = useReactFlow();
+  const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 

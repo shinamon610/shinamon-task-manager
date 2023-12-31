@@ -1,5 +1,4 @@
 import { BottomBar } from "./bottombar";
-import { extractAssignees } from "@/models/assignee";
 import { Task } from "../models/task";
 import { saveData } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
@@ -18,7 +17,6 @@ import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
 import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
-import { loadData } from "@/models/file";
 
 type MainPageProps = {
   filePath: string;
