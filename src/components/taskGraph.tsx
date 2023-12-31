@@ -30,6 +30,24 @@ type LayoutOptions = {
   direction: "TB" | "LR";
 };
 
+function measureTextWidth(text: string, fontSize: number = 10): number {
+  if (typeof document !== "undefined") {
+    // 仮想のCanvas要素を作成
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    if (context) {
+      // フォントサイズとフォントファミリを設定（フォントファミリは適宜変更してください）
+      context.font = `${fontSize}px Arial`;
+
+      // 文字列の幅を計測
+      const metrics = context.measureText(text);
+      return metrics.width;
+    }
+  }
+  return 0;
+}
+
 const getLayoutedElements = (
   nodes: Node[],
   edges: Edge[],
@@ -38,9 +56,12 @@ const getLayoutedElements = (
   const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
   g.setGraph({ rankdir: options.direction });
 
+  const width = Math.max(
+    ...nodes.map((node) => measureTextWidth(node.data.title)),
+    100
+  );
   nodes.forEach((node) => {
     const { id } = node;
-    const width = 100;
     const height = 50;
 
     g.setNode(id, { width, height });
