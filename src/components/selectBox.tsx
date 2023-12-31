@@ -40,6 +40,10 @@ export function boxStyles(isDisabled: boolean) {
       backgroundColor: isDisabled ? "var(--active)" : "white",
       borderColor: isDisabled ? "var(--active)" : base.borderColor,
     }),
+    singleValue: (base: any, state: any) => ({
+      ...base,
+      color: isDisabled ? "black" : base.color, // ここで色を変更
+    }),
   };
 }
 export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(

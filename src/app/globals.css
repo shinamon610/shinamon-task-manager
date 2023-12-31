@@ -97,6 +97,11 @@ input {
   width: 100%;
 }
 
+input:disabled {
+  background-color: var(--active); /* 背景色 */
+  color: black; /* テキストの色 */
+}
+
 .selectbox {
   min-width: 200px;
   flex-grow: 1;
