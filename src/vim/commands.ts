@@ -25,7 +25,7 @@ export enum Command {
   InputEndDateTime,
   SelectMemo,
   InputMemo,
-  Purify,
+  Filter,
   SelectTaskNode,
   Nothing,
   Cancel,
@@ -162,8 +162,8 @@ export function keyEventToCommand(
       if (key === "w") {
         return Command.SelectAnotherLocation;
       }
-      if (key === "p") {
-        return Command.Purify;
+      if (key === "f") {
+        return Command.Filter;
       }
       if (key === "r") {
         return Command.Rename;
@@ -182,8 +182,6 @@ export function keyEventToCommand(
       if (key === "e") {
         return Command.SelectTitle;
       }
-      return Command.Nothing;
-    case Mode.PurifyInputting:
       return Command.Nothing;
     case Mode.TitleSelecting:
     case Mode.StatusSelecting:

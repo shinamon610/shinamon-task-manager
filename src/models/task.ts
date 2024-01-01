@@ -68,8 +68,12 @@ export function createTask(userInput: UserInput, userName: Assignee): Task {
   };
 }
 
-export function selectTask(tasks: Task[], serialInput: string): [Mode, Task[]] {
-  const labels = indexesToLabels(tasks.length);
+export function selectTask(
+  tasks: Task[],
+  filteredTasks: Task[],
+  serialInput: string
+): [Mode, Task[]] {
+  const labels = indexesToLabels(filteredTasks.length);
   const selectedMatrix = createLabelSelectedMatrix(labels, serialInput);
   const selectedIndex = selectedMatrix
     .map((selectedArray) => {
@@ -79,8 +83,9 @@ export function selectTask(tasks: Task[], serialInput: string): [Mode, Task[]] {
   if (selectedIndex === -1) {
     return [Mode.Normal, tasks];
   }
-  const newTasks = tasks.map((task, i): Task => {
-    if (i === selectedIndex) {
+  const selectedTaskId = filteredTasks[selectedIndex].id;
+  const newTasks = tasks.map((task): Task => {
+    if (selectedTaskId === task.id) {
       return {
         ...task,
         isSelected: true,
@@ -146,8 +151,16 @@ export function updateTasks(
     newTask.id
   );
 }
+
 export function getSelectedTask(tasks: Task[]): Task {
   return tasks.filter((task) => {
     return task.isSelected;
   })[0];
+}
+
+export function filterTasks(tasks: Task[], filterTitle: string): Task[] {
+  const res = tasks.filter((task) => {
+    return task.name.includes(filterTitle);
+  });
+  return res;
 }

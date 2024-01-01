@@ -31,7 +31,6 @@ export enum Mode {
   EndDateTimeInputting,
   MemoSelecting,
   MemoInputting,
-  PurifyInputting,
 }
 
 export const selectingModes = [
@@ -63,6 +62,7 @@ export function createModeAndTasks(
   mode: Mode,
   command: Command,
   tasks: Task[],
+  filteredTasks: Task[],
   serialInput: string,
   userInput: UserInput,
   userName: string
@@ -142,14 +142,14 @@ export function createModeAndTasks(
     case Command.InputMemo:
       return [Mode.MemoInputting, tasks];
     case Command.SelectTaskNode:
-      const [newMode, newTasks] = selectTask(tasks, serialInput);
+      const [newMode, newTasks] = selectTask(tasks, filteredTasks, serialInput);
       return [newMode, newTasks];
     case Command.Nothing:
       return [mode, tasks];
     case Command.Cancel:
       return [Mode.Normal, unSelectAll(tasks)];
-    case Command.Purify:
-      return [Mode.PurifyInputting, tasks];
+    case Command.Filter:
+      return [Mode.TitleSelecting, tasks];
     case Command.ConfirmEdit:
       return [Mode.Normal, updateTasks(tasks, userInput, userName)];
     case Command.SelectAnotherLocation:

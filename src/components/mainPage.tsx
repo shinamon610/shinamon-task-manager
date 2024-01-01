@@ -1,5 +1,5 @@
 import { BottomBar } from "./bottombar";
-import { Task } from "../models/task";
+import { Task, filterTasks } from "../models/task";
 import { saveData } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
@@ -28,6 +28,21 @@ type MainPageProps = {
   assignees: Set<Assignee>;
   setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 };
+
+function shouldFilter(
+  isFilter: boolean,
+  command: Command,
+  mode: Mode
+): boolean {
+  if (command === Command.Filter) {
+    return true;
+  }
+  if (mode === Mode.Normal) {
+    return false;
+  }
+  return isFilter;
+}
+
 export function MainPage({
   filePath,
   setFilePath,
@@ -66,20 +81,27 @@ export function MainPage({
   const [endDateTime, setEndDateTime] = useState<Moment | null>(null);
   const [memo, setMemo] = useState("");
 
+  // filter設定
+  const [isFilter, setIsFilter] = useState(false);
+  const [filterTitle, setFilterTitle] = useState("");
+
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
       const newCommand = keyEventToCommand(mode, event, sourcesRef, targetsRef);
       preventKey(event, newCommand);
+
+      const filteredTasks = filterTasks(tasks, filterTitle);
       const newSerialInput = createSerialInput(
         event.key,
         newCommand,
         serialInput,
-        tasks
+        filteredTasks
       );
       const [newMode, newTasks] = createModeAndTasks(
         mode,
         newCommand,
         tasks,
+        filteredTasks,
         newSerialInput,
         {
           name: title,
@@ -157,6 +179,9 @@ export function MainPage({
       if (newCommand === Command.Rename) {
         setUserName("");
       }
+
+      setIsFilter(shouldFilter(isFilter, newCommand, newMode));
+
       saveData({ tasks: newTasks, userName }, filePath);
     };
     window.addEventListener("keydown", handle);
@@ -168,7 +193,7 @@ export function MainPage({
   return (
     <div className={"homepage"}>
       <TaskGraph
-        tasks={tasks}
+        tasks={filterTasks(tasks, filterTitle)}
         assignees={assignees}
         serialInput={serialInput}
         mode={mode}
@@ -178,8 +203,8 @@ export function MainPage({
       <EditBar
         mode={mode}
         tasks={tasks}
-        title={title}
-        setTitle={setTitle}
+        title={isFilter ? filterTitle : title}
+        setTitle={isFilter ? setFilterTitle : setTitle}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
         statuses={statuses}
