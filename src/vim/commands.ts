@@ -1,3 +1,4 @@
+import { isFilter } from "./mode";
 import { MutableRefObject } from "react";
 import {
   Mode,
@@ -108,7 +109,7 @@ function handleSelectMode(
   const iy = selectingModes[ix].indexOf(mode);
   if (key === "Enter") {
     if (event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) {
-      return Command.ConfirmEdit;
+      return isFilter(mode) ? Command.Nothing : Command.ConfirmEdit;
     }
     return inputtingCommands[ix][iy];
   }
@@ -165,7 +166,7 @@ function handleInputMode(
       return Command.Nothing;
     }
     if (event.ctrlKey || event.metaKey || event.altKey) {
-      return Command.ConfirmEdit;
+      return isFilter(mode) ? Command.Nothing : Command.ConfirmEdit;
     }
     if (event.shiftKey) {
       return getPrevItem(inputtingCommands, ix, iy);

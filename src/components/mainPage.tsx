@@ -20,8 +20,7 @@ import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
 import { Status, DefaultStatus } from "@/models/status";
 import { Assignee } from "@/models/assignee";
-import { selectingFilterModes, inputtingFilterModes } from "@/vim/mode";
-import { flatten } from "@/utils";
+import { isFilter } from "@/vim/mode";
 
 type MainPageProps = {
   filePath: string;
@@ -33,12 +32,6 @@ type MainPageProps = {
   assignees: Set<Assignee>;
   setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 };
-
-function isFilter(mode: Mode): boolean {
-  return [selectingFilterModes, inputtingFilterModes].some((modes) => {
-    return flatten(modes).includes(mode);
-  });
-}
 
 export function MainPage({
   filePath,

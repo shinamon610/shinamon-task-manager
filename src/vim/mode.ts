@@ -1,3 +1,4 @@
+import { flatten } from "@/utils";
 import { UserInput, getSelectedTask } from "@/models/task";
 import {
   updateTasks,
@@ -181,4 +182,10 @@ export function createModeAndTasks(
     case Command.InputFilterStatus:
       return [Mode.FilterStatusInputting, tasks];
   }
+}
+
+export function isFilter(mode: Mode): boolean {
+  return [selectingFilterModes, inputtingFilterModes].some((modes) => {
+    return flatten(modes).includes(mode);
+  });
 }
