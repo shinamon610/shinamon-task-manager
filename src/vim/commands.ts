@@ -65,7 +65,13 @@ const inputtingCommands = [
   [Command.InputMemo],
 ];
 
-function handleSelectMode(mode: Mode, event: KeyboardEvent): Command {
+function handleSelectMode(
+  mode: Mode,
+  event: KeyboardEvent,
+  selectingModes: Mode[][],
+  selectingCommands: Command[][],
+  inputtingCommands: Command[][]
+): Command {
   const key = event.key;
   const ix = selectingModes.findIndex((modes) => {
     return modes.includes(mode);
@@ -109,7 +115,10 @@ function handleInputMode(
   mode: Mode,
   event: KeyboardEvent,
   sourcesRef: MutableRefObject<null>,
-  targetsRef: MutableRefObject<null>
+  targetsRef: MutableRefObject<null>,
+  inputtingModes: Mode[][],
+  selectingCommands: Command[][],
+  inputtingCommands: Command[][]
 ): Command {
   const key = event.key;
   const ix = inputtingModes.findIndex((modes) => {
@@ -193,7 +202,13 @@ export function keyEventToCommand(
     case Mode.StartDateTimeSelecting:
     case Mode.EndDateTimeSelecting:
     case Mode.MemoSelecting:
-      return handleSelectMode(mode, event);
+      return handleSelectMode(
+        mode,
+        event,
+        selectingModes,
+        selectingCommands,
+        inputtingCommands
+      );
     case Mode.TitleInputting:
     case Mode.StatusInputting:
     case Mode.AssigneeInputting:
@@ -204,6 +219,14 @@ export function keyEventToCommand(
     case Mode.StartDateTimeInputting:
     case Mode.EndDateTimeInputting:
     case Mode.MemoInputting:
-      return handleInputMode(mode, event, sourcesRef, targetsRef);
+      return handleInputMode(
+        mode,
+        event,
+        sourcesRef,
+        targetsRef,
+        inputtingModes,
+        selectingCommands,
+        inputtingCommands
+      );
   }
 }
