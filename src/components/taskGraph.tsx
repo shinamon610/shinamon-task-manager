@@ -67,6 +67,10 @@ const getLayoutedElements = (
   });
   edges.forEach((edge) => g.setEdge(edge.source, edge.target));
 
+  if (nodes.length === 0) {
+    return { nodes: [], edges: [] };
+  }
+  // nodesもedgesも0だとエラーになる。
   Dagre.layout(g);
 
   return {
@@ -203,9 +207,6 @@ function BaseNewTaskGraph({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    if (tasks.length === 0) {
-      return;
-    }
     const layouted = getLayoutedElements(
       ...createNodesAndEdgesFromTasks(tasks, assignees, serialInput, mode),
       { direction: "LR" }
