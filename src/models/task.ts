@@ -158,9 +158,18 @@ export function getSelectedTask(tasks: Task[]): Task {
   })[0];
 }
 
-export function filterTasks(tasks: Task[], filterTitle: string): Task[] {
+export function filterTasks(
+  tasks: Task[],
+  filterTitle: string,
+  filterStatus: Status | null
+): Task[] {
   const res = tasks.filter((task) => {
-    return task.name.includes(filterTitle);
+    if (task.name.includes(filterTitle)) {
+      if (filterStatus == null) {
+        return true;
+      }
+      return task.status === filterStatus;
+    }
   });
   return res;
 }

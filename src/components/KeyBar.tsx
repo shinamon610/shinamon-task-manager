@@ -42,6 +42,8 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
       return [["Confirm"], [["ctrl|cmd|alt", "Enter"]]];
     case Mode.FilterTitleSelecting:
     case Mode.FilterTitleInputting:
+    case Mode.FilterStatusSelecting:
+    case Mode.FilterStatusInputting:
       return [[], []];
   }
 }

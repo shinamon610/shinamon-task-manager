@@ -44,6 +44,8 @@ export enum Command {
   Filter,
   SelectFilterTitle,
   InputFilterTitle,
+  SelectFilterStatus,
+  InputFilterStatus,
 }
 
 export const selectString = "agi";
@@ -77,8 +79,14 @@ const inputtingCommands = [
   [Command.InputMemo],
 ];
 
-const selectingFilterCommands = [[Command.SelectFilterTitle]];
-const inputtingFilterCommands = [[Command.InputFilterTitle]];
+const selectingFilterCommands = [
+  [Command.SelectFilterTitle],
+  [Command.SelectFilterStatus],
+];
+const inputtingFilterCommands = [
+  [Command.InputFilterTitle],
+  [Command.InputFilterStatus],
+];
 
 function handleSelectMode(
   mode: Mode,
@@ -244,6 +252,7 @@ export function keyEventToCommand(
         inputtingCommands
       );
     case Mode.FilterTitleSelecting:
+    case Mode.FilterStatusSelecting:
       return handleSelectMode(
         mode,
         event,
@@ -252,6 +261,7 @@ export function keyEventToCommand(
         inputtingFilterCommands
       );
     case Mode.FilterTitleInputting:
+    case Mode.FilterStatusInputting:
       return handleInputMode(
         mode,
         event,

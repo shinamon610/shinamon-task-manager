@@ -18,8 +18,10 @@ type EditBarProps = {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
 
-  selectedStatus: Status;
-  setSelectedStatus: React.Dispatch<React.SetStateAction<Status>>;
+  selectedStatus: Status | null;
+  setSelectedStatus:
+    | React.Dispatch<React.SetStateAction<Status>>
+    | React.Dispatch<React.SetStateAction<Status | null>>;
   statuses: Set<Status>;
   setStatuses: React.Dispatch<React.SetStateAction<Set<Status>>>;
 
@@ -131,7 +133,10 @@ function createContent(
                 toLabel={idf}
               />,
             ]}
-            isSelected={mode === Mode.StatusSelecting}
+            isSelected={
+              mode === Mode.StatusSelecting ||
+              mode === Mode.FilterStatusSelecting
+            }
             ratios={[0, 1]}
           />,
           <FlexContainer
@@ -349,7 +354,7 @@ export const EditBar = (props: EditBarProps) => {
 
   const refAndModes: [MutableRefObject<null>, Mode[]][] = [
     [titleRef, [Mode.TitleInputting, Mode.FilterTitleInputting]],
-    [statusRef, [Mode.StatusInputting]],
+    [statusRef, [Mode.StatusInputting, Mode.FilterStatusInputting]],
     [assigneeRef, [Mode.AssigneeInputting]],
     [sourcesRef, [Mode.SourcesInputting]],
     [targetsRef, [Mode.TargetsInputting]],
