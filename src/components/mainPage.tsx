@@ -1,4 +1,4 @@
-import { BottomBar } from "./bottombar";
+import { KeyBar } from "./KeyBar";
 import { Task, filterTasks } from "../models/task";
 import { saveData } from "@/models/file";
 import { selectThenSaveFilePath } from "@/models/file";
@@ -184,7 +184,7 @@ export function MainPage({
         mode={mode}
         command={command}
       />
-      <BottomBar mode={mode} />
+      <KeyBar mode={mode} />
       <EditBar
         mode={mode}
         tasks={tasks}
