@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { DefaultStatus, Status } from "./status";
+import { NotStatus, toDefaultStatus, DefaultStatus, Status } from "./status";
 import { Mode } from "@/vim/mode";
 import { indexesToLabels, createLabelSelectedMatrix } from "./labels";
 import { idf } from "@/utils";
@@ -168,7 +168,12 @@ export function filterTasks(
       if (filterStatus == null) {
         return true;
       }
-      return task.status === filterStatus;
+      if (
+        Object.values(DefaultStatus).includes(filterStatus as DefaultStatus)
+      ) {
+        return task.status === filterStatus;
+      }
+      return task.status !== toDefaultStatus(filterStatus as NotStatus);
     }
   });
   return res;

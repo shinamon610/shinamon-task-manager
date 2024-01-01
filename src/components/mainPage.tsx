@@ -5,7 +5,10 @@ import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
 import { getSelectedTask } from "../models/task";
-import { loadInitialStatusOptions } from "@/models/status";
+import {
+  loadInitialStatusOptions,
+  loadInitialAllStatusOptions,
+} from "@/models/status";
 import { Mode, createModeAndTasks } from "@/vim/mode";
 import TaskGraph from "@/components/taskGraph";
 import { Command } from "@/vim/commands";
@@ -48,6 +51,7 @@ export function MainPage({
   setAssignees,
 }: MainPageProps) {
   const [statuses, setStatuses] = useState(loadInitialStatusOptions());
+  const [allStatuses, setAllStatuses] = useState(loadInitialAllStatusOptions());
   const [mode, setMode] = useState(Mode.Normal);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -195,8 +199,8 @@ export function MainPage({
         setTitle={isFilter(mode) ? setFilterTitle : setTitle}
         selectedStatus={isFilter(mode) ? filterStatus : selectedStatus}
         setSelectedStatus={isFilter(mode) ? setFilterStatus : setSelectedStatus}
-        statuses={statuses}
-        setStatuses={setStatuses}
+        statuses={isFilter(mode) ? allStatuses : statuses}
+        setStatuses={isFilter(mode) ? setAllStatuses : setStatuses}
         selectedAssignee={selectedAssignee}
         setSelectedAssignee={setSelectedAssignee}
         assignees={assignees}
