@@ -11,6 +11,8 @@ import { Command } from "./commands";
 export enum Mode {
   Normal,
   NodeSelecting,
+
+  //edit
   TitleSelecting,
   TitleInputting,
   StatusSelecting,

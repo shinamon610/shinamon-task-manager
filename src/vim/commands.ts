@@ -5,6 +5,15 @@ import { getNextItem, getPrevItem } from "@/utils";
 export enum Command {
   CreateTaskNode,
   DeleteTaskNode,
+  Filter,
+  SelectTaskNode,
+  Nothing,
+  Cancel,
+  ConfirmEdit,
+  SelectAnotherLocation,
+  Rename,
+
+  //edit
   SelectTitle,
   InputTitle,
   SelectStatus,
@@ -25,13 +34,6 @@ export enum Command {
   InputEndDateTime,
   SelectMemo,
   InputMemo,
-  Filter,
-  SelectTaskNode,
-  Nothing,
-  Cancel,
-  ConfirmEdit,
-  SelectAnotherLocation,
-  Rename,
 }
 
 export const selectString = "agi";
