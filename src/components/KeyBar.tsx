@@ -16,8 +16,8 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
       ];
     case Mode.NodeSelecting:
       return [
-        ["Edit", "Delete"],
-        [["e"], ["d"]],
+        ["Edit", "Delete", "Cancel"],
+        [["e"], ["d"], ["esc"]],
       ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
@@ -39,12 +39,15 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
     case Mode.EndDateTimeInputting:
     case Mode.MemoSelecting:
     case Mode.MemoInputting:
-      return [["Confirm"], [["ctrl|cmd|alt", "Enter"]]];
+      return [
+        ["Confirm", "Cancel"],
+        [["ctrl|cmd|alt", "Enter"], ["esc"]],
+      ];
     case Mode.FilterTitleSelecting:
     case Mode.FilterTitleInputting:
     case Mode.FilterStatusSelecting:
     case Mode.FilterStatusInputting:
-      return [[], []];
+      return [["Done"], [["esc"]]];
   }
 }
 function createElements(mode: Mode): React.JSX.Element[] {
