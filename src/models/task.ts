@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Status } from "./status";
+import { DefaultStatus, Status } from "./status";
 import { Mode } from "@/vim/mode";
 import { indexesToLabels, createLabelSelectedMatrix } from "./labels";
 import { idf } from "@/utils";
@@ -47,7 +47,7 @@ export function createTask(userInput: UserInput, userName: Assignee): Task {
     if (userInput.assignee != null && userInput.assignee !== "") {
       return userInput.assignee;
     }
-    if (userInput.status === Status.Working) {
+    if (userInput.status === DefaultStatus.Working) {
       return userName;
     }
     return null;
@@ -62,7 +62,7 @@ export function createTask(userInput: UserInput, userName: Assignee): Task {
     to: userInput.to,
     priority: 0,
     memo: userInput.memo || "",
-    status: userInput.status || Status.Pending,
+    status: userInput.status || DefaultStatus.Pending,
     assignee: assignee(),
     isSelected: true,
   };

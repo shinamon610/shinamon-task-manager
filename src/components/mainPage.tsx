@@ -15,7 +15,7 @@ import { createSerialInput } from "@/vim/createSerialInput";
 import { UUID } from "../models/task";
 import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
-import { Status } from "@/models/status";
+import { Status, DefaultStatus } from "@/models/status";
 import { Assignee } from "@/models/assignee";
 import { selectingFilterModes, inputtingFilterModes } from "@/vim/mode";
 import { flatten } from "@/utils";
@@ -54,7 +54,9 @@ export function MainPage({
 
   // edit barの要素
   const [title, setTitle] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.Pending);
+  const [selectedStatus, setSelectedStatus] = useState<Status>(
+    DefaultStatus.Pending
+  );
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );

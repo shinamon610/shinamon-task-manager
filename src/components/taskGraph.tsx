@@ -1,4 +1,4 @@
-import { Status } from "@/models/status";
+import { Status, DefaultStatus } from "@/models/status";
 import { Assignee } from "@/models/assignee";
 import { getColor } from "@/models/assignee";
 import { zip } from "@/utils";
@@ -105,7 +105,7 @@ function borderAndPadding(
   if (isSelected) {
     return ["3px solid var(--accent)", "0px"];
   }
-  if (status === Status.Working) {
+  if (status === DefaultStatus.Working) {
     if (color == null) {
       return ["", "3px"];
     }
@@ -122,7 +122,7 @@ function boxShadow(
   if (!isSelected) {
     return "";
   }
-  if (status === Status.Working) {
+  if (status === DefaultStatus.Working) {
     if (color == null) {
       return "";
     }
@@ -166,7 +166,9 @@ function createNodesAndEdgesFromTasks(
         padding,
         boxShadow: boxShadow(task.status, task.isSelected, color),
         background:
-          task.status === Status.Done ? "var(--inactive)" : "var(--active)",
+          task.status === DefaultStatus.Done
+            ? "var(--inactive)"
+            : "var(--active)",
       },
     };
   });
