@@ -22,9 +22,10 @@ export function toOption<S>(
 
 type SelectBoxProps<S> = {
   isDisabled: boolean;
-  defaultOption: Option<S>;
-  data: Set<Option<S>>;
-  setSelectedValue: React.Dispatch<React.SetStateAction<Option<S>>>;
+  defaultOption: S;
+  data: Set<S>;
+  setSelectedValue: React.Dispatch<React.SetStateAction<S>>;
+  toLabel: (value: S) => string;
 };
 
 export interface BoxRef {
@@ -46,13 +47,17 @@ export function boxStyles(isDisabled: boolean) {
     }),
   };
 }
+
 export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
   (props: SelectBoxProps<any>, ref) => {
-    const { isDisabled, defaultOption, data, setSelectedValue } = props;
+    const { isDisabled, defaultOption, data, setSelectedValue, toLabel } =
+      props;
 
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const toOptionLocal = toOption(toLabel);
+
     useImperativeHandle(ref, () => ({
       focus: () => {
         selectRef.current?.focus();
@@ -66,7 +71,7 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
     return (
       <Select
         className="selectbox"
-        options={Array.from(data)}
+        options={Array.from(data).map(toOptionLocal)}
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
         onChange={(newValue) => {
@@ -74,7 +79,7 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
           if (newValue == null) {
             return;
           }
-          setSelectedValue(nv);
+          setSelectedValue(nv.value);
         }}
         placeholder=""
         isClearable
@@ -82,7 +87,7 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
         menuPlacement="top"
         styles={boxStyles(isDisabled)}
         ref={selectRef}
-        value={defaultOption}
+        value={toOptionLocal(defaultOption)}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {
           setInnerMenuIsOpen(false);

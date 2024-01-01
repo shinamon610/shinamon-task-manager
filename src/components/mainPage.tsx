@@ -6,7 +6,7 @@ import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
 import { getSelectedTask } from "../models/task";
 import { loadInitialStatusOptions } from "@/models/status";
-import { Mode, createModeAndTasks, selectingModes } from "@/vim/mode";
+import { Mode, createModeAndTasks } from "@/vim/mode";
 import TaskGraph from "@/components/taskGraph";
 import { Command } from "@/vim/commands";
 import { EditBar } from "@/components/editBar";
@@ -54,10 +54,7 @@ export function MainPage({
 
   // edit barの要素
   const [title, setTitle] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<Option<Status>>({
-    value: Status.Pending,
-    label: "",
-  });
+  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.Pending);
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
@@ -106,7 +103,7 @@ export function MainPage({
           from: Array.from(selectedSources).map(({ value }) => value),
           priority: null,
           memo: memo,
-          status: selectedStatus.value,
+          status: selectedStatus,
           assignee: selectedAssignee,
         },
         userName
@@ -121,10 +118,7 @@ export function MainPage({
       ) {
         const selectedTask = getSelectedTask(newTasks);
         setTitle(selectedTask.name);
-        setSelectedStatus({
-          value: selectedTask.status,
-          label: selectedTask.status.toString(),
-        });
+        setSelectedStatus(selectedTask.status);
         setSelectedAssignee(selectedTask.assignee);
         setSelectedSources(
           new Set<Option<UUID>>(

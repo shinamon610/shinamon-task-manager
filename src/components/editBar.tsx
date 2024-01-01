@@ -18,10 +18,10 @@ type EditBarProps = {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
 
-  selectedStatus: Option<Status>;
-  setSelectedStatus: React.Dispatch<React.SetStateAction<Option<Status>>>;
-  statuses: Set<Option<Status>>;
-  setStatuses: React.Dispatch<React.SetStateAction<Set<Option<Status>>>>;
+  selectedStatus: Status;
+  setSelectedStatus: React.Dispatch<React.SetStateAction<Status>>;
+  statuses: Set<Status>;
+  setStatuses: React.Dispatch<React.SetStateAction<Set<Status>>>;
 
   selectedAssignee: Assignee | null;
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>;
@@ -128,6 +128,7 @@ function createContent(
                 data={statuses}
                 setSelectedValue={setSelectedStatus}
                 ref={statusRef}
+                toLabel={idf}
               />,
             ]}
             isSelected={mode === Mode.StatusSelecting}
