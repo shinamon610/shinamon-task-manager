@@ -6,7 +6,7 @@ import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
 import { getSelectedTask } from "../models/task";
 import { loadInitialStatusOptions } from "@/models/status";
-import { Mode, createModeAndTasks } from "@/vim/mode";
+import { Mode, createModeAndTasks, selectingModes } from "@/vim/mode";
 import TaskGraph from "@/components/taskGraph";
 import { Command } from "@/vim/commands";
 import { EditBar } from "@/components/editBar";
@@ -17,6 +17,8 @@ import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
 import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
+import { selectingFilterModes, inputtingFilterModes } from "@/vim/mode";
+import { flatten } from "@/utils";
 
 type MainPageProps = {
   filePath: string;
@@ -29,18 +31,10 @@ type MainPageProps = {
   setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 };
 
-function shouldFilter(
-  isFilter: boolean,
-  command: Command,
-  mode: Mode
-): boolean {
-  if (command === Command.Filter) {
-    return true;
-  }
-  if (mode === Mode.Normal) {
-    return false;
-  }
-  return isFilter;
+function isFilter(mode: Mode): boolean {
+  return [selectingFilterModes, inputtingFilterModes].some((modes) => {
+    return flatten(modes).includes(mode);
+  });
 }
 
 export function MainPage({
@@ -82,7 +76,6 @@ export function MainPage({
   const [memo, setMemo] = useState("");
 
   // filter設定
-  const [isFilter, setIsFilter] = useState(false);
   const [filterTitle, setFilterTitle] = useState("");
 
   useEffect(() => {
@@ -180,8 +173,6 @@ export function MainPage({
         setUserName("");
       }
 
-      setIsFilter(shouldFilter(isFilter, newCommand, newMode));
-
       saveData({ tasks: newTasks, userName }, filePath);
     };
     window.addEventListener("keydown", handle);
@@ -203,8 +194,8 @@ export function MainPage({
       <EditBar
         mode={mode}
         tasks={tasks}
-        title={isFilter ? filterTitle : title}
-        setTitle={isFilter ? setFilterTitle : setTitle}
+        title={isFilter(mode) ? filterTitle : title}
+        setTitle={isFilter(mode) ? setFilterTitle : setTitle}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
         statuses={statuses}

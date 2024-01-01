@@ -1,5 +1,5 @@
 import { flatten, idf } from "@/utils";
-import { Mode } from "@/vim/mode";
+import { Mode, inputtingFilterModes, selectingFilterModes } from "@/vim/mode";
 import { selectingModes, inputtingModes } from "@/vim/mode";
 import { MutableRefObject, useRef, useEffect } from "react";
 import { Option, SelectBox } from "./selectBox";
@@ -109,7 +109,9 @@ function createContent(
             }}
           />,
         ]}
-        isSelected={mode === Mode.TitleSelecting}
+        isSelected={
+          mode === Mode.TitleSelecting || mode === Mode.FilterTitleSelecting
+        }
         ratios={[0, 1]}
       />
       <hr />
@@ -321,11 +323,16 @@ function createContent(
   );
 }
 function isDisabled(mode: Mode) {
-  return (
-    !flatten(selectingModes).includes(mode) &&
-    !flatten(inputtingModes).includes(mode)
-  );
+  return [
+    selectingModes,
+    inputtingModes,
+    selectingFilterModes,
+    inputtingFilterModes,
+  ].every((modes) => {
+    !flatten(modes).includes(mode);
+  });
 }
+
 export const EditBar = (props: EditBarProps) => {
   const mode = props.mode;
   const titleRef = useRef(null);
@@ -339,20 +346,20 @@ export const EditBar = (props: EditBarProps) => {
   const endDateTimeRef = useRef(null);
   const memoRef = useRef(null);
 
-  const refAndModes: [MutableRefObject<null>, Mode][] = [
-    [titleRef, Mode.TitleInputting],
-    [statusRef, Mode.StatusInputting],
-    [assigneeRef, Mode.AssigneeInputting],
-    [sourcesRef, Mode.SourcesInputting],
-    [targetsRef, Mode.TargetsInputting],
-    [estimatedRef, Mode.EstimatedTimeInputting],
-    [spentRef, Mode.SpentTimeInputting],
-    [startDateTimeRef, Mode.StartDateTimeInputting],
-    [endDateTimeRef, Mode.EndDateTimeInputting],
-    [memoRef, Mode.MemoInputting],
+  const refAndModes: [MutableRefObject<null>, Mode[]][] = [
+    [titleRef, [Mode.TitleInputting, Mode.FilterTitleInputting]],
+    [statusRef, [Mode.StatusInputting]],
+    [assigneeRef, [Mode.AssigneeInputting]],
+    [sourcesRef, [Mode.SourcesInputting]],
+    [targetsRef, [Mode.TargetsInputting]],
+    [estimatedRef, [Mode.EstimatedTimeInputting]],
+    [spentRef, [Mode.SpentTimeInputting]],
+    [startDateTimeRef, [Mode.StartDateTimeInputting]],
+    [endDateTimeRef, [Mode.EndDateTimeInputting]],
+    [memoRef, [Mode.MemoInputting]],
   ];
   useEffect(() => {
-    const refAndMode = refAndModes.filter(([_, m]) => m === mode);
+    const refAndMode = refAndModes.filter(([_, m]) => m.includes(mode));
     if (refAndMode.length === 1) {
       // @ts-ignore
       refAndMode[0][0].current?.focus();

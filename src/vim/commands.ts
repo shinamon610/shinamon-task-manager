@@ -1,11 +1,16 @@
 import { MutableRefObject } from "react";
-import { Mode, selectingModes, inputtingModes } from "./mode";
+import {
+  Mode,
+  selectingModes,
+  inputtingModes,
+  selectingFilterModes,
+  inputtingFilterModes,
+} from "./mode";
 import { getNextItem, getPrevItem } from "@/utils";
 
 export enum Command {
   CreateTaskNode,
   DeleteTaskNode,
-  Filter,
   SelectTaskNode,
   Nothing,
   Cancel,
@@ -34,6 +39,11 @@ export enum Command {
   InputEndDateTime,
   SelectMemo,
   InputMemo,
+
+  // filter
+  Filter,
+  SelectFilterTitle,
+  InputFilterTitle,
 }
 
 export const selectString = "agi";
@@ -66,6 +76,9 @@ const inputtingCommands = [
   ],
   [Command.InputMemo],
 ];
+
+const selectingFilterCommands = [[Command.SelectFilterTitle]];
+const inputtingFilterCommands = [[Command.InputFilterTitle]];
 
 function handleSelectMode(
   mode: Mode,
@@ -229,6 +242,24 @@ export function keyEventToCommand(
         inputtingModes,
         selectingCommands,
         inputtingCommands
+      );
+    case Mode.FilterTitleSelecting:
+      return handleSelectMode(
+        mode,
+        event,
+        selectingFilterModes,
+        selectingFilterCommands,
+        inputtingFilterCommands
+      );
+    case Mode.FilterTitleInputting:
+      return handleInputMode(
+        mode,
+        event,
+        sourcesRef,
+        targetsRef,
+        inputtingFilterModes,
+        selectingFilterCommands,
+        inputtingFilterCommands
       );
   }
 }

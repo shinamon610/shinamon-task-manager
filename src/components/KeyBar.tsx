@@ -40,6 +40,9 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
     case Mode.MemoSelecting:
     case Mode.MemoInputting:
       return [["Confirm"], [["ctrl|cmd|alt", "Enter"]]];
+    case Mode.FilterTitleSelecting:
+    case Mode.FilterTitleInputting:
+      return [[], []];
   }
 }
 function createElements(mode: Mode): React.JSX.Element[] {

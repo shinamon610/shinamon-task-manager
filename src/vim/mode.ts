@@ -33,6 +33,10 @@ export enum Mode {
   EndDateTimeInputting,
   MemoSelecting,
   MemoInputting,
+
+  // filter
+  FilterTitleSelecting,
+  FilterTitleInputting,
 }
 
 export const selectingModes = [
@@ -59,6 +63,9 @@ export const inputtingModes = [
   ],
   [Mode.MemoInputting],
 ];
+
+export const selectingFilterModes = [[Mode.FilterTitleSelecting]];
+export const inputtingFilterModes = [[Mode.FilterTitleInputting]];
 
 export function createModeAndTasks(
   mode: Mode,
@@ -150,12 +157,16 @@ export function createModeAndTasks(
       return [mode, tasks];
     case Command.Cancel:
       return [Mode.Normal, unSelectAll(tasks)];
-    case Command.Filter:
-      return [Mode.TitleSelecting, tasks];
     case Command.ConfirmEdit:
       return [Mode.Normal, updateTasks(tasks, userInput, userName)];
     case Command.SelectAnotherLocation:
     case Command.Rename:
       return [Mode.Normal, tasks];
+    case Command.Filter:
+      return [Mode.FilterTitleSelecting, tasks];
+    case Command.SelectFilterTitle:
+      return [Mode.FilterTitleSelecting, tasks];
+    case Command.InputFilterTitle:
+      return [Mode.FilterTitleInputting, tasks];
   }
 }
