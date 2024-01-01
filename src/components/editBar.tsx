@@ -131,6 +131,10 @@ function createContent(
                 setSelectedValue={setSelectedStatus}
                 ref={statusRef}
                 toLabel={idf}
+                nullable={
+                  mode === Mode.FilterStatusSelecting ||
+                  mode === Mode.FilterStatusInputting
+                }
               />,
             ]}
             isSelected={

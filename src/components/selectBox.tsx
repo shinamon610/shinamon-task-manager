@@ -26,6 +26,7 @@ type SelectBoxProps<S> = {
   data: Set<S>;
   setSelectedValue: React.Dispatch<React.SetStateAction<S>>;
   toLabel: (value: S) => string;
+  nullable: boolean;
 };
 
 export interface BoxRef {
@@ -50,8 +51,14 @@ export function boxStyles(isDisabled: boolean) {
 
 export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
   (props: SelectBoxProps<any>, ref) => {
-    const { isDisabled, defaultOption, data, setSelectedValue, toLabel } =
-      props;
+    const {
+      isDisabled,
+      defaultOption,
+      data,
+      setSelectedValue,
+      toLabel,
+      nullable,
+    } = props;
 
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
@@ -75,11 +82,15 @@ export const SelectBox = forwardRef<BoxRef, SelectBoxProps<any>>(
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
         onChange={(newValue) => {
-          const nv = newValue as Option<any>;
-          if (newValue == null) {
-            return;
+          const nv = newValue as Option<any> | null;
+          if (nullable) {
+            setSelectedValue(nv?.value);
+          } else {
+            if (nv == null) {
+              return;
+            }
+            setSelectedValue(nv.value);
           }
-          setSelectedValue(nv.value);
         }}
         placeholder=""
         isClearable
