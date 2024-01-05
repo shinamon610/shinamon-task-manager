@@ -134,6 +134,16 @@ function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
     if (task.isSelected) {
       return newTask;
     }
+    if (
+      newTask.assignee !== null &&
+      newTask.status === DefaultStatus.Working &&
+      task.status === DefaultStatus.Working
+    ) {
+      return {
+        ...task,
+        status: DefaultStatus.Pending,
+      };
+    }
     return task;
   });
 }
