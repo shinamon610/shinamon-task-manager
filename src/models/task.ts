@@ -194,18 +194,32 @@ export function filterTasks(
   filterStatus: Status | null,
   filterAssignee: Assignee | null
 ): Task[] {
-  const res = tasks.filter((task) => {
-    if (task.name.includes(filterTitle)) {
-      if (filterStatus == null) {
-        return true;
-      }
-      if (
-        Object.values(DefaultStatus).includes(filterStatus as DefaultStatus)
-      ) {
-        return task.status === filterStatus;
-      }
-      return task.status !== toDefaultStatus(filterStatus as NotStatus);
+  function baseFilter<S>(
+    task: Task | null,
+    filterValue: S | null,
+    f: (task: Task, filterValue: S) => Task | null
+  ): Task | null {
+    if (task == null) {
+      return null;
     }
+    if (filterValue == null) {
+      return task;
+    }
+    return f(task, filterValue);
+  }
+  function filterByTitle(task: Task): Task | null {
+    return task.name.includes(filterTitle) ? task : null;
+  }
+  function filterByStatus(task: Task | null): Task | null {
+    return baseFilter(task, filterStatus, (task, status) => {
+      if (Object.values(DefaultStatus).includes(status as DefaultStatus)) {
+        return task.status === status ? task : null;
+      }
+      return task.status !== toDefaultStatus(status as NotStatus) ? task : null;
+    });
+  }
+  const res = tasks.filter((task) => {
+    return filterByStatus(filterByTitle(task)) != null;
   });
   return res;
 }
