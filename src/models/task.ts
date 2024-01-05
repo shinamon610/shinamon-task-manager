@@ -134,6 +134,7 @@ function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
     }
     if (
       newTask.assignee !== null &&
+      newTask.assignee === task.assignee &&
       newTask.status === DefaultStatus.Working &&
       task.status === DefaultStatus.Working
     ) {
