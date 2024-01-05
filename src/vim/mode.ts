@@ -44,6 +44,8 @@ export enum Mode {
   FilterStatusInputting,
   FilterAssigneeSelecting,
   FilterAssigneeInputting,
+  FilterSourcesSelecting,
+  FilterSourcesInputting,
 }
 
 export const selectingModes = [
@@ -74,10 +76,12 @@ export const inputtingModes = [
 export const selectingFilterModes = [
   [Mode.FilterTitleSelecting],
   [Mode.FilterStatusSelecting, Mode.FilterAssigneeSelecting],
+  [Mode.FilterSourcesSelecting],
 ];
 export const inputtingFilterModes = [
   [Mode.FilterTitleInputting],
   [Mode.FilterStatusInputting, Mode.FilterAssigneeInputting],
+  [Mode.FilterSourcesInputting],
 ];
 
 export function createModeAndTasks(
@@ -190,6 +194,10 @@ export function createModeAndTasks(
       return [Mode.FilterAssigneeSelecting, tasks];
     case Command.InputFilterAssignee:
       return [Mode.FilterAssigneeInputting, tasks];
+    case Command.SelectFilterSources:
+      return [Mode.FilterSourcesSelecting, tasks];
+    case Command.InputFilterSources:
+      return [Mode.FilterSourcesInputting, tasks];
     case Command.SetToWorking:
       return [
         Mode.NodeSelecting,
