@@ -185,7 +185,10 @@ function createContent(
                 ref={sourcesRef}
               />,
             ]}
-            isSelected={mode === Mode.SourcesSelecting}
+            isSelected={
+              mode === Mode.SourcesSelecting ||
+              mode === Mode.FilterSourcesSelecting
+            }
             ratios={[0, 1]}
           />,
           <FlexContainer
@@ -349,7 +352,7 @@ export const EditBar = (props: EditBarProps) => {
     [titleRef, [Mode.TitleInputting, Mode.FilterTitleInputting]],
     [statusRef, [Mode.StatusInputting, Mode.FilterStatusInputting]],
     [assigneeRef, [Mode.AssigneeInputting, Mode.FilterAssigneeInputting]],
-    [sourcesRef, [Mode.SourcesInputting]],
+    [sourcesRef, [Mode.SourcesInputting, Mode.FilterSourcesInputting]],
     [targetsRef, [Mode.TargetsInputting]],
     [estimatedRef, [Mode.EstimatedTimeInputting]],
     [spentRef, [Mode.SpentTimeInputting]],
