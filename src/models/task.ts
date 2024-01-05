@@ -188,6 +188,14 @@ export function getSelectedTask(tasks: Task[]): Task {
   })[0];
 }
 
+function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
+  const source = tasks.filter((task) => task.id === sourceID)[0];
+  return [
+    source,
+    ...source.to.flatMap((nextID) => getAllTasksFromSource(tasks, nextID)),
+  ];
+}
+
 export function filterTasks(
   tasks: Task[],
   filterTitle: string,
@@ -228,10 +236,19 @@ export function filterTasks(
       return null;
     });
   }
+  function filterBySources(tasks: Task[]): Task[] {
+    if (filterSoucres.size === 0) {
+      return tasks;
+    }
+    const allowedTasks = Array.from(filterSoucres).flatMap((id) =>
+      getAllTasksFromSource(tasks, id)
+    );
+    return tasks.filter((task) => allowedTasks.includes(task));
+  }
   const res = tasks.filter((task) => {
     return filterByAssignee(filterByStatus(filterByTitle(task))) != null;
   });
-  return res;
+  return filterBySources(res);
 }
 
 export function updateTaskStatus(
