@@ -6,17 +6,19 @@ import React, {
 } from "react";
 import Select, { createFilter, SelectInstance } from "react-select";
 import { boxStyles, BoxRef, Option } from "./selectBox";
+import { UUID } from "@/models/task";
+import { Task } from "@/models/task";
 
 type MultiBoxProps = {
   isDisabled: boolean;
-  defaultOption: Set<Option<string>>;
-  data: Set<Option<String>>;
-  setSelectedValue: React.Dispatch<React.SetStateAction<Set<Option<string>>>>;
+  defaultOption: Set<UUID>;
+  tasks: Task[];
+  setSelectedValue: React.Dispatch<React.SetStateAction<Set<UUID>>>;
 };
 
 export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
   (props: MultiBoxProps, ref) => {
-    const { isDisabled, defaultOption, data, setSelectedValue } = props;
+    const { isDisabled, defaultOption, tasks, setSelectedValue } = props;
 
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
@@ -34,12 +36,15 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
     return (
       <Select
         className="selectbox"
-        options={Array.from(data)}
+        options={tasks.map((task) => ({
+          value: task.id,
+          label: task.name,
+        }))}
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
         onChange={(newValue) => {
-          const selectedOptions = newValue as Option<string>[];
-          setSelectedValue(new Set(selectedOptions));
+          const selectedOptions = newValue as Option<UUID>[];
+          setSelectedValue(new Set(selectedOptions.map((o) => o.value)));
         }}
         placeholder=""
         isClearable
@@ -47,7 +52,10 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         menuPlacement="top"
         styles={boxStyles(isDisabled)}
         ref={selectRef}
-        value={Array.from(defaultOption)}
+        value={Array.from(defaultOption).map((id) => ({
+          value: id,
+          label: tasks.filter((task) => task.id === id)[0].name,
+        }))}
         isMulti={true}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {

@@ -36,7 +36,7 @@ export type UserInput = {
   assignee: Assignee | null;
 };
 
-function getFromTasks(targetID: UUID, tasks: Task[]): Task[] {
+export function getFromTasks(targetID: UUID, tasks: Task[]): Task[] {
   return tasks.filter((task) => task.to.includes(targetID));
 }
 

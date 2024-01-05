@@ -1,3 +1,4 @@
+import { getFromTasks } from "../models/task";
 import { KeyBar } from "./KeyBar";
 import { Task, filterTasks } from "../models/task";
 import { saveData } from "@/models/file";
@@ -13,7 +14,6 @@ import { EditBar } from "@/components/editBar";
 import { preventKey } from "@/vim/preventKey";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { UUID } from "../models/task";
-import { Option } from "@/components/selectBox";
 import moment, { Moment } from "moment";
 import { Status, DefaultStatus } from "@/models/status";
 import { Assignee } from "@/models/assignee";
@@ -54,12 +54,12 @@ export function MainPage({
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
-  const [selectedSources, setSelectedSources] = useState<Set<Option<UUID>>>(
-    new Set<Option<UUID>>([])
+  const [selectedSources, setSelectedSources] = useState<Set<UUID>>(
+    new Set<UUID>([])
   );
   const sourcesRef = useRef(null);
-  const [selectedTargets, setSelectedTargets] = useState<Set<Option<UUID>>>(
-    new Set<Option<UUID>>([])
+  const [selectedTargets, setSelectedTargets] = useState<Set<UUID>>(
+    new Set<UUID>([])
   );
   const targetsRef = useRef(null);
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
@@ -102,8 +102,8 @@ export function MainPage({
           endTime: endDateTime,
           estimatedTime: estimatedTime,
           spentTime: spentTime,
-          to: Array.from(selectedTargets).map(({ value }) => value),
-          from: Array.from(selectedSources).map(({ value }) => value),
+          to: Array.from(selectedTargets),
+          from: Array.from(selectedSources),
           priority: null,
           memo: memo,
           status: selectedStatus,
@@ -124,24 +124,12 @@ export function MainPage({
         setSelectedStatus(selectedTask.status);
         setSelectedAssignee(selectedTask.assignee);
         setSelectedSources(
-          new Set<Option<UUID>>(
-            newTasks
-              .filter((task) => task.to.includes(selectedTask.id))
-              .map((task) => ({ value: task.id, label: task.name }))
+          new Set<UUID>(
+            getFromTasks(selectedTask.id, newTasks).map((task) => task.id)
           )
         );
 
-        setSelectedTargets(
-          new Set<Option<UUID>>(
-            getSelectedTask(newTasks).to.map((id) => {
-              const task = newTasks.find((task) => task.id === id)!;
-              return {
-                value: task.id,
-                label: task.name,
-              };
-            })
-          )
-        );
+        setSelectedTargets(new Set<UUID>(selectedTask.to));
         setEstimatedTime(selectedTask.estimatedTime);
         setSpentTime(selectedTask.spentTime);
         setStartDateTime(selectedTask.startTime);

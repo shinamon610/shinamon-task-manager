@@ -30,12 +30,12 @@ type EditBarProps = {
   assignees: Set<Assignee>;
   setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 
-  selectedSources: Set<Option<UUID>>;
-  setSelectedSources: React.Dispatch<React.SetStateAction<Set<Option<UUID>>>>;
+  selectedSources: Set<UUID>;
+  setSelectedSources: React.Dispatch<React.SetStateAction<Set<UUID>>>;
   sourcesRef: MutableRefObject<null>;
 
-  selectedTargets: Set<Option<UUID>>;
-  setSelectedTargets: React.Dispatch<React.SetStateAction<Set<Option<UUID>>>>;
+  selectedTargets: Set<UUID>;
+  setSelectedTargets: React.Dispatch<React.SetStateAction<Set<UUID>>>;
   targetsRef: MutableRefObject<null>;
 
   estimatedTime: number | null;
@@ -180,14 +180,7 @@ function createContent(
                 key={"sourceInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedSources}
-                data={
-                  new Set(
-                    tasks.map((task) => ({
-                      value: task.id,
-                      label: task.name,
-                    }))
-                  )
-                }
+                tasks={tasks}
                 setSelectedValue={setSelectedSources}
                 ref={sourcesRef}
               />,
@@ -203,14 +196,7 @@ function createContent(
                 key={"targetInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedTargets}
-                data={
-                  new Set(
-                    tasks.map((task) => ({
-                      value: task.id,
-                      label: task.name,
-                    }))
-                  )
-                }
+                tasks={tasks}
                 setSelectedValue={setSelectedTargets}
                 ref={targetsRef}
               />,
