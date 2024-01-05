@@ -103,7 +103,7 @@ export function createModeAndTasks(
         },
         userName
       );
-      return [Mode.TitleSelecting, [...unSelectAll(tasks), newTask]];
+      return [Mode.TitleInputting, [...unSelectAll(tasks), newTask]];
     case Command.DeleteTaskNode:
       const idToDelete = getSelectedTask(tasks).id;
       return [
