@@ -49,7 +49,7 @@ export enum Command {
   InputFilterStatus,
 }
 
-export const selectString = "agi";
+export const selectString = "aeghik";
 const leftStrings = ["ArrowLeft", "h"];
 const downStrings = ["ArrowDown", "j"];
 const upStrings = ["ArrowUp", "k"];
