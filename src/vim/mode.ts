@@ -1,6 +1,8 @@
+import { DefaultStatus } from "@/models/status";
 import { flatten } from "@/utils";
 import { UserInput, getSelectedTask } from "@/models/task";
 import {
+  updateTaskStatus,
   updateTasks,
   unSelectAll,
   Task,
@@ -181,6 +183,21 @@ export function createModeAndTasks(
       return [Mode.FilterStatusSelecting, tasks];
     case Command.InputFilterStatus:
       return [Mode.FilterStatusInputting, tasks];
+    case Command.SetToWorking:
+      return [
+        Mode.NodeSelecting,
+        updateTaskStatus(tasks, DefaultStatus.Working, userName),
+      ];
+    case Command.SetToPending:
+      return [
+        Mode.NodeSelecting,
+        updateTaskStatus(tasks, DefaultStatus.Pending, userName),
+      ];
+    case Command.SetToDone:
+      return [
+        Mode.NodeSelecting,
+        updateTaskStatus(tasks, DefaultStatus.Done, userName),
+      ];
   }
 }
 

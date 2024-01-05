@@ -18,6 +18,9 @@ export enum Command {
   ConfirmEdit,
   SelectAnotherLocation,
   Rename,
+  SetToWorking,
+  SetToPending,
+  SetToDone,
 
   //edit
   SelectTitle,
@@ -214,6 +217,15 @@ export function keyEventToCommand(
       }
       if (key === "e") {
         return Command.SelectTitle;
+      }
+      if (key === "w") {
+        return Command.SetToWorking;
+      }
+      if (key === "p") {
+        return Command.SetToPending;
+      }
+      if (key === "d") {
+        return Command.SetToDone;
       }
       return Command.Nothing;
     case Mode.TitleSelecting:

@@ -188,3 +188,28 @@ export function filterTasks(
   });
   return res;
 }
+
+export function updateTaskStatus(
+  tasks: Task[],
+  status: Status,
+  userName: string
+): Task[] {
+  const selectedTask = getSelectedTask(tasks);
+  return updateTasks(
+    tasks,
+    {
+      name: selectedTask.name,
+      startTime: selectedTask.startTime,
+      endTime: selectedTask.endTime,
+      estimatedTime: selectedTask.estimatedTime,
+      spentTime: selectedTask.spentTime,
+      to: selectedTask.to,
+      from: getFromTaskIDs(selectedTask.id, tasks),
+      priority: selectedTask.priority,
+      memo: selectedTask.memo,
+      status: status,
+      assignee: selectedTask.assignee,
+    },
+    userName
+  );
+}
