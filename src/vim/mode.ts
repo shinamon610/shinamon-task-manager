@@ -103,7 +103,8 @@ export function createModeAndTasks(
           status: null,
           assignee: null,
         },
-        userName
+        userName,
+        tasks
       );
       return [Mode.TitleInputting, [...unSelectAll(tasks), newTask]];
     case Command.DeleteTaskNode:

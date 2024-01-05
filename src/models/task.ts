@@ -40,16 +40,37 @@ function getFromTasks(targetID: UUID, tasks: Task[]): Task[] {
   return tasks.filter((task) => task.to.includes(targetID));
 }
 
-export function createTask(userInput: UserInput, userName: Assignee): Task {
-  function assignee(): Assignee | null {
+export function createTask(
+  userInput: UserInput,
+  userName: Assignee,
+  tasks: Task[]
+): Task {
+  function toStatus(): Status {
+    if (
+      tasks.filter(
+        ({ id, status }) =>
+          userInput.from.includes(id) && status !== DefaultStatus.Done
+      ).length > 0
+    ) {
+      return DefaultStatus.Pending;
+    }
+    if (userInput.status == null) {
+      return DefaultStatus.Pending;
+    }
+    return userInput.status;
+  }
+
+  function toAssignee(status: Status): Assignee | null {
     if (userInput.assignee != null && userInput.assignee !== "") {
       return userInput.assignee;
     }
-    if (userInput.status === DefaultStatus.Working) {
+    if (status === DefaultStatus.Working) {
       return userName;
     }
     return null;
   }
+
+  const newStatus = toStatus();
   return {
     id: uuidv4(),
     name: userInput.name || "no name",
@@ -60,8 +81,8 @@ export function createTask(userInput: UserInput, userName: Assignee): Task {
     to: userInput.to,
     priority: 0,
     memo: userInput.memo || "",
-    status: userInput.status || DefaultStatus.Pending,
-    assignee: assignee(),
+    status: newStatus,
+    assignee: toAssignee(newStatus),
     isSelected: true,
   };
 }
@@ -152,7 +173,7 @@ export function updateTasks(
   userInfo: UserInput,
   userName: string
 ): Task[] {
-  const newTask = createTask(userInfo, userName);
+  const newTask = createTask(userInfo, userName, tasks);
   const oldSelectedTask = getSelectedTask(tasks);
   return createEdge(
     deleteEdge(updateSelectedTask(tasks, newTask), oldSelectedTask.id),
@@ -206,7 +227,7 @@ export function updateTaskStatus(
       from: getFromTasks(selectedTask.id, tasks).map(({ id }) => id),
       priority: selectedTask.priority,
       memo: selectedTask.memo,
-      status: status,
+      status,
       assignee: selectedTask.assignee,
     },
     userName
