@@ -1,13 +1,18 @@
+import { Task } from "@/models/task";
 import { zip } from "@/utils";
 import { Mode } from "@/vim/mode";
 import { Key } from "./key";
 import { selectString } from "@/vim/commands";
+import { hasNotDoneChildTask } from "@/models/task";
 
-export function KeyBar({ mode }: { mode: Mode }) {
-  return <div className="top-bar">{createElements(mode)}</div>;
+export function KeyBar({ mode, tasks }: { mode: Mode; tasks: Task[] }) {
+  return <div className="top-bar">{createElements(mode, tasks)}</div>;
 }
 
-function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
+function createLabelsAndKeys(
+  mode: Mode,
+  tasks: Task[]
+): [string[], string[][]] {
   switch (mode) {
     case Mode.Normal:
       return [
@@ -15,17 +20,18 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
         [["n"], ["w"], ["f"], selectString.split(""), ["r"]],
       ];
     case Mode.NodeSelecting:
-      return [
-        [
-          "Edit",
-          "Delete",
-          "Cancel",
-          "Set to Working",
-          "Set to Pending",
-          "Set to Done",
-        ],
-        [["e"], ["x"], ["esc"], ["w"], ["p"], ["d"]],
+      const labelsNodeSelecting = [
+        "Edit",
+        "Delete",
+        "Cancel",
+        "Set to Working",
+        "Set to Pending",
+        "Set to Done",
       ];
+      const keyNodeSelecting = [["e"], ["x"], ["esc"], ["w"], ["p"], ["d"]];
+      return hasNotDoneChildTask(tasks)
+        ? [labelsNodeSelecting.slice(0, 3), keyNodeSelecting.slice(0, 3)]
+        : [labelsNodeSelecting, keyNodeSelecting];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
     case Mode.StatusSelecting:
@@ -57,8 +63,8 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
       return [["Done"], [["esc"]]];
   }
 }
-function createElements(mode: Mode): React.JSX.Element[] {
-  const [labels, keys] = createLabelsAndKeys(mode);
+function createElements(mode: Mode, tasks: Task[]): React.JSX.Element[] {
+  const [labels, keys] = createLabelsAndKeys(mode, tasks);
   return zip(labels, keys).map(([label, key]) => {
     return Key({
       label: label,

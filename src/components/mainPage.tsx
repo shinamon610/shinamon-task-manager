@@ -184,7 +184,7 @@ export function MainPage({
         mode={mode}
         command={command}
       />
-      <KeyBar mode={mode} />
+      <KeyBar mode={mode} tasks={tasks} />
       <EditBar
         mode={mode}
         tasks={tasks}

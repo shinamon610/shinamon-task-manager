@@ -36,10 +36,8 @@ export type UserInput = {
   assignee: Assignee | null;
 };
 
-export function getFromTaskIDs(targetID: UUID, tasks: Task[]): UUID[] {
-  return tasks
-    .filter((task) => task.to.includes(targetID))
-    .map((task) => task.id);
+function getFromTasks(targetID: UUID, tasks: Task[]): Task[] {
+  return tasks.filter((task) => task.to.includes(targetID));
 }
 
 export function createTask(userInput: UserInput, userName: Assignee): Task {
@@ -204,12 +202,21 @@ export function updateTaskStatus(
       estimatedTime: selectedTask.estimatedTime,
       spentTime: selectedTask.spentTime,
       to: selectedTask.to,
-      from: getFromTaskIDs(selectedTask.id, tasks),
+      from: getFromTasks(selectedTask.id, tasks).map(({ id }) => id),
       priority: selectedTask.priority,
       memo: selectedTask.memo,
       status: status,
       assignee: selectedTask.assignee,
     },
     userName
+  );
+}
+
+export function hasNotDoneChildTask(tasks: Task[]): boolean {
+  const selectedTask = getSelectedTask(tasks);
+  return (
+    getFromTasks(selectedTask.id, tasks).filter(({ status }) => {
+      return status !== DefaultStatus.Done;
+    }).length > 0
   );
 }
