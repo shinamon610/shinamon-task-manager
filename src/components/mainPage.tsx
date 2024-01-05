@@ -74,13 +74,19 @@ export function MainPage({
   // filter設定
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
+  const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
 
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
       const newCommand = keyEventToCommand(mode, event, sourcesRef, targetsRef);
       preventKey(event, newCommand);
 
-      const filteredTasks = filterTasks(tasks, filterTitle, filterStatus);
+      const filteredTasks = filterTasks(
+        tasks,
+        filterTitle,
+        filterStatus,
+        filterAssignee
+      );
       const newSerialInput = createSerialInput(
         event.key,
         newCommand,
@@ -178,7 +184,7 @@ export function MainPage({
   return (
     <div className={"homepage"}>
       <TaskGraph
-        tasks={filterTasks(tasks, filterTitle, filterStatus)}
+        tasks={filterTasks(tasks, filterTitle, filterStatus, filterAssignee)}
         assignees={assignees}
         serialInput={serialInput}
         mode={mode}
@@ -194,8 +200,10 @@ export function MainPage({
         setSelectedStatus={isFilter(mode) ? setFilterStatus : setSelectedStatus}
         statuses={isFilter(mode) ? allStatuses : statuses}
         setStatuses={isFilter(mode) ? setAllStatuses : setStatuses}
-        selectedAssignee={selectedAssignee}
-        setSelectedAssignee={setSelectedAssignee}
+        selectedAssignee={isFilter(mode) ? filterAssignee : selectedAssignee}
+        setSelectedAssignee={
+          isFilter(mode) ? setFilterAssignee : setSelectedAssignee
+        }
         assignees={assignees}
         setAssignees={setAssignees}
         selectedSources={selectedSources}

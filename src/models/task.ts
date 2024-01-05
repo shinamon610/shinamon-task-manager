@@ -191,7 +191,8 @@ export function getSelectedTask(tasks: Task[]): Task {
 export function filterTasks(
   tasks: Task[],
   filterTitle: string,
-  filterStatus: Status | null
+  filterStatus: Status | null,
+  filterAssignee: Assignee | null
 ): Task[] {
   const res = tasks.filter((task) => {
     if (task.name.includes(filterTitle)) {
