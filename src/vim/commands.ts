@@ -209,7 +209,7 @@ export function keyEventToCommand(
       if (key === "Escape" || key === "c" || key === "Backspace") {
         return Command.Cancel;
       }
-      if (key === "d") {
+      if (key === "x") {
         return Command.DeleteTaskNode;
       }
       if (key === "e") {

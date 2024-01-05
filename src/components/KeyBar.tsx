@@ -17,7 +17,7 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
     case Mode.NodeSelecting:
       return [
         ["Edit", "Delete", "Cancel"],
-        [["e"], ["d"], ["esc"]],
+        [["e"], ["x"], ["esc"]],
       ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
