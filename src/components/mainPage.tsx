@@ -5,10 +5,7 @@ import { selectThenSaveFilePath } from "@/models/file";
 import { keyEventToCommand } from "@/vim/commands";
 import React, { useRef, useState, useEffect } from "react";
 import { getSelectedTask } from "../models/task";
-import {
-  loadInitialStatusOptions,
-  loadInitialAllStatusOptions,
-} from "@/models/status";
+import { loadInitialStatus, loadInitialAllStatus } from "@/models/status";
 import { Mode, createModeAndTasks } from "@/vim/mode";
 import TaskGraph from "@/components/taskGraph";
 import { Command } from "@/vim/commands";
@@ -43,8 +40,8 @@ export function MainPage({
   assignees,
   setAssignees,
 }: MainPageProps) {
-  const [statuses, setStatuses] = useState(loadInitialStatusOptions());
-  const [allStatuses, setAllStatuses] = useState(loadInitialAllStatusOptions());
+  const [statuses, setStatuses] = useState(loadInitialStatus());
+  const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());
   const [mode, setMode] = useState(Mode.Normal);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);

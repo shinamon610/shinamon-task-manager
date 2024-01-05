@@ -23,11 +23,11 @@ export function toDefaultStatus(status: NotStatus): DefaultStatus {
   }
 }
 
-export function loadInitialStatusOptions(): Set<Status> {
+export function loadInitialStatus(): Set<Status> {
   return new Set(Object.values(DefaultStatus));
 }
 
-export function loadInitialAllStatusOptions(): Set<Status> {
+export function loadInitialAllStatus(): Set<Status> {
   return new Set([
     ...Object.values(DefaultStatus),
     ...Object.values(NotStatus),
