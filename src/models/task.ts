@@ -202,7 +202,7 @@ export function filterTasks(
     if (task == null) {
       return null;
     }
-    if (filterValue == null) {
+    if (filterValue == null || filterValue === "") {
       return task;
     }
     return f(task, filterValue);
@@ -218,8 +218,17 @@ export function filterTasks(
       return task.status !== toDefaultStatus(status as NotStatus) ? task : null;
     });
   }
+  function filterByAssignee(task: Task | null): Task | null {
+    console.log("fa", filterAssignee);
+    return baseFilter(task, filterAssignee, (task, assignee) => {
+      if (task.assignee === assignee) {
+        return task;
+      }
+      return null;
+    });
+  }
   const res = tasks.filter((task) => {
-    return filterByStatus(filterByTitle(task)) != null;
+    return filterByAssignee(filterByStatus(filterByTitle(task))) != null;
   });
   return res;
 }
