@@ -11,8 +11,8 @@ function createLabelsAndKeys(mode: Mode): [string[], string[][]] {
   switch (mode) {
     case Mode.Normal:
       return [
-        ["New node", "Select Another Location", "Purify", "Select", "Rename"],
-        [["n"], ["w"], ["p"], selectString.split(""), ["r"]],
+        ["New node", "Select Another Location", "Filter", "Select", "Rename"],
+        [["n"], ["w"], ["f"], selectString.split(""), ["r"]],
       ];
     case Mode.NodeSelecting:
       return [

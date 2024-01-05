@@ -48,10 +48,6 @@ body {
   display: flex;
 }
 
-.purify-bar {
-  background: var(--dark-gray);
-  display: flex;
-}
 .node-label {
   background-color: var(--dark-gray);
   display: flex;
