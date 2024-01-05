@@ -37,7 +37,7 @@ function measureTextWidth(text: string, fontSize: number = 10): number {
 
     if (context) {
       // フォントサイズとフォントファミリを設定（フォントファミリは適宜変更してください）
-      context.font = `${fontSize}px Arial`;
+      context.font = `${fontSize}px sans-serif`;
 
       // 文字列の幅を計測
       const metrics = context.measureText(text);

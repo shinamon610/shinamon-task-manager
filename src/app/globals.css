@@ -30,6 +30,7 @@ body {
 
 .react-flow__node-normalNode {
   font-size: 10px;
+  font-family: sans-serif;
   border-radius: 5px;
   text-align: center;
   width: auto;
@@ -37,7 +38,6 @@ body {
   height: 50px;
   overflow-x: hidden;
   overflow-y: auto;
-  word-wrap: break-word;
 }
 .edit-bar {
   background: var(--active);
