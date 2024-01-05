@@ -332,14 +332,14 @@ function createContent(
     </>
   );
 }
-function isDisabled(mode: Mode) {
+function isDisabled(mode: Mode): boolean {
   return [
     selectingModes,
     inputtingModes,
     selectingFilterModes,
     inputtingFilterModes,
   ].every((modes) => {
-    !flatten(modes).includes(mode);
+    return !flatten(modes).includes(mode);
   });
 }
 
