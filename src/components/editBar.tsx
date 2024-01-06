@@ -227,14 +227,12 @@ function createContent(
                 key={"targetInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedTargets}
-                // tasks={createMultiSelectBoxData(
-                //   tasks,
-                //   mode === Mode.TargetsInputting,
-                //   mode === Mode.FilterTargetsInputting,
-                //   selectedSources,
-                //   getAllTasksFromSource
-                // )}
-                tasks={tasks}
+                tasks={createMultiSelectBoxData(
+                  tasks,
+                  mode === Mode.TargetsInputting,
+                  selectedSources,
+                  getAllTasksFromTarget
+                )}
                 setSelectedValue={setSelectedTargets}
                 ref={targetsRef}
               />,
