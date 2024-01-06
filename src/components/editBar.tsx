@@ -95,6 +95,8 @@ function createContent(
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
   const dateFormat = "YYYY-MM-DDTHH:mm";
+  const taskWithoutSelected = tasks.filter(({ isSelected }) => !isSelected);
+
   return (
     <>
       <FlexContainer
@@ -180,7 +182,7 @@ function createContent(
                 key={"sourceInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedSources}
-                tasks={tasks}
+                tasks={taskWithoutSelected}
                 setSelectedValue={setSelectedSources}
                 ref={sourcesRef}
               />,
@@ -199,7 +201,7 @@ function createContent(
                 key={"targetInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedTargets}
-                tasks={tasks}
+                tasks={taskWithoutSelected}
                 setSelectedValue={setSelectedTargets}
                 ref={targetsRef}
               />,
