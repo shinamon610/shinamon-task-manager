@@ -208,10 +208,26 @@ export function getSelectedTask(tasks: Task[]): Task {
 }
 
 function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
-  const source = tasks.filter((task) => task.id === sourceID)[0];
+  const maybeSource = tasks.filter((task) => task.id === sourceID);
+  if (maybeSource.length === 0) {
+    return [];
+  }
+  const source = maybeSource[0];
   return [
     source,
     ...source.to.flatMap((nextID) => getAllTasksFromSource(tasks, nextID)),
+  ];
+}
+
+function getAllTasksFromTarget(tasks: Task[], targetID: UUID): Task[] {
+  const maybeTarget = tasks.filter((task) => task.id === targetID);
+  if (maybeTarget.length === 0) {
+    return [];
+  }
+  const target = maybeTarget[0];
+  return [
+    target,
+    ...target.from.flatMap((nextID) => getAllTasksFromTarget(tasks, nextID)),
   ];
 }
 
@@ -256,19 +272,26 @@ export function filterTasks(
       return null;
     });
   }
-  function filterBySources(tasks: Task[]): Task[] {
-    if (filterSoucres.size === 0) {
+  function filterByDependency(
+    tasks: Task[],
+    values: Set<UUID>,
+    f: (task: Task[], filterValue: UUID) => Task[]
+  ): Task[] {
+    if (values.size === 0) {
       return tasks;
     }
-    const allowedTasks = Array.from(filterSoucres).flatMap((id) =>
-      getAllTasksFromSource(tasks, id)
-    );
+    const allowedTasks = Array.from(values).flatMap((id) => f(tasks, id));
     return tasks.filter((task) => allowedTasks.includes(task));
   }
+
   const res = tasks.filter((task) => {
     return filterByAssignee(filterByStatus(filterByTitle(task))) != null;
   });
-  return filterBySources(res);
+  return filterByDependency(
+    filterByDependency(res, filterSoucres, getAllTasksFromSource),
+    filterTargets,
+    getAllTasksFromTarget
+  );
 }
 
 export function updateTaskStatus(
