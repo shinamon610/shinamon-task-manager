@@ -207,7 +207,7 @@ export function getSelectedTask(tasks: Task[]): Task {
   })[0];
 }
 
-function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
+export function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
   const maybeSource = tasks.filter((task) => task.id === sourceID);
   if (maybeSource.length === 0) {
     return [];
@@ -219,7 +219,7 @@ function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
   ];
 }
 
-function getAllTasksFromTarget(tasks: Task[], targetID: UUID): Task[] {
+export function getAllTasksFromTarget(tasks: Task[], targetID: UUID): Task[] {
   const maybeTarget = tasks.filter((task) => task.id === targetID);
   if (maybeTarget.length === 0) {
     return [];

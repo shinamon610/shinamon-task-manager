@@ -6,7 +6,11 @@ import { Option, SelectBox } from "./selectBox";
 import { FlexContainer } from "./flexContainer";
 import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
-import { UUID } from "@/models/task";
+import {
+  UUID,
+  getAllTasksFromTarget,
+  getAllTasksFromSource,
+} from "@/models/task";
 import { Task } from "@/models/task";
 import moment, { Moment } from "moment";
 import { MultiBox } from "./multibox";
@@ -54,6 +58,24 @@ type EditBarProps = {
   setMemo: React.Dispatch<React.SetStateAction<string>>;
 };
 
+function createMultiSelectBoxData(
+  tasks: Task[],
+  isInputting: boolean,
+  selectedIDs: Set<UUID>,
+  f: (task: Task[], id: UUID) => Task[]
+): Task[] {
+  if (isInputting) {
+    const fobiddens = Array.from(selectedIDs)
+      .flatMap((id) => f(tasks, id))
+      .map(({ id }) => id);
+    const res = tasks.filter(
+      ({ id, isSelected }) => !fobiddens.includes(id) && !isSelected
+    );
+    return res;
+  }
+  return tasks;
+}
+
 function createContent(
   {
     mode,
@@ -95,7 +117,6 @@ function createContent(
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
   const dateFormat = "YYYY-MM-DDTHH:mm";
-  const taskWithoutSelected = tasks.filter(({ isSelected }) => !isSelected);
 
   return (
     <>
@@ -182,7 +203,12 @@ function createContent(
                 key={"sourceInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedSources}
-                tasks={taskWithoutSelected}
+                tasks={createMultiSelectBoxData(
+                  tasks,
+                  mode === Mode.SourcesInputting,
+                  selectedTargets,
+                  getAllTasksFromSource
+                )}
                 setSelectedValue={setSelectedSources}
                 ref={sourcesRef}
               />,
@@ -201,7 +227,14 @@ function createContent(
                 key={"targetInput"}
                 isDisabled={isDisabled(mode)}
                 defaultOption={selectedTargets}
-                tasks={taskWithoutSelected}
+                // tasks={createMultiSelectBoxData(
+                //   tasks,
+                //   mode === Mode.TargetsInputting,
+                //   mode === Mode.FilterTargetsInputting,
+                //   selectedSources,
+                //   getAllTasksFromSource
+                // )}
+                tasks={tasks}
                 setSelectedValue={setSelectedTargets}
                 ref={targetsRef}
               />,
