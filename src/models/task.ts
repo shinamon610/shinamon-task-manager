@@ -220,7 +220,8 @@ export function filterTasks(
   filterTitle: string,
   filterStatus: Status | null,
   filterAssignee: Assignee | null,
-  filterSoucres: Set<UUID>
+  filterSoucres: Set<UUID>,
+  filterTargets: Set<UUID>
 ): Task[] {
   function baseFilter<S>(
     task: Task | null,

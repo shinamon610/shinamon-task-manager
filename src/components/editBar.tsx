@@ -204,7 +204,10 @@ function createContent(
                 ref={targetsRef}
               />,
             ]}
-            isSelected={mode === Mode.TargetsSelecting}
+            isSelected={
+              mode === Mode.TargetsSelecting ||
+              mode === Mode.FilterTargetsSelecting
+            }
             ratios={[0, 1]}
           />,
         ]}
@@ -353,7 +356,7 @@ export const EditBar = (props: EditBarProps) => {
     [statusRef, [Mode.StatusInputting, Mode.FilterStatusInputting]],
     [assigneeRef, [Mode.AssigneeInputting, Mode.FilterAssigneeInputting]],
     [sourcesRef, [Mode.SourcesInputting, Mode.FilterSourcesInputting]],
-    [targetsRef, [Mode.TargetsInputting]],
+    [targetsRef, [Mode.TargetsInputting, Mode.FilterTargetsInputting]],
     [estimatedRef, [Mode.EstimatedTimeInputting]],
     [spentRef, [Mode.SpentTimeInputting]],
     [startDateTimeRef, [Mode.StartDateTimeInputting]],

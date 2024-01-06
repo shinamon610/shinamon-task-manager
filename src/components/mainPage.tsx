@@ -74,6 +74,9 @@ export function MainPage({
   const [filterSources, setFilterSources] = useState<Set<UUID>>(
     new Set<UUID>([])
   );
+  const [filterTargets, setFilterTargets] = useState<Set<UUID>>(
+    new Set<UUID>([])
+  );
 
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
@@ -85,7 +88,8 @@ export function MainPage({
         filterTitle,
         filterStatus,
         filterAssignee,
-        filterSources
+        filterSources,
+        filterTargets
       );
       const newSerialInput = createSerialInput(
         event.key,
@@ -127,7 +131,6 @@ export function MainPage({
         setSelectedStatus(selectedTask.status);
         setSelectedAssignee(selectedTask.assignee);
         setSelectedSources(new Set<UUID>(selectedTask.from));
-
         setSelectedTargets(new Set<UUID>(selectedTask.to));
         setEstimatedTime(selectedTask.estimatedTime);
         setSpentTime(selectedTask.spentTime);
@@ -173,7 +176,8 @@ export function MainPage({
           filterTitle,
           filterStatus,
           filterAssignee,
-          filterSources
+          filterSources,
+          filterTargets
         )}
         assignees={assignees}
         serialInput={serialInput}
@@ -201,8 +205,10 @@ export function MainPage({
           isFilter(mode) ? setFilterSources : setSelectedSources
         }
         sourcesRef={sourcesRef}
-        selectedTargets={selectedTargets}
-        setSelectedTargets={setSelectedTargets}
+        selectedTargets={isFilter(mode) ? filterTargets : selectedTargets}
+        setSelectedTargets={
+          isFilter(mode) ? setFilterTargets : setSelectedTargets
+        }
         targetsRef={targetsRef}
         estimatedTime={estimatedTime}
         setEstimatedTime={setEstimatedTime}

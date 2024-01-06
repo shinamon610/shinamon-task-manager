@@ -64,6 +64,8 @@ function createLabelsAndKeys(
     case Mode.FilterAssigneeInputting:
     case Mode.FilterSourcesSelecting:
     case Mode.FilterSourcesInputting:
+    case Mode.FilterTargetsSelecting:
+    case Mode.FilterTargetsInputting:
       return [["Done"], [["esc"]]];
   }
 }
