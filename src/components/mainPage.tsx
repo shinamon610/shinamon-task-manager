@@ -90,7 +90,8 @@ export function MainPage({
         filterStatus,
         filterAssignee,
         filterSources,
-        filterTargets
+        filterTargets,
+        filterMemo
       );
       const newSerialInput = createSerialInput(
         event.key,
@@ -178,7 +179,8 @@ export function MainPage({
           filterStatus,
           filterAssignee,
           filterSources,
-          filterTargets
+          filterTargets,
+          filterMemo
         )}
         assignees={assignees}
         serialInput={serialInput}
@@ -219,8 +221,8 @@ export function MainPage({
         setStartDateTime={setStartDateTime}
         endDateTime={endDateTime}
         setEndDateTime={setEndDateTime}
-        memo={memo}
-        setMemo={setMemo}
+        memo={isFilter(mode) ? filterMemo : memo}
+        setMemo={isFilter(mode) ? setFilterMemo : setMemo}
       />
     </div>
   );

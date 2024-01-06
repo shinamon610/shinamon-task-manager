@@ -237,7 +237,8 @@ export function filterTasks(
   filterStatus: Status | null,
   filterAssignee: Assignee | null,
   filterSoucres: Set<UUID>,
-  filterTargets: Set<UUID>
+  filterTargets: Set<UUID>,
+  filterMemo: string
 ): Task[] {
   function baseFilter<S>(
     task: Task | null,
@@ -272,6 +273,12 @@ export function filterTasks(
       return null;
     });
   }
+  function filterByMemo(task: Task | null): Task | null {
+    return baseFilter(task, filterMemo, (task, value) => {
+      return task.memo.includes(value) ? task : null;
+    });
+  }
+
   function filterByDependency(
     tasks: Task[],
     values: Set<UUID>,
@@ -285,7 +292,10 @@ export function filterTasks(
   }
 
   const res = tasks.filter((task) => {
-    return filterByAssignee(filterByStatus(filterByTitle(task))) != null;
+    return (
+      filterByMemo(filterByAssignee(filterByStatus(filterByTitle(task)))) !=
+      null
+    );
   });
   return filterByDependency(
     filterByDependency(res, filterSoucres, getAllTasksFromSource),
