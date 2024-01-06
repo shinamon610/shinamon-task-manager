@@ -15,6 +15,7 @@ export type Task = {
   estimatedTime: number | null;
   spentTime: number;
   to: UUID[];
+  from: UUID[]; // fromを辿って検索するから、やっぱり必要
   priority: number;
   memo: string;
   status: Status;
@@ -35,10 +36,6 @@ export type UserInput = {
   status: Status | null;
   assignee: Assignee | null;
 };
-
-export function getFromTasks(targetID: UUID, tasks: Task[]): Task[] {
-  return tasks.filter((task) => task.to.includes(targetID));
-}
 
 export function createTask(
   userInput: UserInput,
@@ -79,6 +76,7 @@ export function createTask(
     estimatedTime: userInput.estimatedTime,
     spentTime: userInput.spentTime || 0,
     to: userInput.to,
+    from: userInput.from,
     priority: 0,
     memo: userInput.memo || "",
     status: newStatus,
@@ -132,16 +130,26 @@ function deleteEdge(tasks: Task[], id: UUID): Task[] {
     return {
       ...task,
       to: task.to.filter((to) => to !== id),
+      from: task.from.filter((from) => from !== id),
     };
   });
 }
 
-function createEdge(tasks: Task[], from: UUID[], id: UUID): Task[] {
-  return tasks.map((task): Task => {
+function createEdge(tasks: Task[], from: UUID[], to: UUID[], id: UUID): Task[] {
+  const res = tasks.map((task): Task => {
     if (from.includes(task.id)) {
       return {
         ...task,
         to: [...task.to, id],
+      };
+    }
+    return task;
+  });
+  return res.map((task) => {
+    if (to.includes(task.id)) {
+      return {
+        ...task,
+        from: [...task.from, id],
       };
     }
     return task;
@@ -178,7 +186,18 @@ export function updateTasks(
   return createEdge(
     deleteEdge(updateSelectedTask(tasks, newTask), oldSelectedTask.id),
     userInfo.from,
+    userInfo.to,
     newTask.id
+  );
+}
+
+export function deleteSelectedTask(tasks: Task[]): Task[] {
+  const targetID = getSelectedTask(tasks).id;
+  return deleteEdge(
+    tasks.filter((task): boolean => {
+      return task.id !== targetID;
+    }),
+    targetID
   );
 }
 
@@ -266,7 +285,7 @@ export function updateTaskStatus(
       estimatedTime: selectedTask.estimatedTime,
       spentTime: selectedTask.spentTime,
       to: selectedTask.to,
-      from: getFromTasks(selectedTask.id, tasks).map(({ id }) => id),
+      from: selectedTask.from,
       priority: selectedTask.priority,
       memo: selectedTask.memo,
       status,
@@ -279,8 +298,10 @@ export function updateTaskStatus(
 export function hasNotDoneChildTask(tasks: Task[]): boolean {
   const selectedTask = getSelectedTask(tasks);
   return (
-    getFromTasks(selectedTask.id, tasks).filter(({ status }) => {
-      return status !== DefaultStatus.Done;
+    selectedTask.from.filter((id) => {
+      return (
+        tasks.filter((task) => task.id === id)[0].status !== DefaultStatus.Done
+      );
     }).length > 0
   );
 }

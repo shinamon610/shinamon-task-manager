@@ -1,4 +1,3 @@
-import { getFromTasks } from "../models/task";
 import { KeyBar } from "./KeyBar";
 import { Task, filterTasks } from "../models/task";
 import { saveData } from "@/models/file";
@@ -127,11 +126,7 @@ export function MainPage({
         setTitle(selectedTask.name);
         setSelectedStatus(selectedTask.status);
         setSelectedAssignee(selectedTask.assignee);
-        setSelectedSources(
-          new Set<UUID>(
-            getFromTasks(selectedTask.id, newTasks).map((task) => task.id)
-          )
-        );
+        setSelectedSources(new Set<UUID>(selectedTask.from));
 
         setSelectedTargets(new Set<UUID>(selectedTask.to));
         setEstimatedTime(selectedTask.estimatedTime);

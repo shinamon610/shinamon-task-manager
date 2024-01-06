@@ -1,6 +1,6 @@
 import { DefaultStatus } from "@/models/status";
 import { flatten } from "@/utils";
-import { UserInput, getSelectedTask } from "@/models/task";
+import { UserInput, deleteSelectedTask } from "@/models/task";
 import {
   updateTaskStatus,
   updateTasks,
@@ -114,20 +114,7 @@ export function createModeAndTasks(
       );
       return [Mode.TitleInputting, [...unSelectAll(tasks), newTask]];
     case Command.DeleteTaskNode:
-      const idToDelete = getSelectedTask(tasks).id;
-      return [
-        Mode.Normal,
-        tasks
-          .filter((task): boolean => {
-            return task.id !== idToDelete;
-          })
-          .map((task) => {
-            return {
-              ...task,
-              to: [...task.to.filter((id) => id !== idToDelete)],
-            };
-          }),
-      ];
+      return [Mode.Normal, deleteSelectedTask(tasks)];
     case Command.SelectTitle:
       return [Mode.TitleSelecting, tasks];
     case Command.InputTitle:
