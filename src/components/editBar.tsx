@@ -225,7 +225,7 @@ function createContent(
                 key={"startInput"}
                 name="start"
                 type="datetime-local"
-                disabled={isDisabled(mode)}
+                disabled={isDisabledTime(mode)}
                 value={
                   startDateTime == null ? "" : startDateTime.format(dateFormat)
                 }
@@ -246,7 +246,7 @@ function createContent(
                 key={"endInput"}
                 name="end"
                 type="datetime-local"
-                disabled={isDisabled(mode)}
+                disabled={isDisabledTime(mode)}
                 value={
                   endDateTime == null ? "" : endDateTime.format(dateFormat)
                 }
@@ -268,7 +268,7 @@ function createContent(
                 name="estimatedTime"
                 type="number"
                 value={estimatedTime == null ? "" : estimatedTime.toString()}
-                disabled={isDisabled(mode)}
+                disabled={isDisabledTime(mode)}
                 ref={estimatedRef}
                 onChange={(e) => {
                   setEstimatedTime(e.target.valueAsNumber);
@@ -289,7 +289,7 @@ function createContent(
                 name="spentTime"
                 type="number"
                 value={spentTime.toString()}
-                disabled={isDisabled(mode)}
+                disabled={isDisabledTime(mode)}
                 ref={spentRef}
                 onChange={(e) => {
                   setSpentTime(e.target.valueAsNumber);
@@ -327,6 +327,7 @@ function createContent(
     </>
   );
 }
+
 function isDisabled(mode: Mode): boolean {
   return [
     selectingModes,
@@ -334,6 +335,12 @@ function isDisabled(mode: Mode): boolean {
     selectingFilterModes,
     inputtingFilterModes,
   ].every((modes) => {
+    return !flatten(modes).includes(mode);
+  });
+}
+
+function isDisabledTime(mode: Mode): boolean {
+  return [selectingModes, inputtingModes].every((modes) => {
     return !flatten(modes).includes(mode);
   });
 }
