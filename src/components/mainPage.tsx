@@ -129,7 +129,9 @@ export function MainPage({
         newCommand === Command.CreateTaskNode
       ) {
         const selectedTask = getSelectedTask(newTasks);
-        setTitle(selectedTask.name);
+        setTitle(
+          newCommand === Command.CreateTaskNode ? "" : selectedTask.name
+        );
         setSelectedStatus(selectedTask.status);
         setSelectedAssignee(selectedTask.assignee);
         setSelectedSources(new Set<UUID>(selectedTask.from));

@@ -265,7 +265,6 @@ export function filterTasks(
     });
   }
   function filterByAssignee(task: Task | null): Task | null {
-    console.log("fa", filterAssignee);
     return baseFilter(task, filterAssignee, (task, assignee) => {
       if (task.assignee === assignee) {
         return task;
