@@ -77,6 +77,7 @@ export function MainPage({
   const [filterTargets, setFilterTargets] = useState<Set<UUID>>(
     new Set<UUID>([])
   );
+  const [filterMemo, setFilterMemo] = useState("");
 
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {

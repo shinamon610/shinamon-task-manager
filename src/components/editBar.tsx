@@ -320,7 +320,9 @@ function createContent(
             }}
           />,
         ]}
-        isSelected={mode === Mode.MemoSelecting}
+        isSelected={
+          mode === Mode.MemoSelecting || mode === Mode.FilterMemoSelecting
+        }
         ratios={[0, 1]}
       />
       <hr />
@@ -368,7 +370,7 @@ export const EditBar = (props: EditBarProps) => {
     [spentRef, [Mode.SpentTimeInputting]],
     [startDateTimeRef, [Mode.StartDateTimeInputting]],
     [endDateTimeRef, [Mode.EndDateTimeInputting]],
-    [memoRef, [Mode.MemoInputting]],
+    [memoRef, [Mode.MemoInputting, Mode.FilterMemoInputting]],
   ];
   useEffect(() => {
     const refAndMode = refAndModes.filter(([_, m]) => m.includes(mode));

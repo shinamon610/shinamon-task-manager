@@ -56,6 +56,8 @@ export enum Command {
   InputFilterSources,
   SelectFilterTargets,
   InputFilterTargets,
+  SelectFilterMemo,
+  InputFilterMemo,
 }
 
 export const selectString = "aeghik";
@@ -93,11 +95,13 @@ const selectingFilterCommands = [
   [Command.SelectFilterTitle],
   [Command.SelectFilterStatus, Command.SelectFilterAssignee],
   [Command.SelectFilterSources, Command.SelectFilterTargets],
+  [Command.SelectFilterMemo],
 ];
 const inputtingFilterCommands = [
   [Command.InputFilterTitle],
   [Command.InputFilterStatus, Command.InputFilterAssignee],
   [Command.InputFilterSources, Command.InputFilterTargets],
+  [Command.InputFilterMemo],
 ];
 
 function handleSelectMode(
@@ -277,6 +281,7 @@ export function keyEventToCommand(
     case Mode.FilterAssigneeSelecting:
     case Mode.FilterSourcesSelecting:
     case Mode.FilterTargetsSelecting:
+    case Mode.FilterMemoSelecting:
       return handleSelectMode(
         mode,
         event,
@@ -289,6 +294,7 @@ export function keyEventToCommand(
     case Mode.FilterAssigneeInputting:
     case Mode.FilterSourcesInputting:
     case Mode.FilterTargetsInputting:
+    case Mode.FilterMemoInputting:
       return handleInputMode(
         mode,
         event,
