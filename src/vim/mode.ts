@@ -1,14 +1,15 @@
 import { DefaultStatus } from "@/models/status";
-import { flatten } from "@/utils";
-import { UserInput, deleteSelectedTask } from "@/models/task";
 import {
+  Task,
+  UserInput,
+  createTask,
+  deleteSelectedTask,
+  selectTask,
+  unSelectAll,
   updateTaskStatus,
   updateTasks,
-  unSelectAll,
-  Task,
-  createTask,
-  selectTask,
 } from "@/models/task";
+import { flatten } from "@/utils";
 import { Command } from "./commands";
 
 export enum Mode {

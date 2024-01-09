@@ -1,13 +1,13 @@
-import { isFilter } from "./mode";
+import { getNextItem, getPrevItem } from "@/utils";
 import { MutableRefObject } from "react";
 import {
   Mode,
-  selectingModes,
-  inputtingModes,
-  selectingFilterModes,
   inputtingFilterModes,
+  inputtingModes,
+  isFilter,
+  selectingFilterModes,
+  selectingModes,
 } from "./mode";
-import { getNextItem, getPrevItem } from "@/utils";
 
 export enum Command {
   CreateTaskNode,

@@ -1,13 +1,12 @@
+import { Task, UUID } from "@/models/task";
 import React, {
-  useState,
   forwardRef,
-  useRef,
   useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
-import Select, { createFilter, SelectInstance } from "react-select";
-import { boxStyles, BoxRef, Option } from "./selectBox";
-import { UUID } from "@/models/task";
-import { Task } from "@/models/task";
+import Select, { SelectInstance, createFilter } from "react-select";
+import { BoxRef, Option, boxStyles } from "./selectBox";
 
 type MultiBoxProps = {
   isDisabled: boolean;

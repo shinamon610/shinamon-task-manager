@@ -1,9 +1,8 @@
-import { Task } from "@/models/task";
+import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
+import { selectString } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { Key } from "./key";
-import { selectString } from "@/vim/commands";
-import { hasNotDoneChildTask } from "@/models/task";
 
 export function KeyBar({ mode, tasks }: { mode: Mode; tasks: Task[] }) {
   return <div className="top-bar">{createElements(mode, tasks)}</div>;

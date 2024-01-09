@@ -1,13 +1,12 @@
 import React, {
-  useState,
   forwardRef,
-  useRef,
   useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { SelectInstance } from "react-select";
-import { Option, BoxRef, boxStyles } from "./selectBox";
 import CreatableSelect from "react-select/creatable";
-import { toOption } from "./selectBox";
+import { BoxRef, Option, boxStyles, toOption } from "./selectBox";
 
 type CreatableBoxProps = {
   isDisabled: boolean;

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from "react";
+import { useState } from "react";
 import Select from "react-select";
 import { FlexContainer } from "./flexContainer";
 
@@ -14,8 +14,8 @@ export const SelectDuration = ({
   isDisabled,
   isSelectedHours,
   isSelectedMinutes, // hoursRef,
-} // minutesRef,
-: SelectDurationProps) => {
+  // minutesRef,
+}: SelectDurationProps) => {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
 

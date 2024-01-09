@@ -1,25 +1,24 @@
-import { Status, DefaultStatus } from "@/models/status";
-import { Assignee } from "@/models/assignee";
-import { getColor } from "@/models/assignee";
-import { zip } from "@/utils";
-import Dagre from "@dagrejs/dagre";
-import React, { useEffect } from "react";
-import { MarkerType } from "reactflow";
-import ReactFlow, {
-  Node,
-  Edge,
-  ReactFlowProvider,
-  useNodesState,
-  useEdgesState,
-  useReactFlow,
-  Position,
-} from "reactflow";
+import { Assignee, getColor } from "@/models/assignee";
+import { indexesToLabels } from "@/models/labels";
+import { DefaultStatus, Status } from "@/models/status";
 import { Task } from "@/models/task";
+import { zip } from "@/utils";
+import { Command } from "@/vim/commands";
+import { Mode } from "@/vim/mode";
+import Dagre from "@dagrejs/dagre";
+import { useEffect } from "react";
+import ReactFlow, {
+  Edge,
+  MarkerType,
+  Node,
+  Position,
+  ReactFlowProvider,
+  useEdgesState,
+  useNodesState,
+  useReactFlow,
+} from "reactflow";
 import "reactflow/dist/style.css";
 import NormalNode from "./normalNode";
-import { Mode } from "@/vim/mode";
-import { indexesToLabels } from "@/models/labels";
-import { Command } from "@/vim/commands";
 
 const nodeTypes = {
   normalNode: NormalNode,

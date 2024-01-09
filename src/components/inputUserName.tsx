@@ -1,7 +1,6 @@
-import { CreatableBox } from "./creatableBox";
-import React from "react";
-import { FlexContainer } from "./flexContainer";
 import { idf } from "@/utils";
+import React from "react";
+import { CreatableBox } from "./creatableBox";
 
 type InputUserNameProps = {
   userName: string;

@@ -1,4 +1,3 @@
-import { Option } from "@/components/selectBox";
 import { Task } from "./task";
 
 export type Assignee = string;

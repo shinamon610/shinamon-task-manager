@@ -1,22 +1,21 @@
-import { KeyBar } from "./KeyBar";
-import { Task, filterTasks } from "../models/task";
-import { saveData } from "@/models/file";
-import { selectThenSaveFilePath } from "@/models/file";
-import { keyEventToCommand } from "@/vim/commands";
-import React, { useRef, useState, useEffect } from "react";
-import { getSelectedTask } from "../models/task";
-import { loadInitialStatus, loadInitialAllStatus } from "@/models/status";
-import { Mode, createModeAndTasks } from "@/vim/mode";
-import TaskGraph from "@/components/taskGraph";
-import { Command } from "@/vim/commands";
 import { EditBar } from "@/components/editBar";
-import { preventKey } from "@/vim/preventKey";
-import { createSerialInput } from "@/vim/createSerialInput";
-import { UUID } from "../models/task";
-import moment, { Moment } from "moment";
-import { Status, DefaultStatus } from "@/models/status";
+import TaskGraph from "@/components/taskGraph";
 import { Assignee } from "@/models/assignee";
-import { isFilter } from "@/vim/mode";
+import { saveData, selectThenSaveFilePath } from "@/models/file";
+import {
+  DefaultStatus,
+  Status,
+  loadInitialAllStatus,
+  loadInitialStatus,
+} from "@/models/status";
+import { Command, keyEventToCommand } from "@/vim/commands";
+import { createSerialInput } from "@/vim/createSerialInput";
+import { Mode, createModeAndTasks, isFilter } from "@/vim/mode";
+import { preventKey } from "@/vim/preventKey";
+import moment, { Moment } from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
+import { KeyBar } from "./KeyBar";
 
 type MainPageProps = {
   filePath: string;

@@ -1,20 +1,25 @@
-import { flatten, idf } from "@/utils";
-import { Mode, inputtingFilterModes, selectingFilterModes } from "@/vim/mode";
-import { selectingModes, inputtingModes } from "@/vim/mode";
-import { MutableRefObject, useRef, useEffect } from "react";
-import { Option, SelectBox } from "./selectBox";
-import { FlexContainer } from "./flexContainer";
-import { Status } from "@/models/status";
 import { Assignee } from "@/models/assignee";
+import { Status } from "@/models/status";
 import {
+  Task,
   UUID,
-  getAllTasksFromTarget,
   getAllTasksFromSource,
+  getAllTasksFromTarget,
 } from "@/models/task";
-import { Task } from "@/models/task";
+import { flatten, idf } from "@/utils";
+import {
+  Mode,
+  inputtingFilterModes,
+  inputtingModes,
+  selectingFilterModes,
+  selectingModes,
+} from "@/vim/mode";
 import moment, { Moment } from "moment";
-import { MultiBox } from "./multibox";
+import { MutableRefObject, useEffect, useRef } from "react";
 import { CreatableBox } from "./creatableBox";
+import { FlexContainer } from "./flexContainer";
+import { MultiBox } from "./multibox";
+import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
   mode: Mode;

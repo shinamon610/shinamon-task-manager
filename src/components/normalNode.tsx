@@ -1,8 +1,8 @@
+import { createLabelSelectArray } from "@/models/labels";
 import { Mode } from "@/vim/mode";
 import React, { memo } from "react";
-import { Handle, Position, NodeToolbar, NodeProps } from "reactflow";
+import { Handle, NodeProps, NodeToolbar, Position } from "reactflow";
 import { Key } from "./key";
-import { createLabelSelectArray } from "@/models/labels";
 
 function createLabels(
   serialInput: string | null,

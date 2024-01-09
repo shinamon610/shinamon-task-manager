@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from "uuid";
-import { NotStatus, toDefaultStatus, DefaultStatus, Status } from "./status";
-import { Mode } from "@/vim/mode";
-import { indexesToLabels, createLabelSelectedMatrix } from "./labels";
 import { idf } from "@/utils";
+import { Mode } from "@/vim/mode";
+import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
+import { createLabelSelectedMatrix, indexesToLabels } from "./labels";
+import { DefaultStatus, NotStatus, Status, toDefaultStatus } from "./status";
 
 export type UUID = string;
 

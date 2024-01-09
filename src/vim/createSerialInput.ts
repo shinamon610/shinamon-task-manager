@@ -1,8 +1,7 @@
+import { createLabelSelectedMatrix, indexesToLabels } from "@/models/labels";
 import { Task } from "@/models/task";
-import { indexesToLabels, createLabelSelectedMatrix } from "@/models/labels";
+import { idf, zip } from "@/utils";
 import { Command } from "./commands";
-import { zip } from "@/utils";
-import { idf } from "@/utils";
 
 export function createSerialInput(
   key: string,
