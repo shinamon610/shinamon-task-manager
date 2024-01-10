@@ -132,7 +132,9 @@ function createContent(
             key={"titleInput"}
             name="title"
             value={title}
-            disabled={isDisabled(mode)}
+            disabled={
+              mode !== Mode.TitleInputting && mode !== Mode.FilterTitleInputting
+            }
             ref={titleRef}
             onChange={(e) => {
               setTitle(e.target.value);
@@ -153,7 +155,10 @@ function createContent(
               <label key={"status"}>Status:</label>,
               <SelectBox
                 key={"statusInput"}
-                isDisabled={isDisabled(mode)}
+                isDisabled={
+                  mode !== Mode.StatusInputting &&
+                  mode !== Mode.FilterStatusInputting
+                }
                 defaultOption={selectedStatus}
                 data={statuses}
                 setSelectedValue={setSelectedStatus}
@@ -177,7 +182,10 @@ function createContent(
               <label key={"assignee"}>Assignee:</label>,
               <CreatableBox
                 key={"assigneeInput"}
-                isDisabled={isDisabled(mode)}
+                isDisabled={
+                  mode !== Mode.AssigneeInputting &&
+                  mode !== Mode.FilterAssigneeInputting
+                }
                 defaultOption={selectedAssignee}
                 data={assignees}
                 setData={setAssignees}
@@ -206,7 +214,10 @@ function createContent(
               <label key={"source"}>Sources:</label>,
               <MultiBox
                 key={"sourceInput"}
-                isDisabled={isDisabled(mode)}
+                isDisabled={
+                  mode !== Mode.SourcesInputting &&
+                  mode !== Mode.FilterSourcesInputting
+                }
                 defaultOption={selectedSources}
                 tasks={createMultiSelectBoxData(
                   tasks,
@@ -230,7 +241,10 @@ function createContent(
               <label key={"target"}>Targets:</label>,
               <MultiBox
                 key={"targetInput"}
-                isDisabled={isDisabled(mode)}
+                isDisabled={
+                  mode !== Mode.TargetsInputting &&
+                  mode !== Mode.FilterTargetsInputting
+                }
                 defaultOption={selectedTargets}
                 tasks={createMultiSelectBoxData(
                   tasks,
@@ -263,7 +277,7 @@ function createContent(
                 key={"startInput"}
                 name="start"
                 type="datetime-local"
-                disabled={isDisabledTime(mode)}
+                disabled={mode !== Mode.StartDateTimeInputting}
                 value={
                   startDateTime == null ? "" : startDateTime.format(dateFormat)
                 }
@@ -284,7 +298,7 @@ function createContent(
                 key={"endInput"}
                 name="end"
                 type="datetime-local"
-                disabled={isDisabledTime(mode)}
+                disabled={mode !== Mode.EndDateTimeInputting}
                 value={
                   endDateTime == null ? "" : endDateTime.format(dateFormat)
                 }
@@ -306,7 +320,7 @@ function createContent(
                 name="estimatedTime"
                 type="number"
                 value={estimatedTime == null ? "" : estimatedTime.toString()}
-                disabled={isDisabledTime(mode)}
+                disabled={mode !== Mode.EstimatedTimeInputting}
                 ref={estimatedRef}
                 onChange={(e) => {
                   setEstimatedTime(e.target.valueAsNumber);
@@ -327,7 +341,7 @@ function createContent(
                 name="spentTime"
                 type="number"
                 value={spentTime.toString()}
-                disabled={isDisabledTime(mode)}
+                disabled={mode !== Mode.SpentTimeInputting}
                 ref={spentRef}
                 onChange={(e) => {
                   setSpentTime(e.target.valueAsNumber);
@@ -351,7 +365,9 @@ function createContent(
             key={"memoInput"}
             name="memo"
             value={memo}
-            disabled={isDisabled(mode)}
+            disabled={
+              mode !== Mode.MemoInputting && mode !== Mode.FilterMemoInputting
+            }
             ref={memoRef}
             onChange={(e) => {
               setMemo(e.target.value);
