@@ -15,7 +15,13 @@ function createLabelsAndKeys(
   switch (mode) {
     case Mode.Normal:
       return [
-        ["New node", "Select Another Location", "Filter", "Select", "Rename"],
+        [
+          "New node",
+          "Select Another Location",
+          "Filter",
+          "Select",
+          "Rename User",
+        ],
         [["n"], ["w"], ["f"], selectString.split(""), ["r"]],
       ];
     case Mode.NodeSelecting:
