@@ -5,6 +5,7 @@ import {
   UUID,
   getAllTasksFromSource,
   getAllTasksFromTarget,
+  noneTask,
 } from "@/models/task";
 import { flatten, idf } from "@/utils";
 import {
@@ -65,7 +66,7 @@ type EditBarProps = {
 
 function createMultiSelectBoxData(
   tasks: Task[],
-  isInputting: boolean,
+  isInputting: boolean, // filtering中は絞り込む必要ないので、判別するためのフラグ
   selectedIDs: Set<UUID>,
   f: (task: Task[], id: UUID) => Task[]
 ): Task[] {
@@ -78,7 +79,7 @@ function createMultiSelectBoxData(
     );
     return res;
   }
-  return tasks;
+  return [...tasks, noneTask]; // filtering中は先がないものを絞り込むためにnoneTaskが必要
 }
 
 function createContent(

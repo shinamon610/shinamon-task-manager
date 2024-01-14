@@ -23,6 +23,24 @@ export type Task = {
   isSelected: boolean;
 };
 
+// SourcesやTargetsのfilterで先が無いものを選択するために作成
+export const noneId = "noneTask";
+export const noneTask: Task = {
+  id: noneId,
+  name: "None",
+  startTime: null,
+  endTime: null,
+  estimatedTime: null,
+  spentTime: 0,
+  to: [],
+  from: [],
+  priority: 0,
+  memo: "",
+  status: DefaultStatus.Pending,
+  assignee: null,
+  isSelected: false,
+};
+
 export type UserInput = {
   name: string | null;
   startTime: moment.Moment | null;
@@ -207,8 +225,11 @@ export function getSelectedTask(tasks: Task[]): Task {
   })[0];
 }
 
-export function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
-  const maybeSource = tasks.filter((task) => task.id === sourceID);
+export function getAllTasksFromSource(tasks: Task[], sourceId: UUID): Task[] {
+  if (sourceId === noneId) {
+    return tasks.filter((task) => task.from.length === 0);
+  }
+  const maybeSource = tasks.filter((task) => task.id === sourceId);
   if (maybeSource.length === 0) {
     return [];
   }
@@ -219,8 +240,11 @@ export function getAllTasksFromSource(tasks: Task[], sourceID: UUID): Task[] {
   ];
 }
 
-export function getAllTasksFromTarget(tasks: Task[], targetID: UUID): Task[] {
-  const maybeTarget = tasks.filter((task) => task.id === targetID);
+export function getAllTasksFromTarget(tasks: Task[], targetId: UUID): Task[] {
+  if (targetId === noneId) {
+    return tasks.filter((task) => task.to.length === 0);
+  }
+  const maybeTarget = tasks.filter((task) => task.id === targetId);
   if (maybeTarget.length === 0) {
     return [];
   }
