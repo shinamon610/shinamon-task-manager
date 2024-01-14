@@ -10,6 +10,7 @@ type KeyProps = {
 
 export function Key({ label, keys, isSelectedArray, isDeadArray }: KeyProps) {
   const results = label === "" ? [] : [<samp key={label}>{label}</samp>];
+
   zip(zip(keys, isSelectedArray), isDeadArray).forEach(
     ([[keyLabel, isSelected], isDead], i) => {
       if (isDead) {

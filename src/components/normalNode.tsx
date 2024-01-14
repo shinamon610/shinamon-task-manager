@@ -19,7 +19,10 @@ function createLabels(
         label: "",
         keys: l.split(""),
         isSelectedArray,
-        isDeadArray: [false],
+        isDeadArray: Array.from(
+          { length: isSelectedArray.length },
+          () => false
+        ),
       }),
     ];
   }

@@ -82,8 +82,8 @@ function createElements(mode: Mode, tasks: Task[]): React.JSX.Element[] {
     return Key({
       label: label,
       keys: [...key],
-      isSelectedArray: [false],
-      isDeadArray: [false],
+      isSelectedArray: Array.from({ length: key.length }, () => false),
+      isDeadArray: Array.from({ length: key.length }, () => false),
     });
   });
 }
