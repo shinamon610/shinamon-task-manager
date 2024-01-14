@@ -2,7 +2,7 @@ import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
 import { DefaultStatus, Status } from "@/models/status";
 import { Task } from "@/models/task";
-import { zip } from "@/utils";
+import { accumurateSum, zip } from "@/utils";
 import { Command } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import Dagre from "@dagrejs/dagre";
@@ -46,31 +46,50 @@ function measureTextWidth(text: string, fontSize: number = 10): number {
   return 0;
 }
 
-const getLayoutedElements = (
+function getLayoutedElements(
   nodes: Node[],
   edges: Edge[],
   options: LayoutOptions
-) => {
+): { nodes: Node[]; edges: Edge[] } {
+  if (nodes.length === 0) {
+    return { nodes: [], edges: [] };
+  }
+  const minWidth = 100;
+  const widths = nodes.map((node) =>
+    Math.max(measureTextWidth(node.data.title), minWidth)
+  );
+  const height = 50;
+
   const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
   g.setGraph({ rankdir: options.direction });
 
-  const width = Math.max(
-    ...nodes.map((node) => measureTextWidth(node.data.title)),
-    100
-  );
+  const width = Math.max(...widths);
+
   nodes.forEach((node) => {
     const { id } = node;
-    const height = 50;
 
     g.setNode(id, { width, height });
   });
   edges.forEach((edge) => g.setEdge(edge.source, edge.target));
 
-  if (nodes.length === 0) {
-    return { nodes: [], edges: [] };
-  }
   // nodesもedgesも0だとエラーになる。
   Dagre.layout(g);
+
+  // edgeがない場合、tile上に並べる
+  if (edges.length === 0) {
+    const windowWidth = window.innerWidth / 2;
+    return {
+      nodes: zip(accumurateSum(widths), nodes).map(([w, node], i) => {
+        const y = height * Math.floor(w / windowWidth);
+        node.position = {
+          x: w % windowWidth,
+          y,
+        };
+        return node;
+      }),
+      edges: [],
+    };
+  }
 
   return {
     nodes: nodes.map((node) => {
@@ -86,7 +105,7 @@ const getLayoutedElements = (
     }),
     edges,
   };
-};
+}
 
 type TaskGraphProps = {
   tasks: Task[];
