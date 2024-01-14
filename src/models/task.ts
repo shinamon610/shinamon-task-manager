@@ -179,12 +179,20 @@ function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
     if (task.isSelected) {
       return newTask;
     }
-    if (
+    //もうDoneのタスクは何もしない
+    if (task.status === DefaultStatus.Done) {
+      return task;
+    }
+
+    // 新規タスクをworkingにしたとき、同じassigneeの他のタスクをpendingにする
+    const isNewTaskWorking =
       newTask.assignee !== null &&
       newTask.assignee === task.assignee &&
-      newTask.status === DefaultStatus.Working &&
-      task.status === DefaultStatus.Working
-    ) {
+      newTask.status === DefaultStatus.Working;
+
+    // 新規タスクのtoのタスクがある時はそれもpendingにする
+    const isNewTaskTo = newTask.to.includes(task.id);
+    if (isNewTaskWorking || isNewTaskTo) {
       return {
         ...task,
         status: DefaultStatus.Pending,

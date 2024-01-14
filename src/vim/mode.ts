@@ -102,24 +102,25 @@ export function createModeAndTasks(
 ): [Mode, Task[]] {
   switch (command) {
     case Command.CreateTaskNode:
-      const newTask = createTask(
-        {
-          name: "",
-          startTime: null,
-          endTime: null,
-          estimatedTime: null,
-          spentTime: null,
-          to: [],
-          from: [],
-          priority: null,
-          memo: null,
-          status: null,
-          assignee: null,
-        },
-        userName,
-        tasks
-      );
-      return [Mode.TitleInputting, [...unSelectAll(tasks), newTask]];
+      const brankInput = {
+        name: "",
+        startTime: null,
+        endTime: null,
+        estimatedTime: null,
+        spentTime: null,
+        to: [],
+        from: [],
+        priority: null,
+        memo: null,
+        status: null,
+        assignee: null,
+      };
+      const newTask = createTask(brankInput, userName, tasks);
+
+      return [
+        Mode.TitleInputting,
+        updateTasks([...unSelectAll(tasks), newTask], brankInput, userName),
+      ];
     case Command.DeleteTaskNode:
       return [Mode.Normal, deleteSelectedTask(tasks)];
     case Command.SelectTitle:
