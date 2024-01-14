@@ -1,6 +1,6 @@
 export function zip<T, S>(a: T[], b: S[]): [T, S][] {
   const res: [T, S][] = [];
-  for (let i = 0; i < a.length; i++) {
+  for (let i = 0; i < Math.min(a.length, b.length); i++) {
     res.push([a[i], b[i]]);
   }
   return res;
