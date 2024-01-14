@@ -42,3 +42,12 @@ export function flatten<T>(x: T[][]): T[] {
     return a.concat(b);
   }, []);
 }
+
+export function accumurateSum(xs: number[]): number[] {
+  return xs.reduce(
+    (acc, value) => {
+      return [...acc, acc[acc.length - 1] + value];
+    },
+    [0]
+  );
+}
