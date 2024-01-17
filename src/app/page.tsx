@@ -19,14 +19,19 @@ const HomePage = () => {
         return;
       }
       setFilePath(newFilePath);
-      loadData(newFilePath).then((data) => {
-        setTasks(data.tasks);
-        setAssignees(extractAssignees(data.tasks).add(data.userName));
-        setUserName(data.userName);
-      });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (filePath === "") {
+      return;
+    }
+    loadData(filePath).then((data) => {
+      setTasks(data.tasks);
+      setAssignees(extractAssignees(data.tasks).add(data.userName));
+      setUserName(data.userName);
+    });
+  }, [filePath]);
 
   return (
     <div className={"homepage"}>
