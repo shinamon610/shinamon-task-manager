@@ -207,7 +207,7 @@ export function updateTasks(
   userInfo: UserInput,
   userName: string
 ): Task[] {
-  const oldSelectedTask = getSelectedTask(tasks);
+  const oldSelectedTask = getSelectedTask(tasks)!;
   const newTask = {
     ...createTask(userInfo, userName, tasks),
     id: oldSelectedTask.id, // idは変更しない。filterSourcesとfilterTargetsで参照している
@@ -221,7 +221,7 @@ export function updateTasks(
 }
 
 export function deleteSelectedTask(tasks: Task[]): Task[] {
-  const targetID = getSelectedTask(tasks).id;
+  const targetID = getSelectedTask(tasks)!.id;
   return deleteEdge(
     tasks.filter((task): boolean => {
       return task.id !== targetID;
@@ -230,10 +230,10 @@ export function deleteSelectedTask(tasks: Task[]): Task[] {
   );
 }
 
-export function getSelectedTask(tasks: Task[]): Task {
-  return tasks.filter((task) => {
+export function getSelectedTask(tasks: Task[]): Task | undefined {
+  return tasks.find((task) => {
     return task.isSelected;
-  })[0];
+  });
 }
 
 export function getAllTasksFromSource(tasks: Task[], sourceId: UUID): Task[] {
@@ -343,7 +343,7 @@ export function updateTaskStatus(
   status: Status,
   userName: string
 ): Task[] {
-  const selectedTask = getSelectedTask(tasks);
+  const selectedTask = getSelectedTask(tasks)!;
   return updateTasks(
     tasks,
     {
@@ -364,7 +364,7 @@ export function updateTaskStatus(
 }
 
 export function hasNotDoneChildTask(tasks: Task[]): boolean {
-  const selectedTask = getSelectedTask(tasks);
+  const selectedTask = getSelectedTask(tasks)!;
   return (
     selectedTask.from.filter((id) => {
       return (

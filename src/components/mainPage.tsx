@@ -127,7 +127,7 @@ export function MainPage({
         newMode === Mode.NodeSelecting ||
         newCommand === Command.CreateTaskNode
       ) {
-        const selectedTask = getSelectedTask(newTasks);
+        const selectedTask = getSelectedTask(newTasks)!;
         setTitle(
           newCommand === Command.CreateTaskNode ? "" : selectedTask.name
         );
