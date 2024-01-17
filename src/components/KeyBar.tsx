@@ -34,6 +34,8 @@ function createLabelsAndKeys(
         "Set to Done",
       ];
       const keyNodeSelecting = [["e"], ["x"], ["esc"], ["w"], ["p"], ["d"]];
+
+      // Doneじゃないタスクがある場合、statusは選択できないようにする
       return hasNotDoneChildTask(tasks)
         ? [labelsNodeSelecting.slice(0, 3), keyNodeSelecting.slice(0, 3)]
         : [labelsNodeSelecting, keyNodeSelecting];
