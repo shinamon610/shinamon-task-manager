@@ -207,8 +207,11 @@ export function updateTasks(
   userInfo: UserInput,
   userName: string
 ): Task[] {
-  const newTask = createTask(userInfo, userName, tasks);
   const oldSelectedTask = getSelectedTask(tasks);
+  const newTask = {
+    ...createTask(userInfo, userName, tasks),
+    id: oldSelectedTask.id, // idは変更しない。filterSourcesとfilterTargetsで参照している
+  };
   return createEdge(
     deleteEdge(updateSelectedTask(tasks, newTask), oldSelectedTask.id),
     userInfo.from,
