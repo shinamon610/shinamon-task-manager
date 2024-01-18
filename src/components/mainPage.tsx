@@ -1,7 +1,7 @@
 import { EditBar } from "@/components/editBar";
 import TaskGraph from "@/components/taskGraph";
 import { Assignee } from "@/models/assignee";
-import { saveData, selectThenSaveFilePath } from "@/models/file";
+import { saveData } from "@/models/file";
 import {
   DefaultStatus,
   Status,
@@ -142,12 +142,7 @@ export function MainPage({
         setMemo(selectedTask.memo);
       }
       if (newCommand === Command.SelectAnotherLocation) {
-        selectThenSaveFilePath().then((newFilePath) => {
-          if (newFilePath === null) {
-            return;
-          }
-          setFilePath(newFilePath);
-        });
+        setFilePath("");
       }
       if (newCommand === Command.InputStartDateTime) {
         if (startDateTime === null) {
