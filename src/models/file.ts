@@ -1,7 +1,8 @@
 import moment from "moment";
 import { Task } from "./task";
 
-function selectFilePath(defaultPath: string): Promise<string | null> {
+// fileを選択した瞬間にそこにtasks.jsonが作成される
+function createFile(defaultPath: string): Promise<string | null> {
   return import("@tauri-apps/api/dialog")
     .then(({ save }) =>
       save({
@@ -43,10 +44,10 @@ async function saveFilePath(
   }
 }
 
-export function selectThenSaveFilePath(
+export function createThenSaveFilePath(
   defaultPath = "tasks.json"
 ): Promise<string | null> {
-  return saveFilePath(selectFilePath(defaultPath));
+  return saveFilePath(createFile(defaultPath));
 }
 
 export async function loadInitialFilePath(): Promise<string | null> {

@@ -1,10 +1,17 @@
-import { selectThenSaveFilePath } from "@/models/file";
+import { createThenSaveFilePath } from "@/models/file";
 import React from "react";
 
 type SelectSaveLocationProps = {
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
 };
 export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
+  const style = {
+    backgroundColor: "var(--active)",
+    fontSize: "10vh",
+    boxShadow: "5px 5px 10px rgba(255, 255, 255, 0.5)",
+    borderRadius: "10px",
+    margin: "10px",
+  };
   return (
     <div
       style={{
@@ -12,17 +19,13 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        flexDirection: "column",
       }}
     >
       <button
-        style={{
-          backgroundColor: "var(--active)",
-          fontSize: "10vh",
-          boxShadow: "5px 5px 10px rgba(255, 255, 255, 0.5)",
-          borderRadius: "10px",
-        }}
+        style={style}
         onClick={() =>
-          selectThenSaveFilePath().then((newFilePath) => {
+          createThenSaveFilePath().then((newFilePath) => {
             if (newFilePath === null) {
               return;
             }
@@ -31,6 +34,20 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
         }
       >
         Select Save Location
+      </button>
+
+      <button
+        style={style}
+        onClick={() =>
+          createThenSaveFilePath().then((newFilePath) => {
+            if (newFilePath === null) {
+              return;
+            }
+            setFilePath(newFilePath);
+          })
+        }
+      >
+        Load Tasks
       </button>
     </div>
   );
