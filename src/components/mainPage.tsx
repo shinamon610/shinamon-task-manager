@@ -1,4 +1,5 @@
 import { EditBar } from "@/components/editBar";
+import { KeyBar } from "@/components/keyBar";
 import TaskGraph from "@/components/taskGraph";
 import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
@@ -15,7 +16,6 @@ import { preventKey } from "@/vim/preventKey";
 import moment, { Moment } from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
-import { KeyBar } from "./KeyBar";
 
 type MainPageProps = {
   filePath: string;
