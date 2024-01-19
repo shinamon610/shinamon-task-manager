@@ -1,10 +1,23 @@
+import { load } from "@/app/page";
+import { Assignee } from "@/models/assignee";
 import { createThenSaveFilePath, openThenSaveFilePath } from "@/models/file";
-import React from "react";
+import { Task } from "@/models/task";
+import React, { Dispatch, SetStateAction } from "react";
 
 type SelectSaveLocationProps = {
+  userName: Assignee;
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
+  setTasks: Dispatch<SetStateAction<Task[]>>;
+  setAssignees: Dispatch<SetStateAction<Set<string>>>;
+  setUserName: Dispatch<SetStateAction<string>>;
 };
-export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
+export function SelectSaveLocation({
+  userName,
+  setFilePath,
+  setTasks,
+  setAssignees,
+  setUserName,
+}: SelectSaveLocationProps) {
   const style = {
     backgroundColor: "var(--active)",
     fontSize: "10vh",
@@ -12,14 +25,6 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
     borderRadius: "10px",
     margin: "10px",
   };
-  function onClick(getFilePath: () => Promise<string | null>) {
-    getFilePath().then((newFilePath) => {
-      if (newFilePath === null) {
-        return;
-      }
-      setFilePath(newFilePath);
-    });
-  }
   return (
     <div
       style={{
@@ -30,10 +35,30 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
         flexDirection: "column",
       }}
     >
-      <button style={style} onClick={() => onClick(createThenSaveFilePath)}>
+      <button
+        style={style}
+        onClick={() => {
+          createThenSaveFilePath().then((newFilePath) => {
+            if (newFilePath == null) {
+              return;
+            }
+            setFilePath(newFilePath);
+            setTasks([]);
+            setAssignees(new Set([userName]));
+            setUserName(userName);
+          });
+        }}
+      >
         Select Save Location
       </button>
-      <button style={style} onClick={() => onClick(openThenSaveFilePath)}>
+      <button
+        style={style}
+        onClick={() => {
+          openThenSaveFilePath().then((newFilePath) => {
+            load(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
+          });
+        }}
+      >
         Load Tasks
       </button>
     </div>

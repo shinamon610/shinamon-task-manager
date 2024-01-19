@@ -3,28 +3,24 @@ import { Task } from "./task";
 
 // fileを選択した瞬間にそこにtasks.jsonが作成される
 function createFile(defaultPath: string): Promise<string | null> {
-  return import("@tauri-apps/api/dialog")
-    .then(({ save }) =>
-      save({
-        defaultPath,
-        filters: [{ name: "JSON", extensions: ["json"] }],
-      })
-    )
-    .catch(() => null);
+  return import("@tauri-apps/api/dialog").then(({ save }) =>
+    save({
+      defaultPath,
+      filters: [{ name: "JSON", extensions: ["json"] }],
+    })
+  );
 }
 
 // fileを選択するだけ
 function selectFile(defaultPath: string): Promise<string | null> {
-  return import("@tauri-apps/api/dialog")
-    .then(
-      ({ open }) =>
-        open({
-          defaultPath,
-          filters: [{ name: "JSON", extensions: ["json"] }],
-          multiple: false,
-        }) as Promise<string | null>
-    )
-    .catch(() => null);
+  return import("@tauri-apps/api/dialog").then(
+    ({ open }) =>
+      open({
+        defaultPath,
+        filters: [{ name: "JSON", extensions: ["json"] }],
+        multiple: false,
+      }) as Promise<string | null>
+  );
 }
 
 async function ensureDirExists(dir: string) {
