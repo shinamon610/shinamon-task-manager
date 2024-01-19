@@ -79,12 +79,11 @@ function getLayoutedElements(
   if (edges.length === 0) {
     const windowWidth = window.innerWidth / 2;
     return {
-      nodes: zip(accumurateSum(widths), nodes).map(([w, node], i) => {
+      nodes: zip(accumurateSum(widths), nodes).map(([w, node]) => {
         const y = height * Math.floor(w / windowWidth);
-        node.position = {
-          x: w % windowWidth,
-          y,
-        };
+        const x = w % windowWidth;
+        console.log(x, y);
+        node.position = { x, y };
         return node;
       }),
       edges: [],
