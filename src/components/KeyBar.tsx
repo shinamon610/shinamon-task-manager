@@ -1,6 +1,5 @@
 import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
-import { selectString } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { Key } from "./key";
 
@@ -15,14 +14,8 @@ function createLabelsAndKeys(
   switch (mode) {
     case Mode.Normal:
       return [
-        [
-          "New node",
-          "Select Another Location",
-          "Filter",
-          "Select",
-          "Rename User",
-        ],
-        [["n"], ["w"], ["f"], selectString.split(""), ["r"]],
+        ["New node", "Select Another File", "Filter", "Rename User"],
+        [["n"], ["w"], ["f"], ["r"]],
       ];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [
