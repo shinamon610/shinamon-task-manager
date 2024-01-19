@@ -1,4 +1,4 @@
-import { createThenSaveFilePath } from "@/models/file";
+import { createThenSaveFilePath, openThenSaveFilePath } from "@/models/file";
 import React from "react";
 
 type SelectSaveLocationProps = {
@@ -12,6 +12,14 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
     borderRadius: "10px",
     margin: "10px",
   };
+  function onClick(getFilePath: () => Promise<string | null>) {
+    getFilePath().then((newFilePath) => {
+      if (newFilePath === null) {
+        return;
+      }
+      setFilePath(newFilePath);
+    });
+  }
   return (
     <div
       style={{
@@ -22,31 +30,10 @@ export function SelectSaveLocation({ setFilePath }: SelectSaveLocationProps) {
         flexDirection: "column",
       }}
     >
-      <button
-        style={style}
-        onClick={() =>
-          createThenSaveFilePath().then((newFilePath) => {
-            if (newFilePath === null) {
-              return;
-            }
-            setFilePath(newFilePath);
-          })
-        }
-      >
+      <button style={style} onClick={() => onClick(createThenSaveFilePath)}>
         Select Save Location
       </button>
-
-      <button
-        style={style}
-        onClick={() =>
-          createThenSaveFilePath().then((newFilePath) => {
-            if (newFilePath === null) {
-              return;
-            }
-            setFilePath(newFilePath);
-          })
-        }
-      >
+      <button style={style} onClick={() => onClick(openThenSaveFilePath)}>
         Load Tasks
       </button>
     </div>

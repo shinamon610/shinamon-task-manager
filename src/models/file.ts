@@ -13,6 +13,20 @@ function createFile(defaultPath: string): Promise<string | null> {
     .catch(() => null);
 }
 
+// fileを選択するだけ
+function selectFile(defaultPath: string): Promise<string | null> {
+  return import("@tauri-apps/api/dialog")
+    .then(
+      ({ open }) =>
+        open({
+          defaultPath,
+          filters: [{ name: "JSON", extensions: ["json"] }],
+          multiple: false,
+        }) as Promise<string | null>
+    )
+    .catch(() => null);
+}
+
 async function ensureDirExists(dir: string) {
   const { readDir, createDir } = await import("@tauri-apps/api/fs");
   try {
@@ -44,12 +58,15 @@ async function saveFilePath(
   }
 }
 
-export function createThenSaveFilePath(
-  defaultPath = "tasks.json"
-): Promise<string | null> {
+const defaultPath = "tasks.json";
+
+export function createThenSaveFilePath(): Promise<string | null> {
   return saveFilePath(createFile(defaultPath));
 }
 
+export function openThenSaveFilePath(): Promise<string | null> {
+  return saveFilePath(selectFile(defaultPath));
+}
 export async function loadInitialFilePath(): Promise<string | null> {
   const { BaseDirectory, readTextFile } = await import("@tauri-apps/api/fs");
   return readTextFile(configFileName, {
