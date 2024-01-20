@@ -121,7 +121,7 @@ export function MainPage({
         },
         userName
       );
-      const newViewMode = createViewMode(command, viewMode);
+      const newViewMode = createViewMode(newCommand, viewMode);
       setCommand(newCommand);
       setMode(newMode);
       setViewMode(newViewMode);
