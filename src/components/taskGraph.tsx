@@ -138,6 +138,7 @@ function BaseNewTaskGraph({
   assignees,
   serialInput,
   mode,
+  viewMode,
   command,
 }: TaskGraphProps) {
   const { fitView } = useReactFlow();
