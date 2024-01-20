@@ -58,6 +58,10 @@ export enum Command {
   InputFilterTargets,
   SelectFilterMemo,
   InputFilterMemo,
+
+  // ViewMode
+  ToGraph,
+  ToTile,
 }
 
 export const selectString = "aeghik";

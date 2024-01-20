@@ -216,6 +216,9 @@ export function createModeAndTasks(
         Mode.NodeSelecting,
         updateTaskStatus(tasks, DefaultStatus.Done, userName),
       ];
+    case Command.ToGraph:
+    case Command.ToTile:
+      return [mode, tasks];
   }
 }
 

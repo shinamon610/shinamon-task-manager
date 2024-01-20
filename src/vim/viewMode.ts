@@ -51,5 +51,9 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.SelectFilterMemo:
     case Command.InputFilterMemo:
       return viewMode;
+    case Command.ToGraph:
+      return ViewMode.Graph;
+    case Command.ToTile:
+      return ViewMode.Tile;
   }
 }
