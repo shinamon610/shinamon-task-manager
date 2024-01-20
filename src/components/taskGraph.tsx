@@ -1,4 +1,4 @@
-import { getLayoutedElements } from "@/lib/calculatePosition";
+import { calculateNodePosition } from "@/lib/calculatePosition";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
 import { DefaultStatus, Status } from "@/models/status";
@@ -152,9 +152,15 @@ function BaseNewTaskGraph({
       serialInput,
       mode
     );
-    const layouted = getLayoutedElements(newNodes, newEdges);
-    setNodes([...layouted.nodes]);
-    setEdges([...layouted.edges]);
+    const nodePositions = calculateNodePosition(newNodes, newEdges, viewMode);
+    setNodes(
+      zip(newNodes, nodePositions).map(([node, [x, y]]) => {
+        console.log(x, y);
+        node.position = { x, y };
+        return node;
+      })
+    );
+    setEdges(newEdges);
     setTimeout(() => {
       fitView();
     }, 10);

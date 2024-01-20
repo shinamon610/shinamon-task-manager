@@ -1,4 +1,4 @@
-import { zip } from "@/utils";
+import { ViewMode } from "@/vim/viewMode";
 import Dagre from "@dagrejs/dagre";
 import { Edge, Node } from "reactflow";
 
@@ -20,7 +20,7 @@ function measureTextWidth(text: string): number {
   return 0;
 }
 
-function calculatePosition(
+function calculateTilePosition(
   widths: number[],
   height: number
 ): [number, number][] {
@@ -40,54 +40,42 @@ function calculatePosition(
   return res;
 }
 
-export function getLayoutedElements(
+function calculateGraphPosition(
   nodes: Node[],
-  edges: Edge[]
-): { nodes: Node[]; edges: Edge[] } {
+  edges: Edge[],
+  width: number,
+  height: number
+): [number, number][] {
   if (nodes.length === 0) {
-    return { nodes: [], edges: [] };
+    return [];
   }
-  const minWidth = 100;
-  const widths = nodes.map((node) =>
-    Math.max(measureTextWidth(node.data.title), minWidth)
-  );
-  const height = 50;
-
   const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
   g.setGraph({ rankdir: "LR" });
 
-  const width = Math.max(...widths);
-
   nodes.forEach((node) => g.setNode(node.id, { width, height }));
-  console.log("b", edges[0]);
   edges.forEach((edge) => g.setEdge(edge.source, edge.target));
 
   // nodesもedgesも0だとエラーになる。
   Dagre.layout(g);
-  console.log("a", edges[0]);
 
-  // edgeがない場合、tile上に並べる
-  if (edges.length === 0) {
-    return {
-      nodes: zip(calculatePosition(widths, height), nodes).map(
-        ([[x, y], node]) => {
-          node.position = { x, y };
-          return node;
-        }
-      ),
-      edges: [],
-    };
+  return nodes.map((node) => {
+    const { x, y } = g.node(node.id);
+    return [x, y];
+  });
+}
+
+export function calculateNodePosition(
+  nodes: Node[],
+  edges: Edge[],
+  viewMode: ViewMode
+): [number, number][] {
+  const height = 50;
+  const minWidth = 100;
+  const widths = nodes.map((node) =>
+    Math.max(measureTextWidth(node.data.title), minWidth)
+  );
+  if (viewMode === ViewMode.Tile || edges.length === 0) {
+    return calculateTilePosition(widths, height);
   }
-
-  return {
-    nodes: nodes.map((node) => {
-      const nodeWithPosition = g.node(node.id);
-      node.position = {
-        x: nodeWithPosition.x * 1,
-        y: nodeWithPosition.y * 1,
-      };
-      return node;
-    }),
-    edges,
-  };
+  return calculateGraphPosition(nodes, edges, Math.max(...widths), height);
 }
