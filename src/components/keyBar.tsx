@@ -14,8 +14,15 @@ function createLabelsAndKeys(
   switch (mode) {
     case Mode.Normal:
       return [
-        ["New node", "Select Another File", "Filter", "Rename User"],
-        [["n"], ["w"], ["f"], ["r"]],
+        [
+          "New node",
+          "Select Another File",
+          "Filter",
+          "Rename User",
+          "Tile",
+          "Graph",
+        ],
+        [["n"], ["w"], ["f"], ["r"], ["t"], ["g"]],
       ];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [

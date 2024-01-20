@@ -64,7 +64,7 @@ export enum Command {
   ToTile,
 }
 
-export const selectString = "aeghik";
+export const selectString = "aehik";
 const leftStrings = ["ArrowLeft", "h"];
 const downStrings = ["ArrowDown", "j"];
 const upStrings = ["ArrowUp", "k"];
@@ -219,6 +219,12 @@ export function keyEventToCommand(
       }
       if (key === "r") {
         return Command.Rename;
+      }
+      if (key === "g") {
+        return Command.ToGraph;
+      }
+      if (key === "t") {
+        return Command.ToTile;
       }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;

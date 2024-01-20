@@ -155,7 +155,6 @@ function BaseNewTaskGraph({
     const nodePositions = calculateNodePosition(newNodes, newEdges, viewMode);
     setNodes(
       zip(newNodes, nodePositions).map(([node, [x, y]]) => {
-        console.log(x, y);
         node.position = { x, y };
         return node;
       })
@@ -165,7 +164,16 @@ function BaseNewTaskGraph({
       fitView();
     }, 10);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tasks, setNodes, setEdges, serialInput, mode, command, fitView]);
+  }, [
+    tasks,
+    setNodes,
+    setEdges,
+    serialInput,
+    mode,
+    command,
+    fitView,
+    viewMode,
+  ]);
 
   return (
     <ReactFlow
