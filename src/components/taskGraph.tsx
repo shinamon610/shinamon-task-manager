@@ -5,6 +5,7 @@ import { Task } from "@/models/task";
 import { zip } from "@/utils";
 import { Command } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
+import { ViewMode } from "@/vim/viewMode";
 import Dagre from "@dagrejs/dagre";
 import { useEffect } from "react";
 import ReactFlow, {
@@ -125,6 +126,7 @@ type TaskGraphProps = {
   assignees: Set<Assignee>;
   serialInput: string;
   mode: Mode;
+  viewMode: ViewMode;
   command: Command;
 };
 
@@ -269,6 +271,7 @@ export default function TaskGraph({
   assignees,
   serialInput,
   mode,
+  viewMode,
   command,
 }: TaskGraphProps) {
   return (
@@ -279,6 +282,7 @@ export default function TaskGraph({
           assignees={assignees}
           serialInput={serialInput}
           mode={mode}
+          viewMode={viewMode}
           command={command}
         />
       </ReactFlowProvider>

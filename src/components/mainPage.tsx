@@ -185,6 +185,7 @@ export function MainPage({
         assignees={assignees}
         serialInput={serialInput}
         mode={mode}
+        viewMode={viewMode}
         command={command}
       />
       <KeyBar mode={mode} tasks={tasks} />
