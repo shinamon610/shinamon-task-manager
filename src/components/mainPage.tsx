@@ -13,6 +13,7 @@ import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createModeAndTasks, isFilter } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
+import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
@@ -41,6 +42,7 @@ export function MainPage({
   const [statuses, setStatuses] = useState(loadInitialStatus());
   const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());
   const [mode, setMode] = useState(Mode.Normal);
+  const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
 
@@ -119,8 +121,10 @@ export function MainPage({
         },
         userName
       );
+      const newViewMode = createViewMode(command, viewMode);
       setCommand(newCommand);
       setMode(newMode);
+      setViewMode(newViewMode);
       setTasks(newTasks);
       setSerialInput(newSerialInput);
       if (
