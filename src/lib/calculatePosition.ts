@@ -1,3 +1,4 @@
+import { zip } from "@/utils";
 import { ViewMode } from "@/vim/viewMode";
 import Dagre from "@dagrejs/dagre";
 import { Edge, Node } from "reactflow";
@@ -64,18 +65,25 @@ function calculateGraphPosition(
   });
 }
 
-export function calculateNodePosition(
+export function createLayoutedNodeAndEdges(
   nodes: Node[],
   edges: Edge[],
   viewMode: ViewMode
-): [number, number][] {
+): [Node[], Edge[]] {
   const height = 50;
   const minWidth = 100;
   const widths = nodes.map((node) =>
     Math.max(measureTextWidth(node.data.title), minWidth)
   );
-  if (viewMode === ViewMode.Tile || edges.length === 0) {
-    return calculateTilePosition(widths, height);
-  }
-  return calculateGraphPosition(nodes, edges, Math.max(...widths), height);
+  const isTile = viewMode === ViewMode.Tile || edges.length === 0;
+  const positions = isTile
+    ? calculateTilePosition(widths, height)
+    : calculateGraphPosition(nodes, edges, Math.max(...widths), height);
+  return [
+    zip(nodes, positions).map(([node, [x, y]]) => {
+      node.position = { x, y };
+      return node;
+    }),
+    isTile ? [] : edges,
+  ];
 }

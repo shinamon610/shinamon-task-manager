@@ -1,4 +1,4 @@
-import { calculateNodePosition } from "@/lib/calculatePosition";
+import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
 import { DefaultStatus, Status } from "@/models/status";
@@ -146,19 +146,11 @@ function BaseNewTaskGraph({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    const [newNodes, newEdges] = createNodesAndEdgesFromTasks(
-      tasks,
-      assignees,
-      serialInput,
-      mode
+    const [newNodes, newEdges] = createLayoutedNodeAndEdges(
+      ...createNodesAndEdgesFromTasks(tasks, assignees, serialInput, mode),
+      viewMode
     );
-    const nodePositions = calculateNodePosition(newNodes, newEdges, viewMode);
-    setNodes(
-      zip(newNodes, nodePositions).map(([node, [x, y]]) => {
-        node.position = { x, y };
-        return node;
-      })
-    );
+    setNodes(newNodes);
     setEdges(newEdges);
     setTimeout(() => {
       fitView();
