@@ -2,7 +2,7 @@ import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
 import { DefaultStatus, Status } from "@/models/status";
 import { Task } from "@/models/task";
-import { accumurateSum, zip } from "@/utils";
+import { zip } from "@/utils";
 import { Command } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import Dagre from "@dagrejs/dagre";
@@ -46,6 +46,26 @@ function measureTextWidth(text: string, fontSize: number = 10): number {
   return 0;
 }
 
+function calculatePosition(
+  widths: number[],
+  height: number
+): [number, number][] {
+  if (widths.length === 0) {
+    return [];
+  }
+  const windowWidth = window.innerWidth / 2;
+  const res: [number, number][] = [[0, 0]];
+  widths.forEach((width, i) => {
+    if (res[i][0] + width <= windowWidth) {
+      res.push([width + res[i][0], res[i][1]]);
+    } else {
+      res.push([0, res[i][1] + height]);
+    }
+  });
+
+  return res;
+}
+
 function getLayoutedElements(
   nodes: Node[],
   edges: Edge[],
@@ -65,11 +85,7 @@ function getLayoutedElements(
 
   const width = Math.max(...widths);
 
-  nodes.forEach((node) => {
-    const { id } = node;
-
-    g.setNode(id, { width, height });
-  });
+  nodes.forEach((node) => g.setNode(node.id, { width, height }));
   edges.forEach((edge) => g.setEdge(edge.source, edge.target));
 
   // nodesもedgesも0だとエラーになる。
@@ -77,15 +93,13 @@ function getLayoutedElements(
 
   // edgeがない場合、tile上に並べる
   if (edges.length === 0) {
-    const windowWidth = window.innerWidth / 2;
     return {
-      nodes: zip(accumurateSum(widths), nodes).map(([w, node]) => {
-        const y = height * Math.floor(w / windowWidth);
-        const x = w % windowWidth;
-        console.log(x, y);
-        node.position = { x, y };
-        return node;
-      }),
+      nodes: zip(calculatePosition(widths, height), nodes).map(
+        ([[x, y], node]) => {
+          node.position = { x, y };
+          return node;
+        }
+      ),
       edges: [],
     };
   }
