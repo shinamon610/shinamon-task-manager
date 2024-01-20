@@ -145,9 +145,13 @@ function BaseNewTaskGraph({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    const layouted = getLayoutedElements(
-      ...createNodesAndEdgesFromTasks(tasks, assignees, serialInput, mode)
+    const [newNodes, newEdges] = createNodesAndEdgesFromTasks(
+      tasks,
+      assignees,
+      serialInput,
+      mode
     );
+    const layouted = getLayoutedElements(newNodes, newEdges);
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
     setTimeout(() => {

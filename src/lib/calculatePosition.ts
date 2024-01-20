@@ -2,11 +2,12 @@ import { zip } from "@/utils";
 import Dagre from "@dagrejs/dagre";
 import { Edge, Node } from "reactflow";
 
-function measureTextWidth(text: string, fontSize: number = 10): number {
+function measureTextWidth(text: string): number {
   if (typeof document !== "undefined") {
     // 仮想のCanvas要素を作成
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
+    const fontSize = 10;
 
     if (context) {
       context.font = `${fontSize}px sans-serif`;
