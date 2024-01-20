@@ -1,6 +1,9 @@
-import { load } from "@/app/page";
 import { Assignee } from "@/models/assignee";
-import { createThenSaveFilePath, openThenSaveFilePath } from "@/models/file";
+import {
+  createThenSaveFilePath,
+  loadData,
+  openThenSaveFilePath,
+} from "@/models/file";
 import { Task } from "@/models/task";
 import React, { Dispatch, SetStateAction } from "react";
 
@@ -55,7 +58,13 @@ export function SelectSaveLocation({
         style={style}
         onClick={() => {
           openThenSaveFilePath().then((newFilePath) => {
-            load(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
+            loadData(
+              newFilePath,
+              setFilePath,
+              setTasks,
+              setAssignees,
+              setUserName
+            );
           });
         }}
       >

@@ -1,4 +1,6 @@
 import moment from "moment";
+import { Dispatch, SetStateAction } from "react";
+import { extractAssignees } from "./assignee";
 import { Task } from "./task";
 
 // fileを選択した瞬間にそこにtasks.jsonが作成される
@@ -81,7 +83,7 @@ export async function saveData(data: DataToSave, filePath: string) {
   await writeTextFile(filePath, jsonContent);
 }
 
-export async function loadData(filePath: string): Promise<DataToSave> {
+async function load(filePath: string): Promise<DataToSave> {
   const { readTextFile } = await import("@tauri-apps/api/fs");
   const jsonContent = await readTextFile(filePath);
   const { tasks, userName }: DataToSave = JSON.parse(jsonContent);
@@ -97,4 +99,22 @@ export async function loadData(filePath: string): Promise<DataToSave> {
   });
 
   return { tasks, userName };
+}
+
+export async function loadData(
+  newFilePath: string | null,
+  setFilePath: Dispatch<SetStateAction<string>>,
+  setTasks: Dispatch<SetStateAction<Task[]>>,
+  setAssignees: Dispatch<SetStateAction<Set<string>>>,
+  setUserName: Dispatch<SetStateAction<string>>
+) {
+  if (newFilePath === null) {
+    return;
+  }
+  setFilePath(newFilePath);
+  load(newFilePath).then((data) => {
+    setTasks(data.tasks);
+    setAssignees(extractAssignees(data.tasks).add(data.userName));
+    setUserName(data.userName);
+  });
 }

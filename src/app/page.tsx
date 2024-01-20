@@ -2,28 +2,10 @@
 import { InputUserName } from "@/components/inputUserName";
 import { MainPage } from "@/components/mainPage";
 import { SelectSaveLocation } from "@/components/selectSaveLocation";
-import { Assignee, extractAssignees } from "@/models/assignee";
+import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
 import { Task } from "@/models/task";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-
-export async function load(
-  newFilePath: string | null,
-  setFilePath: Dispatch<SetStateAction<string>>,
-  setTasks: Dispatch<SetStateAction<Task[]>>,
-  setAssignees: Dispatch<SetStateAction<Set<string>>>,
-  setUserName: Dispatch<SetStateAction<string>>
-) {
-  if (newFilePath === null) {
-    return;
-  }
-  setFilePath(newFilePath);
-  loadData(newFilePath).then((data) => {
-    setTasks(data.tasks);
-    setAssignees(extractAssignees(data.tasks).add(data.userName));
-    setUserName(data.userName);
-  });
-}
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const [filePath, setFilePath] = useState("");
@@ -33,7 +15,7 @@ const HomePage = () => {
 
   useEffect(() => {
     loadInitialFilePath().then((newFilePath) => {
-      load(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
+      loadData(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
     });
   }, []);
 
