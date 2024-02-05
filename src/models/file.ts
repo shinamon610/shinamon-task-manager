@@ -36,7 +36,7 @@ async function ensureDirExists(dir: string) {
 
 const configFileName = "config.txt";
 
-async function saveFilePath(
+async function savePath(
   filePath: Promise<string | null>
 ): Promise<string | null> {
   try {
@@ -59,11 +59,11 @@ async function saveFilePath(
 const defaultPath = "tasks.json";
 
 export function createThenSaveFilePath(): Promise<string | null> {
-  return saveFilePath(createFile(defaultPath));
+  return savePath(createFile(defaultPath));
 }
 
 export function openThenSaveFilePath(): Promise<string | null> {
-  return saveFilePath(selectFile(defaultPath));
+  return savePath(selectFile(defaultPath));
 }
 export async function loadInitialFilePath(): Promise<string | null> {
   const { BaseDirectory, readTextFile } = await import("@tauri-apps/api/fs");
