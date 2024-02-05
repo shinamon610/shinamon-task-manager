@@ -1,9 +1,5 @@
 import { Assignee } from "@/models/assignee";
-import {
-  createThenSaveFilePath,
-  loadData,
-  openThenSaveFilePath,
-} from "@/models/file";
+import { createDir, getTasksJsonFile, loadData, openDir } from "@/models/file";
 import { Task } from "@/models/task";
 import React, { Dispatch, SetStateAction } from "react";
 
@@ -41,25 +37,28 @@ export function SelectSaveLocation({
       <button
         style={style}
         onClick={() => {
-          createThenSaveFilePath().then((newFilePath) => {
-            if (newFilePath == null) {
+          createDir().then((newDir) => {
+            if (newDir == null) {
               return;
             }
-            setFilePath(newFilePath);
+            setFilePath(getTasksJsonFile(newDir));
             setTasks([]);
             setAssignees(new Set([userName]));
             setUserName(userName);
           });
         }}
       >
-        Select Save Location
+        Create Save Location
       </button>
       <button
         style={style}
         onClick={() => {
-          openThenSaveFilePath().then((newFilePath) => {
+          openDir().then((dirToLoad) => {
+            if (dirToLoad === null) {
+              return;
+            }
             loadData(
-              newFilePath,
+              dirToLoad,
               setFilePath,
               setTasks,
               setAssignees,

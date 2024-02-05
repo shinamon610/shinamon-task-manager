@@ -1,28 +1,37 @@
 import moment from "moment";
+import path from "path";
 import { Dispatch, SetStateAction } from "react";
 import { extractAssignees } from "./assignee";
 import { Task } from "./task";
 
-// fileを選択した瞬間にそこにtasks.jsonが作成される
-function createFile(defaultPath: string): Promise<string | null> {
-  return import("@tauri-apps/api/dialog").then(({ save }) =>
-    save({
-      defaultPath,
-      filters: [{ name: "JSON", extensions: ["json"] }],
-    })
-  );
+const defaultPath = "tasks.json";
+const defaultDir = "ShinamonTaskManager";
+const configFileName = "config.txt";
+
+export function getTasksJsonFile(dirPath: string): string {
+  return path.join(dirPath, defaultPath);
 }
 
-// fileを選択するだけ
-function selectFile(defaultPath: string): Promise<string | null> {
-  return import("@tauri-apps/api/dialog").then(
-    ({ open }) =>
-      open({
-        defaultPath,
-        filters: [{ name: "JSON", extensions: ["json"] }],
-        multiple: false,
-      }) as Promise<string | null>
-  );
+async function _selectDirectory(): Promise<string | null> {
+  const { save } = await import("@tauri-apps/api/dialog");
+  return await save({
+    defaultPath: defaultDir,
+  });
+}
+
+async function _openDirectory(): Promise<string | null> {
+  const { open } = await import("@tauri-apps/api/dialog");
+  return open({
+    defaultPath: defaultDir,
+    multiple: false,
+    directory: true,
+  }) as Promise<string | null>;
+}
+
+async function _createDir(dir: string): Promise<string | null> {
+  const { createDir } = await import("@tauri-apps/api/fs");
+  await createDir(dir);
+  return dir;
 }
 
 async function ensureDirExists(dir: string) {
@@ -33,8 +42,6 @@ async function ensureDirExists(dir: string) {
     await createDir(dir, { recursive: true });
   }
 }
-
-const configFileName = "config.txt";
 
 async function savePath(
   filePath: Promise<string | null>
@@ -56,15 +63,16 @@ async function savePath(
   }
 }
 
-const defaultPath = "tasks.json";
-
-export function createThenSaveFilePath(): Promise<string | null> {
-  return savePath(createFile(defaultPath));
+export async function createDir(): Promise<string | null> {
+  const maybeDir = await _selectDirectory();
+  if (maybeDir === null) return null;
+  return savePath(_createDir(maybeDir));
 }
 
-export function openThenSaveFilePath(): Promise<string | null> {
-  return savePath(selectFile(defaultPath));
+export async function openDir(): Promise<string | null> {
+  return savePath(_openDirectory());
 }
+
 export async function loadInitialFilePath(): Promise<string | null> {
   const { BaseDirectory, readTextFile } = await import("@tauri-apps/api/fs");
   return readTextFile(configFileName, {
@@ -102,17 +110,18 @@ async function load(filePath: string): Promise<DataToSave> {
 }
 
 export async function loadData(
-  newFilePath: string | null,
+  dir: string | null,
   setFilePath: Dispatch<SetStateAction<string>>,
   setTasks: Dispatch<SetStateAction<Task[]>>,
   setAssignees: Dispatch<SetStateAction<Set<string>>>,
   setUserName: Dispatch<SetStateAction<string>>
 ) {
-  if (newFilePath === null) {
+  if (dir === null) {
     return;
   }
-  setFilePath(newFilePath);
-  load(newFilePath).then((data) => {
+  const filePath = getTasksJsonFile(dir);
+  setFilePath(filePath);
+  load(filePath).then((data) => {
     setTasks(data.tasks);
     setAssignees(extractAssignees(data.tasks).add(data.userName));
     setUserName(data.userName);
