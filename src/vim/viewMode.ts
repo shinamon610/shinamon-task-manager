@@ -50,6 +50,10 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.InputFilterTargets:
     case Command.SelectFilterMemo:
     case Command.InputFilterMemo:
+    case Command.InputMarkdownFile:
+    case Command.OpenEditor:
+    case Command.SetEditor:
+    case Command.ViewMarkdownFile:
       return viewMode;
     case Command.ToGraph:
       return ViewMode.Graph;

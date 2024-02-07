@@ -32,8 +32,17 @@ function createLabelsAndKeys(
         "Set to Working",
         "Set to Pending",
         "Set to Done",
+        "View Memo",
       ];
-      const keyNodeSelecting = [["e"], ["x"], ["esc"], ["w"], ["p"], ["d"]];
+      const keyNodeSelecting = [
+        ["e"],
+        ["x"],
+        ["esc"],
+        ["w"],
+        ["p"],
+        ["d"],
+        ["f"],
+      ];
 
       // Doneじゃないタスクがある場合、statusは選択できないようにする
       return hasNotDoneChildTask(tasks)
@@ -76,6 +85,15 @@ function createLabelsAndKeys(
     case Mode.FilterMemoSelecting:
     case Mode.FilterMemoInputting:
       return [["Done"], [["esc"]]];
+    case Mode.MarkDownViewing:
+      return [
+        ["Input", "Back", "Editor", "Set Editor"],
+        [["i"], ["Escape"], ["e"], ["s"]],
+      ];
+    case Mode.MarkDownInputting:
+      return [["Done"], [["Escape"]]];
+    case Mode.EditorSetting:
+      return [["Done"], [["Escape|Enter"]]];
   }
 }
 function createElements(mode: Mode, tasks: Task[]): React.JSX.Element[] {

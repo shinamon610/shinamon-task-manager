@@ -174,7 +174,10 @@ export function MainPage({
   return (
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
-        <MarkdownViewer />
+        <>
+          <MarkdownViewer />
+          <KeyBar mode={mode} tasks={tasks} />
+        </>
       ) : (
         <>
           <TaskGraph
