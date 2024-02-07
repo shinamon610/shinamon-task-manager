@@ -328,7 +328,7 @@ export function keyEventToCommand(
         return Command.InputMarkdownFile;
       }
       if (key === "Escape") {
-        return Command.SelectTaskNode;
+        return Command.ConfirmEdit;
       }
       if (key === "e") {
         return Command.OpenEditor;

@@ -144,6 +144,7 @@ export function MainPage({
         setSpentTime(selectedTask.spentTime);
         setStartDateTime(selectedTask.startTime);
         setEndDateTime(selectedTask.endTime);
+        console.log("memo", selectedTask.memo);
         setMemo(selectedTask.memo);
       }
       if (newCommand === Command.SelectAnotherLocation) {
@@ -175,7 +176,11 @@ export function MainPage({
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
         <>
-          <MarkdownViewer memo={getSelectedTask(tasks)!.memo} />
+          <MarkdownViewer
+            memo={getSelectedTask(tasks)!.memo}
+            setMemo={setMemo}
+            mode={mode}
+          />
           <KeyBar mode={mode} tasks={tasks} />
         </>
       ) : (
