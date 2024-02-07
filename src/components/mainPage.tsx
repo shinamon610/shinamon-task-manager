@@ -175,7 +175,7 @@ export function MainPage({
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
         <>
-          <MarkdownViewer />
+          <MarkdownViewer memo={getSelectedTask(tasks)!.memo} />
           <KeyBar mode={mode} tasks={tasks} />
         </>
       ) : (

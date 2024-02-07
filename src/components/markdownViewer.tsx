@@ -1,8 +1,20 @@
 import { Editable, useEditor } from "@wysimark/react";
 import { useState } from "react";
 
-export default function MarkdownViewer() {
-  const [markdown, setMarkdown] = useState("# Hello World");
+type Props = {
+  memo: string;
+};
+export default function MarkdownViewer({ memo }: Props) {
+  const [markdown, setMarkdown] = useState(memo);
   const editor = useEditor({});
-  return <Editable editor={editor} value={markdown} onChange={setMarkdown} />;
+  return (
+    <Editable
+      editor={editor}
+      value={markdown}
+      onChange={(e) => {
+        setMarkdown(e);
+      }}
+      className="bg-transparent text-white"
+    />
+  );
 }
