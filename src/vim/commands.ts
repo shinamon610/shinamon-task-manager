@@ -22,6 +22,12 @@ export enum Command {
   SetToPending,
   SetToDone,
 
+  // Markdown
+  ViewMarkdownFile,
+  InputMarkdownFile,
+  OpenEditor,
+  SetEditor,
+
   //edit
   SelectTitle,
   InputTitle,
@@ -249,6 +255,9 @@ export function keyEventToCommand(
       if (key === "d") {
         return Command.SetToDone;
       }
+      if (key === "f") {
+        return Command.ViewMarkdownFile;
+      }
       return Command.Nothing;
     case Mode.TitleSelecting:
     case Mode.StatusSelecting:
@@ -314,5 +323,29 @@ export function keyEventToCommand(
         selectingFilterCommands,
         inputtingFilterCommands
       );
+    case Mode.MarkDownViewing:
+      if (key === "i") {
+        return Command.InputMarkdownFile;
+      }
+      if (key === "Escape") {
+        return Command.SelectTaskNode;
+      }
+      if (key === "e") {
+        return Command.OpenEditor;
+      }
+      if (key === "s") {
+        return Command.SetEditor;
+      }
+      return Command.Nothing;
+    case Mode.MarkDownInputting:
+      if (key === "Escape") {
+        return Command.ViewMarkdownFile;
+      }
+      return Command.Nothing;
+    case Mode.EditorSetting:
+      if (key === "Escape") {
+        return Command.ViewMarkdownFile;
+      }
+      return Command.Nothing;
   }
 }

@@ -16,6 +16,11 @@ export enum Mode {
   Normal,
   NodeSelecting,
 
+  // Markdown
+  MarkDownViewing,
+  MarkDownInputting,
+  EditorSetting,
+
   //edit
   TitleSelecting,
   TitleInputting,
@@ -219,6 +224,14 @@ export function createModeAndTasks(
     case Command.ToGraph:
     case Command.ToTile:
       return [mode, tasks];
+    case Command.ViewMarkdownFile:
+      return [Mode.MarkDownViewing, tasks];
+    case Command.InputMarkdownFile:
+      return [Mode.MarkDownInputting, tasks];
+    case Command.SetEditor:
+      return [Mode.EditorSetting, tasks];
+    case Command.OpenEditor:
+      return [Mode.MarkDownViewing, tasks];
   }
 }
 
