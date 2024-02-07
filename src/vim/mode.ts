@@ -58,6 +58,12 @@ export enum Mode {
   FilterMemoInputting,
 }
 
+export const markdownModes = [
+  Mode.MarkDownInputting,
+  Mode.MarkDownViewing,
+  Mode.EditorSetting,
+];
+
 export const selectingModes = [
   [Mode.TitleSelecting],
   [Mode.StatusSelecting, Mode.AssigneeSelecting],

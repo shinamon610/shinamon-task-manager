@@ -11,12 +11,13 @@ import {
 } from "@/models/status";
 import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
-import { Mode, createModeAndTasks, isFilter } from "@/vim/mode";
+import { Mode, createModeAndTasks, isFilter, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
+import MarkdownViewer from "./markdownViewer";
 
 type MainPageProps = {
   filePath: string;
@@ -172,59 +173,69 @@ export function MainPage({
 
   return (
     <div className={"homepage"}>
-      <TaskGraph
-        tasks={filterTasks(
-          tasks,
-          filterTitle,
-          filterStatus,
-          filterAssignee,
-          filterSources,
-          filterTargets,
-          filterMemo
-        )}
-        assignees={assignees}
-        serialInput={serialInput}
-        mode={mode}
-        viewMode={viewMode}
-        command={command}
-      />
-      <KeyBar mode={mode} tasks={tasks} />
-      <EditBar
-        mode={mode}
-        tasks={tasks}
-        title={isFilter(mode) ? filterTitle : title}
-        setTitle={isFilter(mode) ? setFilterTitle : setTitle}
-        selectedStatus={isFilter(mode) ? filterStatus : selectedStatus}
-        setSelectedStatus={isFilter(mode) ? setFilterStatus : setSelectedStatus}
-        statuses={isFilter(mode) ? allStatuses : statuses}
-        setStatuses={isFilter(mode) ? setAllStatuses : setStatuses}
-        selectedAssignee={isFilter(mode) ? filterAssignee : selectedAssignee}
-        setSelectedAssignee={
-          isFilter(mode) ? setFilterAssignee : setSelectedAssignee
-        }
-        assignees={assignees}
-        setAssignees={setAssignees}
-        selectedSources={isFilter(mode) ? filterSources : selectedSources}
-        setSelectedSources={
-          isFilter(mode) ? setFilterSources : setSelectedSources
-        }
-        sourcesRef={sourcesRef}
-        selectedTargets={isFilter(mode) ? filterTargets : selectedTargets}
-        setSelectedTargets={
-          isFilter(mode) ? setFilterTargets : setSelectedTargets
-        }
-        targetsRef={targetsRef}
-        estimatedTime={estimatedTime}
-        setEstimatedTime={setEstimatedTime}
-        spentTime={spentTime}
-        setSpentTime={setSpentTime}
-        startDateTime={startDateTime}
-        setStartDateTime={setStartDateTime}
-        endDateTime={endDateTime}
-        setEndDateTime={setEndDateTime}
-        memo={isFilter(mode) ? filterMemo : memo}
-        setMemo={isFilter(mode) ? setFilterMemo : setMemo}
-      />
+      {markdownModes.includes(mode) ? (
+        <MarkdownViewer />
+      ) : (
+        <>
+          <TaskGraph
+            tasks={filterTasks(
+              tasks,
+              filterTitle,
+              filterStatus,
+              filterAssignee,
+              filterSources,
+              filterTargets,
+              filterMemo
+            )}
+            assignees={assignees}
+            serialInput={serialInput}
+            mode={mode}
+            viewMode={viewMode}
+            command={command}
+          />
+          <KeyBar mode={mode} tasks={tasks} />
+          <EditBar
+            mode={mode}
+            tasks={tasks}
+            title={isFilter(mode) ? filterTitle : title}
+            setTitle={isFilter(mode) ? setFilterTitle : setTitle}
+            selectedStatus={isFilter(mode) ? filterStatus : selectedStatus}
+            setSelectedStatus={
+              isFilter(mode) ? setFilterStatus : setSelectedStatus
+            }
+            statuses={isFilter(mode) ? allStatuses : statuses}
+            setStatuses={isFilter(mode) ? setAllStatuses : setStatuses}
+            selectedAssignee={
+              isFilter(mode) ? filterAssignee : selectedAssignee
+            }
+            setSelectedAssignee={
+              isFilter(mode) ? setFilterAssignee : setSelectedAssignee
+            }
+            assignees={assignees}
+            setAssignees={setAssignees}
+            selectedSources={isFilter(mode) ? filterSources : selectedSources}
+            setSelectedSources={
+              isFilter(mode) ? setFilterSources : setSelectedSources
+            }
+            sourcesRef={sourcesRef}
+            selectedTargets={isFilter(mode) ? filterTargets : selectedTargets}
+            setSelectedTargets={
+              isFilter(mode) ? setFilterTargets : setSelectedTargets
+            }
+            targetsRef={targetsRef}
+            estimatedTime={estimatedTime}
+            setEstimatedTime={setEstimatedTime}
+            spentTime={spentTime}
+            setSpentTime={setSpentTime}
+            startDateTime={startDateTime}
+            setStartDateTime={setStartDateTime}
+            endDateTime={endDateTime}
+            setEndDateTime={setEndDateTime}
+            memo={isFilter(mode) ? filterMemo : memo}
+            setMemo={isFilter(mode) ? setFilterMemo : setMemo}
+          />
+        </>
+      )}
     </div>
   );
 }
