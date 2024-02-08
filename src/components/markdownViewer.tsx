@@ -1,5 +1,6 @@
 import { Mode } from "@/vim/mode";
 import { TextareaAutosize } from "@mui/material";
+import { useEffect, useRef } from "react";
 
 type Props = {
   memo: string;
@@ -7,11 +8,23 @@ type Props = {
   mode: Mode;
 };
 export default function MarkdownViewer({ memo, setMemo, mode }: Props) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (mode === Mode.MarkDownInputting) {
+      // @ts-ignore
+      ref.current.focus();
+    } else {
+      // @ts-ignore
+      ref.current.blur();
+    }
+  }, [mode]);
+
   return (
     <TextareaAutosize
+      disabled={mode !== Mode.MarkDownInputting}
+      ref={ref}
       value={memo}
       onChange={(e) => {
-        console.log(e.target.value);
         setMemo(e.target.value);
       }}
       style={{ backgroundColor: "var(--active)" }}
