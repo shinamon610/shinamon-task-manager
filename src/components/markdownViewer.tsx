@@ -1,4 +1,5 @@
 import { Mode } from "@/vim/mode";
+import { TextareaAutosize } from "@mui/material";
 
 type Props = {
   memo: string;
@@ -7,7 +8,7 @@ type Props = {
 };
 export default function MarkdownViewer({ memo, setMemo, mode }: Props) {
   return (
-    <textarea
+    <TextareaAutosize
       value={memo}
       onChange={(e) => {
         console.log(e.target.value);

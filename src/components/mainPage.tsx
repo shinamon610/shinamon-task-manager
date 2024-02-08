@@ -181,11 +181,7 @@ export function MainPage({
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
         <>
-          <MarkdownViewer
-            memo={getSelectedTask(tasks)!.memo}
-            setMemo={setMemo}
-            mode={mode}
-          />
+          <MarkdownViewer memo={memo} setMemo={setMemo} mode={mode} />
           <FlexContainer
             components={[
               <KeyBar key={"m0"} mode={mode} tasks={tasks} />,
