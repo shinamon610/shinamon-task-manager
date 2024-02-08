@@ -18,19 +18,18 @@
     "@mui/joy": "^5.0.0-beta.18",
     "@mui/material": "^5.15.0",
     "@tauri-apps/api": "^1.5.3",
-    "@wysimark/react": "^3.0.20",
     "cytoscape": "^3.27.0",
     "cytoscape-dagre": "^2.5.0",
     "cytoscape-dom-node": "^1.2.0",
     "cytoscape-popper": "^2.0.0",
     "moment": "^2.29.4",
     "next": "14.0.4",
+    "prettier": "^3.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-select": "^5.8.0",
     "reactflow": "^11.10.1",
-    "uuid": "^9.0.1",
-    "prettier": "^3.2.5"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.9",
