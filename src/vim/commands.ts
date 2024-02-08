@@ -208,7 +208,7 @@ export function keyEventToCommand(
   targetsRef: MutableRefObject<null>
 ): Command {
   const key = event.key;
-  console.log(key);
+  // console.log(key);
   switch (mode) {
     case Mode.Normal:
       if (key === "Escape" || key === "c" || key === "Backspace") {

@@ -149,7 +149,6 @@ export function MainPage({
         setSpentTime(selectedTask.spentTime);
         setStartDateTime(selectedTask.startTime);
         setEndDateTime(selectedTask.endTime);
-        console.log("memo", selectedTask.memo);
         setMemo(selectedTask.memo);
       }
       if (newCommand === Command.SelectAnotherLocation) {
