@@ -17,6 +17,8 @@ import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
+import { EditorSettingTextBox } from "./editorSettingTextBox";
+import { FlexContainer } from "./flexContainer";
 import MarkdownViewer from "./markdownViewer";
 
 type MainPageProps = {
@@ -80,6 +82,9 @@ export function MainPage({
     new Set<UUID>([])
   );
   const [filterMemo, setFilterMemo] = useState("");
+
+  // editor
+  const [editor, setEditor] = useState("");
 
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
@@ -181,7 +186,22 @@ export function MainPage({
             setMemo={setMemo}
             mode={mode}
           />
-          <KeyBar mode={mode} tasks={tasks} />
+          <FlexContainer
+            components={[
+              <KeyBar key={"m0"} mode={mode} tasks={tasks} />,
+              <label key={"m1"} style={{ backgroundColor: "var(--active)" }}>
+                Editor:
+              </label>,
+              <EditorSettingTextBox
+                key={"m2"}
+                editor={editor}
+                setEditor={setEditor}
+                mode={mode}
+              />,
+            ]}
+            isSelected={false}
+            ratios={[1, 0, 1]}
+          />
         </>
       ) : (
         <>
