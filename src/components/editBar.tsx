@@ -396,12 +396,6 @@ function isDisabled(mode: Mode): boolean {
   });
 }
 
-function isDisabledTime(mode: Mode): boolean {
-  return [selectingModes, inputtingModes].every((modes) => {
-    return !flatten(modes).includes(mode);
-  });
-}
-
 export const EditBar = (props: EditBarProps) => {
   const mode = props.mode;
   const titleRef = useRef(null);
