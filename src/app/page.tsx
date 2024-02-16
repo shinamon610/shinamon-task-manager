@@ -1,10 +1,10 @@
 "use client";
 import { InputUserName } from "@/components/inputUserName";
-import { MainPage } from "@/components/mainPage";
 import { SelectSaveLocation } from "@/components/selectSaveLocation";
 import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
 import { Task } from "@/models/task";
+import { MainPage } from "@/pages/mainPage";
 import { useEffect, useState } from "react";
 
 const HomePage = () => {

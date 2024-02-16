@@ -1,5 +1,8 @@
 import { EditBar } from "@/components/editBar";
+import { EditorSettingTextBox } from "@/components/editorSettingTextBox";
+import { FlexContainer } from "@/components/flexContainer";
 import { KeyBar } from "@/components/keyBar";
+import MarkdownViewer from "@/components/markdownViewer";
 import TaskGraph from "@/components/taskGraph";
 import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
@@ -17,10 +20,6 @@ import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
-import { EditorSettingTextBox } from "./editorSettingTextBox";
-import { FlexContainer } from "./flexContainer";
-import MarkdownViewer from "./markdownViewer";
-
 type MainPageProps = {
   filePath: string;
   setFilePath: React.Dispatch<React.SetStateAction<string>>;
