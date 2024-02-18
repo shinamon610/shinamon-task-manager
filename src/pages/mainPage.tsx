@@ -54,16 +54,20 @@ export function MainPage() {
   const [memo, setMemo] = useState("");
 
   // filter設定
-  const { filterTitle, setFilterTitle } = useContext(MainContext);
-  const [filterStatus, setFilterStatus] = useState<Status | null>(null);
-  const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
-  const [filterSources, setFilterSources] = useState<Set<UUID>>(
-    new Set<UUID>([])
-  );
-  const [filterTargets, setFilterTargets] = useState<Set<UUID>>(
-    new Set<UUID>([])
-  );
-  const [filterMemo, setFilterMemo] = useState("");
+  const {
+    filterTitle,
+    setFilterTitle,
+    filterStatus,
+    setFilterStatus,
+    filterAssignee,
+    setFilterAssignee,
+    filterSources,
+    setFilterSources,
+    filterTargets,
+    setFilterTargets,
+    filterMemo,
+    setFilterMemo,
+  } = useContext(MainContext);
 
   // editor
   const [editor, setEditor] = useState("");
