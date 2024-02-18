@@ -27,7 +27,6 @@ const nodeTypes = {
 };
 
 type TaskGraphProps = {
-  tasks: Task[];
   serialInput: string;
   viewMode: ViewMode;
   command: Command;
@@ -133,12 +132,8 @@ function createNodesAndEdgesFromTasks(
   return [nodes, edges];
 }
 
-function BaseNewTaskGraph({
-  tasks,
-  serialInput,
-  viewMode,
-  command,
-}: TaskGraphProps) {
+function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
+  const { filteredTasks } = useContext(MainContext);
   const { assignees } = useContext(GlobalContext);
   const { fitView } = useReactFlow();
   const { mode } = useContext(MainContext);
@@ -147,7 +142,12 @@ function BaseNewTaskGraph({
 
   useEffect(() => {
     const [newNodes, newEdges] = createLayoutedNodeAndEdges(
-      ...createNodesAndEdgesFromTasks(tasks, assignees, serialInput, mode),
+      ...createNodesAndEdgesFromTasks(
+        filteredTasks,
+        assignees,
+        serialInput,
+        mode
+      ),
       viewMode
     );
     setNodes(newNodes);
@@ -157,7 +157,7 @@ function BaseNewTaskGraph({
     }, 10);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    tasks,
+    filteredTasks,
     setNodes,
     setEdges,
     serialInput,
@@ -180,7 +180,6 @@ function BaseNewTaskGraph({
 }
 
 export default function TaskGraph({
-  tasks,
   serialInput,
   viewMode,
   command,
@@ -189,7 +188,6 @@ export default function TaskGraph({
     <div className="task-graph">
       <ReactFlowProvider>
         <BaseNewTaskGraph
-          tasks={tasks}
           serialInput={serialInput}
           viewMode={viewMode}
           command={command}

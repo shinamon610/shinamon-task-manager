@@ -1,8 +1,16 @@
 import { Assignee } from "@/models/assignee";
 import { Status } from "@/models/status";
 import { Mode } from "@/vim/mode";
-import { Dispatch, SetStateAction, createContext, useState } from "react";
-import { UUID } from "../models/task";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { Task, UUID, filterTasks } from "../models/task";
+import { GlobalContext } from "./globalContext";
 
 export const MainContext = createContext<MainContextType>({
   mode: Mode.Normal,
@@ -19,6 +27,7 @@ export const MainContext = createContext<MainContextType>({
   setFilterTargets: () => {},
   filterMemo: "",
   setFilterMemo: () => {},
+  filteredTasks: [],
 });
 
 type MainContextType = {
@@ -36,9 +45,11 @@ type MainContextType = {
   setFilterTargets: Dispatch<SetStateAction<Set<UUID>>>;
   filterMemo: string;
   setFilterMemo: Dispatch<SetStateAction<string>>;
+  filteredTasks: Task[];
 };
 
 export function MainProvider({ children }: { children: React.ReactNode }) {
+  const { tasks } = useContext(GlobalContext);
   const [mode, setMode] = useState(Mode.Normal);
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
@@ -50,6 +61,26 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
     new Set<UUID>([])
   );
   const [filterMemo, setFilterMemo] = useState("");
+  const filteredTasks = useMemo(() => {
+    return filterTasks(
+      tasks,
+      filterTitle,
+      filterStatus,
+      filterAssignee,
+      filterSources,
+      filterTargets,
+      filterMemo
+    );
+  }, [
+    tasks,
+    filterTitle,
+    filterStatus,
+    filterAssignee,
+    filterSources,
+    filterTargets,
+    filterMemo,
+  ]);
+
   return (
     <MainContext.Provider
       value={{
@@ -67,6 +98,7 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setFilterTargets,
         filterMemo,
         setFilterMemo,
+        filteredTasks,
       }}
     >
       {children}

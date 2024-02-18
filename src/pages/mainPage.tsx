@@ -21,7 +21,7 @@ import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
-import { UUID, filterTasks, getSelectedTask } from "../models/task";
+import { UUID, getSelectedTask } from "../models/task";
 
 export function MainPage() {
   const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
@@ -67,6 +67,7 @@ export function MainPage() {
     setFilterTargets,
     filterMemo,
     setFilterMemo,
+    filteredTasks,
   } = useContext(MainContext);
 
   // editor
@@ -77,15 +78,6 @@ export function MainPage() {
       const newCommand = keyEventToCommand(mode, event, sourcesRef, targetsRef);
       preventKey(event, newCommand);
 
-      const filteredTasks = filterTasks(
-        tasks,
-        filterTitle,
-        filterStatus,
-        filterAssignee,
-        filterSources,
-        filterTargets,
-        filterMemo
-      );
       const newSerialInput = createSerialInput(
         event.key,
         newCommand,
@@ -185,15 +177,6 @@ export function MainPage() {
       ) : (
         <>
           <TaskGraph
-            tasks={filterTasks(
-              tasks,
-              filterTitle,
-              filterStatus,
-              filterAssignee,
-              filterSources,
-              filterTargets,
-              filterMemo
-            )}
             serialInput={serialInput}
             viewMode={viewMode}
             command={command}
