@@ -5,7 +5,6 @@ import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
-import { loadInitialAllStatus, loadInitialStatus } from "@/models/status";
 import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createModeAndTasks, isFilter, markdownModes } from "@/vim/mode";
@@ -45,10 +44,6 @@ export function MainPage() {
 
   // filter設定
   const {
-    filterTitle,
-    setFilterTitle,
-    filterStatus,
-    setFilterStatus,
     filterAssignee,
     setFilterAssignee,
     filterSources,
@@ -161,9 +156,6 @@ export function MainPage() {
           />
           <KeyBar />
           <EditBar
-            statuses={
-              isFilter(mode) ? loadInitialAllStatus() : loadInitialStatus()
-            }
             selectedAssignee={
               isFilter(mode) ? filterAssignee : selectedAssignee
             }

@@ -1,7 +1,11 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Assignee } from "@/models/assignee";
-import { Status } from "@/models/status";
+import {
+  Status,
+  loadInitialAllStatus,
+  loadInitialStatus,
+} from "@/models/status";
 import {
   Task,
   UUID,
@@ -26,8 +30,6 @@ import { MultiBox } from "./multibox";
 import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
-  statuses: Set<Status>;
-
   selectedAssignee: Assignee | null;
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>;
 
@@ -387,7 +389,6 @@ function isDisabled(mode: Mode): boolean {
 }
 
 export const EditBar = ({
-  statuses,
   selectedAssignee,
   setSelectedAssignee,
   selectedSources,
@@ -420,6 +421,9 @@ export const EditBar = ({
   const setSelectedStatus = isFilter(mode)
     ? mainContext.setFilterStatus
     : mainContext.setSelectedStatus;
+  const statuses = isFilter(mode)
+    ? loadInitialAllStatus()
+    : loadInitialStatus();
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);
