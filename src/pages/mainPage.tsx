@@ -1,8 +1,5 @@
 import { EditBar } from "@/components/editBar";
-import { EditorSettingTextBox } from "@/components/editorSettingTextBox";
-import { FlexContainer } from "@/components/flexContainer";
 import { KeyBar } from "@/components/keyBar";
-import MarkdownViewer from "@/components/markdownViewer";
 import TaskGraph from "@/components/taskGraph";
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
@@ -22,6 +19,7 @@ import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
 import { UUID, getSelectedTask } from "../models/task";
+import { MarkdownPage } from "./markdownPage";
 
 export function MainPage() {
   const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
@@ -156,24 +154,12 @@ export function MainPage() {
   return (
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
-        <>
-          <MarkdownViewer memo={memo} setMemo={setMemo} />
-          <FlexContainer
-            components={[
-              <KeyBar key={"m0"} />,
-              <label key={"m1"} style={{ backgroundColor: "var(--active)" }}>
-                Editor:
-              </label>,
-              <EditorSettingTextBox
-                key={"m2"}
-                editor={editor}
-                setEditor={setEditor}
-              />,
-            ]}
-            isSelected={false}
-            ratios={[1, 0, 1]}
-          />
-        </>
+        <MarkdownPage
+          memo={memo}
+          setMemo={setMemo}
+          editor={editor}
+          setEditor={setEditor}
+        />
       ) : (
         <>
           <TaskGraph
