@@ -44,9 +44,6 @@ type EditBarProps = {
 
   endDateTime: Moment | null;
   setEndDateTime: React.Dispatch<React.SetStateAction<Moment | null>>;
-
-  memo: string;
-  setMemo: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function createMultiSelectBoxData(
@@ -391,8 +388,6 @@ export const EditBar = ({
   setStartDateTime,
   endDateTime,
   setEndDateTime,
-  memo,
-  setMemo,
 }: EditBarProps) => {
   const { tasks, assignees, setAssignees } = useContext(GlobalContext);
   const mainContext = useContext(MainContext);
@@ -428,6 +423,10 @@ export const EditBar = ({
   const setSelectedTargets = isFilter(mode)
     ? mainContext.setFilterTargets
     : mainContext.setSelectedTargets;
+  const memo = isFilter(mode) ? mainContext.filterMemo : mainContext.memo;
+  const setMemo = isFilter(mode)
+    ? mainContext.setFilterMemo
+    : mainContext.setMemo;
 
   const titleRef = useRef(null);
   const statusRef = useRef(null);

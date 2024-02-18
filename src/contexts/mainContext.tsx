@@ -23,6 +23,8 @@ export const MainContext = createContext<MainContextType>({
   setSelectedSources: () => {},
   selectedTargets: new Set<UUID>([]),
   setSelectedTargets: () => {},
+  memo: "",
+  setMemo: () => {},
 
   filterTitle: "",
   setFilterTitle: () => {},
@@ -54,6 +56,8 @@ type MainContextType = {
   setSelectedSources: Dispatch<SetStateAction<Set<UUID>>>;
   selectedTargets: Set<UUID>;
   setSelectedTargets: Dispatch<SetStateAction<Set<UUID>>>;
+  memo: string;
+  setMemo: Dispatch<SetStateAction<string>>;
 
   filterTitle: string;
   setFilterTitle: Dispatch<SetStateAction<string>>;
@@ -86,6 +90,7 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   const [selectedTargets, setSelectedTargets] = useState<Set<UUID>>(
     new Set<UUID>([])
   );
+  const [memo, setMemo] = useState("");
 
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
@@ -132,6 +137,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setSelectedSources,
         selectedTargets,
         setSelectedTargets,
+        memo,
+        setMemo,
 
         filterTitle,
         setFilterTitle,

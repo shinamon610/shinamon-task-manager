@@ -6,7 +6,7 @@ import { MainContext } from "@/contexts/mainContext";
 import { saveData } from "@/models/file";
 import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
-import { Mode, createModeAndTasks, isFilter, markdownModes } from "@/vim/mode";
+import { Mode, createModeAndTasks, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
@@ -30,6 +30,8 @@ export function MainPage() {
     setSelectedSources,
     selectedTargets,
     setSelectedTargets,
+    memo,
+    setMemo,
   } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
@@ -42,7 +44,6 @@ export function MainPage() {
   const [spentTime, setSpentTime] = useState<number>(0);
   const [startDateTime, setStartDateTime] = useState<Moment | null>(null);
   const [endDateTime, setEndDateTime] = useState<Moment | null>(null);
-  const [memo, setMemo] = useState("");
 
   // filter設定
   const {
@@ -143,12 +144,7 @@ export function MainPage() {
   return (
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
-        <MarkdownPage
-          memo={memo}
-          setMemo={setMemo}
-          editor={editor}
-          setEditor={setEditor}
-        />
+        <MarkdownPage editor={editor} setEditor={setEditor} />
       ) : (
         <>
           <TaskGraph
@@ -168,8 +164,6 @@ export function MainPage() {
             setStartDateTime={setStartDateTime}
             endDateTime={endDateTime}
             setEndDateTime={setEndDateTime}
-            memo={isFilter(mode) ? filterMemo : memo}
-            setMemo={isFilter(mode) ? setFilterMemo : setMemo}
           />
         </>
       )}
