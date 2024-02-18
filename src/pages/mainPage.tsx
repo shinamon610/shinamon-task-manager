@@ -156,8 +156,6 @@ export function MainPage() {
       if (newCommand === Command.Rename) {
         setUserName("");
       }
-
-      console.log("memo", memo);
       saveData({ tasks: newTasks, userName }, filePath);
     };
     window.addEventListener("keydown", handle);
