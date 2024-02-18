@@ -28,6 +28,8 @@ export function MainPage() {
     setSelectedAssignee,
     selectedSources,
     setSelectedSources,
+    selectedTargets,
+    setSelectedTargets,
   } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
@@ -35,9 +37,6 @@ export function MainPage() {
 
   // edit barの要素
   const sourcesRef = useRef(null);
-  const [selectedTargets, setSelectedTargets] = useState<Set<UUID>>(
-    new Set<UUID>([])
-  );
   const targetsRef = useRef(null);
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
   const [spentTime, setSpentTime] = useState<number>(0);
@@ -160,10 +159,6 @@ export function MainPage() {
           <KeyBar />
           <EditBar
             sourcesRef={sourcesRef}
-            selectedTargets={isFilter(mode) ? filterTargets : selectedTargets}
-            setSelectedTargets={
-              isFilter(mode) ? setFilterTargets : setSelectedTargets
-            }
             targetsRef={targetsRef}
             estimatedTime={estimatedTime}
             setEstimatedTime={setEstimatedTime}

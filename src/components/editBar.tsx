@@ -31,9 +31,6 @@ import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
   sourcesRef: MutableRefObject<null>;
-
-  selectedTargets: Set<UUID>;
-  setSelectedTargets: React.Dispatch<React.SetStateAction<Set<UUID>>>;
   targetsRef: MutableRefObject<null>;
 
   estimatedTime: number | null;
@@ -385,8 +382,6 @@ function isDisabled(mode: Mode): boolean {
 
 export const EditBar = ({
   sourcesRef,
-  selectedTargets,
-  setSelectedTargets,
   targetsRef,
   estimatedTime,
   setEstimatedTime,
@@ -427,6 +422,12 @@ export const EditBar = ({
   const setSelectedSources = isFilter(mode)
     ? mainContext.setFilterSources
     : mainContext.setSelectedSources;
+  const selectedTargets = isFilter(mode)
+    ? mainContext.filterTargets
+    : mainContext.selectedTargets;
+  const setSelectedTargets = isFilter(mode)
+    ? mainContext.setFilterTargets
+    : mainContext.setSelectedTargets;
 
   const titleRef = useRef(null);
   const statusRef = useRef(null);
