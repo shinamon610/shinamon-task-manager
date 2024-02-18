@@ -30,9 +30,6 @@ import { MultiBox } from "./multibox";
 import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
-  selectedAssignee: Assignee | null;
-  setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>;
-
   selectedSources: Set<UUID>;
   setSelectedSources: React.Dispatch<React.SetStateAction<Set<UUID>>>;
   sourcesRef: MutableRefObject<null>;
@@ -389,8 +386,6 @@ function isDisabled(mode: Mode): boolean {
 }
 
 export const EditBar = ({
-  selectedAssignee,
-  setSelectedAssignee,
   selectedSources,
   setSelectedSources,
   sourcesRef,
@@ -424,6 +419,12 @@ export const EditBar = ({
   const statuses = isFilter(mode)
     ? loadInitialAllStatus()
     : loadInitialStatus();
+  const selectedAssignee = isFilter(mode)
+    ? mainContext.filterAssignee
+    : mainContext.selectedAssignee;
+  const setSelectedAssignee = isFilter(mode)
+    ? mainContext.setFilterAssignee
+    : mainContext.setSelectedAssignee;
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);

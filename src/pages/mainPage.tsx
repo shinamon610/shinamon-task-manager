@@ -3,7 +3,6 @@ import { KeyBar } from "@/components/keyBar";
 import TaskGraph from "@/components/taskGraph";
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
 import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
@@ -18,16 +17,21 @@ import { MarkdownPage } from "./markdownPage";
 export function MainPage() {
   const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
     useContext(GlobalContext);
-  const { mode, setMode, title, setTitle, selectedStatus, setSelectedStatus } =
-    useContext(MainContext);
+  const {
+    mode,
+    setMode,
+    title,
+    setTitle,
+    selectedStatus,
+    setSelectedStatus,
+    selectedAssignee,
+    setSelectedAssignee,
+  } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
 
   // edit barの要素
-  const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
-    null
-  );
   const [selectedSources, setSelectedSources] = useState<Set<UUID>>(
     new Set<UUID>([])
   );
@@ -156,12 +160,6 @@ export function MainPage() {
           />
           <KeyBar />
           <EditBar
-            selectedAssignee={
-              isFilter(mode) ? filterAssignee : selectedAssignee
-            }
-            setSelectedAssignee={
-              isFilter(mode) ? setFilterAssignee : setSelectedAssignee
-            }
             selectedSources={isFilter(mode) ? filterSources : selectedSources}
             setSelectedSources={
               isFilter(mode) ? setFilterSources : setSelectedSources

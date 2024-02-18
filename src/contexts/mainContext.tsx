@@ -17,6 +17,8 @@ export const MainContext = createContext<MainContextType>({
   setMode: () => {},
   title: "",
   setTitle: () => {},
+  selectedAssignee: null,
+  setSelectedAssignee: () => {},
   filterTitle: "",
   setFilterTitle: () => {},
   filterStatus: null,
@@ -41,6 +43,9 @@ type MainContextType = {
   setTitle: Dispatch<SetStateAction<string>>;
   selectedStatus: Status;
   setSelectedStatus: Dispatch<SetStateAction<Status>>;
+  selectedAssignee: Assignee | null;
+  setSelectedAssignee: Dispatch<SetStateAction<Assignee | null>>;
+
   filterTitle: string;
   setFilterTitle: Dispatch<SetStateAction<string>>;
   filterStatus: Status | null;
@@ -62,6 +67,9 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   const [title, setTitle] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<Status>(
     DefaultStatus.Pending
+  );
+  const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
+    null
   );
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
@@ -100,6 +108,11 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setMode,
         title,
         setTitle,
+        selectedStatus,
+        setSelectedStatus,
+        selectedAssignee,
+        setSelectedAssignee,
+
         filterTitle,
         setFilterTitle,
         filterStatus,
@@ -113,8 +126,6 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         filterMemo,
         setFilterMemo,
         filteredTasks,
-        selectedStatus,
-        setSelectedStatus,
       }}
     >
       {children}
