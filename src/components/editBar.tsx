@@ -36,8 +36,6 @@ type EditBarProps = {
 
   selectedAssignee: Assignee | null;
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>;
-  assignees: Set<Assignee>;
-  setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 
   selectedSources: Set<UUID>;
   setSelectedSources: React.Dispatch<React.SetStateAction<Set<UUID>>>;
@@ -402,8 +400,6 @@ export const EditBar = ({
   statuses,
   selectedAssignee,
   setSelectedAssignee,
-  assignees,
-  setAssignees,
   selectedSources,
   setSelectedSources,
   sourcesRef,
@@ -421,7 +417,7 @@ export const EditBar = ({
   memo,
   setMemo,
 }: EditBarProps) => {
-  const { tasks } = useContext(GlobalContext);
+  const { tasks, assignees, setAssignees } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
   const titleRef = useRef(null);
   const statusRef = useRef(null);

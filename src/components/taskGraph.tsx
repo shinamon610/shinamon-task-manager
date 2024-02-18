@@ -1,3 +1,4 @@
+import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
 import { Assignee, getColor } from "@/models/assignee";
@@ -27,7 +28,6 @@ const nodeTypes = {
 
 type TaskGraphProps = {
   tasks: Task[];
-  assignees: Set<Assignee>;
   serialInput: string;
   viewMode: ViewMode;
   command: Command;
@@ -135,11 +135,11 @@ function createNodesAndEdgesFromTasks(
 
 function BaseNewTaskGraph({
   tasks,
-  assignees,
   serialInput,
   viewMode,
   command,
 }: TaskGraphProps) {
+  const { assignees } = useContext(GlobalContext);
   const { fitView } = useReactFlow();
   const { mode } = useContext(MainContext);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -181,7 +181,6 @@ function BaseNewTaskGraph({
 
 export default function TaskGraph({
   tasks,
-  assignees,
   serialInput,
   viewMode,
   command,
@@ -191,7 +190,6 @@ export default function TaskGraph({
       <ReactFlowProvider>
         <BaseNewTaskGraph
           tasks={tasks}
-          assignees={assignees}
           serialInput={serialInput}
           viewMode={viewMode}
           command={command}

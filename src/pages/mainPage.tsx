@@ -24,16 +24,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { UUID, filterTasks, getSelectedTask } from "../models/task";
 
 export function MainPage() {
-  const {
-    filePath,
-    setFilePath,
-    userName,
-    setUserName,
-    tasks,
-    setTasks,
-    assignees,
-    setAssignees,
-  } = useContext(GlobalContext);
+  const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
+    useContext(GlobalContext);
   const { mode, setMode } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
@@ -198,7 +190,6 @@ export function MainPage() {
               filterTargets,
               filterMemo
             )}
-            assignees={assignees}
             serialInput={serialInput}
             viewMode={viewMode}
             command={command}
@@ -220,8 +211,6 @@ export function MainPage() {
             setSelectedAssignee={
               isFilter(mode) ? setFilterAssignee : setSelectedAssignee
             }
-            assignees={assignees}
-            setAssignees={setAssignees}
             selectedSources={isFilter(mode) ? filterSources : selectedSources}
             setSelectedSources={
               isFilter(mode) ? setFilterSources : setSelectedSources
