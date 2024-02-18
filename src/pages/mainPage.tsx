@@ -172,7 +172,7 @@ export function MainPage() {
           <MarkdownViewer memo={memo} setMemo={setMemo} />
           <FlexContainer
             components={[
-              <KeyBar key={"m0"} tasks={tasks} />,
+              <KeyBar key={"m0"} />,
               <label key={"m1"} style={{ backgroundColor: "var(--active)" }}>
                 Editor:
               </label>,
@@ -203,9 +203,8 @@ export function MainPage() {
             viewMode={viewMode}
             command={command}
           />
-          <KeyBar tasks={tasks} />
+          <KeyBar />
           <EditBar
-            tasks={tasks}
             title={isFilter(mode) ? filterTitle : title}
             setTitle={isFilter(mode) ? setFilterTitle : setTitle}
             selectedStatus={isFilter(mode) ? filterStatus : selectedStatus}

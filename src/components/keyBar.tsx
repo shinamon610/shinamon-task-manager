@@ -1,3 +1,4 @@
+import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
@@ -5,7 +6,8 @@ import { Mode } from "@/vim/mode";
 import { useContext } from "react";
 import { Key } from "./key";
 
-export function KeyBar({ tasks }: { tasks: Task[] }) {
+export function KeyBar() {
+  const { tasks } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
   return <div className="top-bar">{createElements(mode, tasks)}</div>;
 }

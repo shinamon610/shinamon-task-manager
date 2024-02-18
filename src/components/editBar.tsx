@@ -1,3 +1,4 @@
+import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Assignee } from "@/models/assignee";
 import { Status } from "@/models/status";
@@ -24,7 +25,6 @@ import { MultiBox } from "./multibox";
 import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
-  tasks: Task[];
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
 
@@ -395,7 +395,6 @@ function isDisabled(mode: Mode): boolean {
 }
 
 export const EditBar = ({
-  tasks,
   title,
   setTitle,
   selectedStatus,
@@ -422,6 +421,7 @@ export const EditBar = ({
   memo,
   setMemo,
 }: EditBarProps) => {
+  const { tasks } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
   const titleRef = useRef(null);
   const statusRef = useRef(null);
