@@ -20,21 +20,14 @@ import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
+import { UUID, filterTasks, getSelectedTask } from "../models/task";
 type MainPageProps = {
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   assignees: Set<Assignee>;
   setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
 };
 
-export function MainPage({
-  tasks,
-  setTasks,
-  assignees,
-  setAssignees,
-}: MainPageProps) {
-  const { filePath, setFilePath, userName, setUserName } =
+export function MainPage({ assignees, setAssignees }: MainPageProps) {
+  const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
     useContext(GlobalContext);
   const [statuses, setStatuses] = useState(loadInitialStatus());
   const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());

@@ -1,17 +1,13 @@
 import { GlobalContext } from "@/app/page";
 import { createDir, getTasksJsonFile, loadData, openDir } from "@/models/file";
-import { Task } from "@/models/task";
 import { Dispatch, SetStateAction, useContext } from "react";
 
 type SelectSaveLocationProps = {
-  setTasks: Dispatch<SetStateAction<Task[]>>;
   setAssignees: Dispatch<SetStateAction<Set<string>>>;
 };
-export function SelectSaveLocation({
-  setTasks,
-  setAssignees,
-}: SelectSaveLocationProps) {
-  const { setFilePath, userName, setUserName } = useContext(GlobalContext);
+export function SelectSaveLocation({ setAssignees }: SelectSaveLocationProps) {
+  const { setFilePath, userName, setUserName, setTasks } =
+    useContext(GlobalContext);
   const style = {
     backgroundColor: "var(--active)",
     fontSize: "10vh",
