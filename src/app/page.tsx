@@ -1,9 +1,16 @@
 "use client";
 import { TopPage } from "@/pages/topPage";
-import { createContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
 
-const GlobalContext = createContext({});
+export const GlobalContext = createContext<GlobalContextType>({
+  filePath: "",
+  setFilePath: () => {},
+});
 
+type GlobalContextType = {
+  filePath: string;
+  setFilePath: Dispatch<SetStateAction<string>>;
+};
 function GlobalProvider({ children }: { children: React.ReactNode }) {
   const [filePath, setFilePath] = useState("");
   return (

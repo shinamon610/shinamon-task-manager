@@ -1,3 +1,4 @@
+import { GlobalContext } from "@/app/page";
 import { EditBar } from "@/components/editBar";
 import { EditorSettingTextBox } from "@/components/editorSettingTextBox";
 import { FlexContainer } from "@/components/flexContainer";
@@ -18,11 +19,9 @@ import { Mode, createModeAndTasks, isFilter, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
 type MainPageProps = {
-  filePath: string;
-  setFilePath: React.Dispatch<React.SetStateAction<string>>;
   userName: string;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   tasks: Task[];
@@ -32,8 +31,6 @@ type MainPageProps = {
 };
 
 export function MainPage({
-  filePath,
-  setFilePath,
   userName,
   setUserName,
   tasks,
@@ -41,6 +38,7 @@ export function MainPage({
   assignees,
   setAssignees,
 }: MainPageProps) {
+  const { filePath, setFilePath } = useContext(GlobalContext);
   const [statuses, setStatuses] = useState(loadInitialStatus());
   const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());
   const [mode, setMode] = useState(Mode.Normal);
