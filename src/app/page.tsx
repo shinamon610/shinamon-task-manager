@@ -11,6 +11,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   setUserName: () => {},
   tasks: [],
   setTasks: () => {},
+  assignees: new Set(),
+  setAssignees: () => {},
 });
 
 type GlobalContextType = {
@@ -20,14 +22,26 @@ type GlobalContextType = {
   setUserName: Dispatch<SetStateAction<Assignee>>;
   tasks: Task[];
   setTasks: Dispatch<SetStateAction<Task[]>>;
+  assignees: Set<Assignee>;
+  setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
 };
 function GlobalProvider({ children }: { children: React.ReactNode }) {
   const [filePath, setFilePath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
   return (
     <GlobalContext.Provider
-      value={{ filePath, setFilePath, userName, setUserName, tasks, setTasks }}
+      value={{
+        filePath,
+        setFilePath,
+        userName,
+        setUserName,
+        tasks,
+        setTasks,
+        assignees,
+        setAssignees,
+      }}
     >
       {children}
     </GlobalContext.Provider>

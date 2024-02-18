@@ -2,30 +2,34 @@
 import { GlobalContext } from "@/app/page";
 import { InputUserName } from "@/components/inputUserName";
 import { SelectSaveLocation } from "@/components/selectSaveLocation";
-import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
 import { MainPage } from "@/pages/mainPage";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 
 export function TopPage() {
-  const { filePath, setFilePath, userName, setUserName, setTasks } =
-    useContext(GlobalContext);
-  const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
+  const {
+    filePath,
+    setFilePath,
+    userName,
+    setUserName,
+    setTasks,
+    setAssignees,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     loadInitialFilePath().then((newFilePath) => {
       loadData(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
     });
-  }, [setFilePath, setUserName, setTasks]);
+  }, [setFilePath, setUserName, setTasks, setAssignees]);
 
   return (
     <div className={"homepage"}>
       {filePath === "" ? (
-        <SelectSaveLocation setAssignees={setAssignees} />
+        <SelectSaveLocation />
       ) : userName === "" ? (
-        <InputUserName assignees={assignees} setAssignees={setAssignees} />
+        <InputUserName />
       ) : (
-        <MainPage assignees={assignees} setAssignees={setAssignees} />
+        <MainPage />
       )}
     </div>
   );

@@ -19,16 +19,20 @@ import { Mode, createModeAndTasks, isFilter, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { UUID, filterTasks, getSelectedTask } from "../models/task";
-type MainPageProps = {
-  assignees: Set<Assignee>;
-  setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>;
-};
 
-export function MainPage({ assignees, setAssignees }: MainPageProps) {
-  const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
-    useContext(GlobalContext);
+export function MainPage() {
+  const {
+    filePath,
+    setFilePath,
+    userName,
+    setUserName,
+    tasks,
+    setTasks,
+    assignees,
+    setAssignees,
+  } = useContext(GlobalContext);
   const [statuses, setStatuses] = useState(loadInitialStatus());
   const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());
   const [mode, setMode] = useState(Mode.Normal);
