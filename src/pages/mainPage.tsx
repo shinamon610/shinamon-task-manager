@@ -24,13 +24,12 @@ import { MarkdownPage } from "./markdownPage";
 export function MainPage() {
   const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
     useContext(GlobalContext);
-  const { mode, setMode } = useContext(MainContext);
+  const { mode, setMode, title, setTitle } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
 
   // edit barの要素
-  const [title, setTitle] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<Status>(
     DefaultStatus.Pending
   );
@@ -169,8 +168,6 @@ export function MainPage() {
           />
           <KeyBar />
           <EditBar
-            title={isFilter(mode) ? filterTitle : title}
-            setTitle={isFilter(mode) ? setFilterTitle : setTitle}
             selectedStatus={isFilter(mode) ? filterStatus : selectedStatus}
             setSelectedStatus={
               isFilter(mode) ? setFilterStatus : setSelectedStatus

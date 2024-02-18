@@ -14,6 +14,7 @@ import {
   Mode,
   inputtingFilterModes,
   inputtingModes,
+  isFilter,
   selectingFilterModes,
   selectingModes,
 } from "@/vim/mode";
@@ -25,9 +26,6 @@ import { MultiBox } from "./multibox";
 import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
-  title: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-
   selectedStatus: Status | null;
   setSelectedStatus:
     | React.Dispatch<React.SetStateAction<Status>>
@@ -393,8 +391,6 @@ function isDisabled(mode: Mode): boolean {
 }
 
 export const EditBar = ({
-  title,
-  setTitle,
   selectedStatus,
   setSelectedStatus,
   statuses,
@@ -420,6 +416,10 @@ export const EditBar = ({
   const { tasks, assignees, setAssignees } = useContext(GlobalContext);
   const mainContext = useContext(MainContext);
   const { mode } = mainContext;
+  const title = isFilter(mode) ? mainContext.filterTitle : mainContext.title;
+  const setTitle = isFilter(mode)
+    ? mainContext.setFilterTitle
+    : mainContext.setTitle;
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);

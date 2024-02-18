@@ -15,6 +15,8 @@ import { GlobalContext } from "./globalContext";
 export const MainContext = createContext<MainContextType>({
   mode: Mode.Normal,
   setMode: () => {},
+  title: "",
+  setTitle: () => {},
   filterTitle: "",
   setFilterTitle: () => {},
   filterStatus: null,
@@ -33,6 +35,8 @@ export const MainContext = createContext<MainContextType>({
 type MainContextType = {
   mode: Mode;
   setMode: Dispatch<SetStateAction<Mode>>;
+  title: string;
+  setTitle: Dispatch<SetStateAction<string>>;
   filterTitle: string;
   setFilterTitle: Dispatch<SetStateAction<string>>;
   filterStatus: Status | null;
@@ -51,6 +55,7 @@ type MainContextType = {
 export function MainProvider({ children }: { children: React.ReactNode }) {
   const { tasks } = useContext(GlobalContext);
   const [mode, setMode] = useState(Mode.Normal);
+  const [title, setTitle] = useState("");
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
   const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
@@ -86,6 +91,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
       value={{
         mode,
         setMode,
+        title,
+        setTitle,
         filterTitle,
         setFilterTitle,
         filterStatus,
