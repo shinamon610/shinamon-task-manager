@@ -22,8 +22,6 @@ import moment, { Moment } from "moment";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Task, UUID, filterTasks, getSelectedTask } from "../models/task";
 type MainPageProps = {
-  userName: string;
-  setUserName: React.Dispatch<React.SetStateAction<string>>;
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   assignees: Set<Assignee>;
@@ -31,14 +29,13 @@ type MainPageProps = {
 };
 
 export function MainPage({
-  userName,
-  setUserName,
   tasks,
   setTasks,
   assignees,
   setAssignees,
 }: MainPageProps) {
-  const { filePath, setFilePath } = useContext(GlobalContext);
+  const { filePath, setFilePath, userName, setUserName } =
+    useContext(GlobalContext);
   const [statuses, setStatuses] = useState(loadInitialStatus());
   const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());
   const [mode, setMode] = useState(Mode.Normal);

@@ -9,8 +9,8 @@ import { MainPage } from "@/pages/mainPage";
 import { useContext, useEffect, useState } from "react";
 
 export function TopPage() {
-  const { filePath, setFilePath } = useContext(GlobalContext);
-  const [userName, setUserName] = useState<Assignee>("");
+  const { filePath, setFilePath, userName, setUserName } =
+    useContext(GlobalContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
 
@@ -18,28 +18,16 @@ export function TopPage() {
     loadInitialFilePath().then((newFilePath) => {
       loadData(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
     });
-  }, [setFilePath]);
+  }, [setFilePath, setUserName]);
 
   return (
     <div className={"homepage"}>
       {filePath === "" ? (
-        <SelectSaveLocation
-          userName={userName}
-          setTasks={setTasks}
-          setAssignees={setAssignees}
-          setUserName={setUserName}
-        />
+        <SelectSaveLocation setTasks={setTasks} setAssignees={setAssignees} />
       ) : userName === "" ? (
-        <InputUserName
-          userName={userName}
-          setUserName={setUserName}
-          assignees={assignees}
-          setAssignees={setAssignees}
-        />
+        <InputUserName assignees={assignees} setAssignees={setAssignees} />
       ) : (
         <MainPage
-          userName={userName}
-          setUserName={setUserName}
           tasks={tasks}
           setTasks={setTasks}
           assignees={assignees}

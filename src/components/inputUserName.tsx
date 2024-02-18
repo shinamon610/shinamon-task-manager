@@ -1,20 +1,15 @@
+import { GlobalContext } from "@/app/page";
 import { idf } from "@/utils";
-import React from "react";
+import React, { useContext } from "react";
 import { CreatableBox } from "./creatableBox";
 
 type InputUserNameProps = {
-  userName: string;
-  setUserName: React.Dispatch<React.SetStateAction<string>>;
   assignees: Set<string>;
   setAssignees: React.Dispatch<React.SetStateAction<Set<string>>>;
 };
 
-export function InputUserName({
-  userName,
-  setUserName,
-  assignees,
-  setAssignees,
-}: InputUserNameProps) {
+export function InputUserName({ assignees, setAssignees }: InputUserNameProps) {
+  const { userName, setUserName } = useContext(GlobalContext);
   return (
     <div
       style={{
