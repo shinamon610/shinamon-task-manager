@@ -33,8 +33,6 @@ export function MainPage() {
     assignees,
     setAssignees,
   } = useContext(GlobalContext);
-  const [statuses, setStatuses] = useState(loadInitialStatus());
-  const [allStatuses, setAllStatuses] = useState(loadInitialAllStatus());
   const [mode, setMode] = useState(Mode.Normal);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
@@ -218,8 +216,9 @@ export function MainPage() {
             setSelectedStatus={
               isFilter(mode) ? setFilterStatus : setSelectedStatus
             }
-            statuses={isFilter(mode) ? allStatuses : statuses}
-            setStatuses={isFilter(mode) ? setAllStatuses : setStatuses}
+            statuses={
+              isFilter(mode) ? loadInitialAllStatus() : loadInitialStatus()
+            }
             selectedAssignee={
               isFilter(mode) ? filterAssignee : selectedAssignee
             }

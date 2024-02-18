@@ -33,7 +33,6 @@ type EditBarProps = {
     | React.Dispatch<React.SetStateAction<Status>>
     | React.Dispatch<React.SetStateAction<Status | null>>;
   statuses: Set<Status>;
-  setStatuses: React.Dispatch<React.SetStateAction<Set<Status>>>;
 
   selectedAssignee: Assignee | null;
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>;
@@ -91,7 +90,6 @@ function createContent(
     selectedStatus,
     setSelectedStatus,
     statuses,
-    setStatuses,
     selectedAssignee,
     setSelectedAssignee,
     assignees,
