@@ -1,7 +1,7 @@
 "use client";
-import { GlobalContext } from "@/app/page";
 import { InputUserName } from "@/components/inputUserName";
 import { SelectSaveLocation } from "@/components/selectSaveLocation";
+import { GlobalContext } from "@/contexts/globalContext";
 import { MainPage } from "@/pages/mainPage";
 import { useContext, useEffect } from "react";
 

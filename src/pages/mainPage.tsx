@@ -1,10 +1,10 @@
-import { GlobalContext } from "@/app/page";
 import { EditBar } from "@/components/editBar";
 import { EditorSettingTextBox } from "@/components/editorSettingTextBox";
 import { FlexContainer } from "@/components/flexContainer";
 import { KeyBar } from "@/components/keyBar";
 import MarkdownViewer from "@/components/markdownViewer";
 import TaskGraph from "@/components/taskGraph";
+import { GlobalContext } from "@/contexts/globalContext";
 import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
 import {

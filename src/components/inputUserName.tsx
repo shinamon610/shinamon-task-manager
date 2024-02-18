@@ -1,4 +1,4 @@
-import { GlobalContext } from "@/app/page";
+import { GlobalContext } from "@/contexts/globalContext";
 import { idf } from "@/utils";
 import { useContext } from "react";
 import { CreatableBox } from "./creatableBox";

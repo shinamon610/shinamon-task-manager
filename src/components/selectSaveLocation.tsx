@@ -1,4 +1,4 @@
-import { GlobalContext } from "@/app/page";
+import { GlobalContext } from "@/contexts/globalContext";
 import { createDir, getTasksJsonFile, loadData, openDir } from "@/models/file";
 import { useContext } from "react";
 
