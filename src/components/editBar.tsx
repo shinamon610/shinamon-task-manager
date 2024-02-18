@@ -26,10 +26,6 @@ import { MultiBox } from "./multibox";
 import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
-  selectedStatus: Status | null;
-  setSelectedStatus:
-    | React.Dispatch<React.SetStateAction<Status>>
-    | React.Dispatch<React.SetStateAction<Status | null>>;
   statuses: Set<Status>;
 
   selectedAssignee: Assignee | null;
@@ -391,8 +387,6 @@ function isDisabled(mode: Mode): boolean {
 }
 
 export const EditBar = ({
-  selectedStatus,
-  setSelectedStatus,
   statuses,
   selectedAssignee,
   setSelectedAssignee,
@@ -420,6 +414,12 @@ export const EditBar = ({
   const setTitle = isFilter(mode)
     ? mainContext.setFilterTitle
     : mainContext.setTitle;
+  const selectedStatus = isFilter(mode)
+    ? mainContext.filterStatus
+    : mainContext.selectedStatus;
+  const setSelectedStatus = isFilter(mode)
+    ? mainContext.setFilterStatus
+    : mainContext.setSelectedStatus;
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);

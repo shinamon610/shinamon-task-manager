@@ -5,12 +5,7 @@ import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
-import {
-  DefaultStatus,
-  Status,
-  loadInitialAllStatus,
-  loadInitialStatus,
-} from "@/models/status";
+import { loadInitialAllStatus, loadInitialStatus } from "@/models/status";
 import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createModeAndTasks, isFilter, markdownModes } from "@/vim/mode";
@@ -24,15 +19,13 @@ import { MarkdownPage } from "./markdownPage";
 export function MainPage() {
   const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
     useContext(GlobalContext);
-  const { mode, setMode, title, setTitle } = useContext(MainContext);
+  const { mode, setMode, title, setTitle, selectedStatus, setSelectedStatus } =
+    useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
 
   // edit barの要素
-  const [selectedStatus, setSelectedStatus] = useState<Status>(
-    DefaultStatus.Pending
-  );
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
@@ -168,10 +161,6 @@ export function MainPage() {
           />
           <KeyBar />
           <EditBar
-            selectedStatus={isFilter(mode) ? filterStatus : selectedStatus}
-            setSelectedStatus={
-              isFilter(mode) ? setFilterStatus : setSelectedStatus
-            }
             statuses={
               isFilter(mode) ? loadInitialAllStatus() : loadInitialStatus()
             }

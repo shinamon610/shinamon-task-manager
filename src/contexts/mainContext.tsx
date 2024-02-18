@@ -1,5 +1,5 @@
 import { Assignee } from "@/models/assignee";
-import { Status } from "@/models/status";
+import { DefaultStatus, Status } from "@/models/status";
 import { Mode } from "@/vim/mode";
 import {
   Dispatch,
@@ -30,6 +30,8 @@ export const MainContext = createContext<MainContextType>({
   filterMemo: "",
   setFilterMemo: () => {},
   filteredTasks: [],
+  selectedStatus: DefaultStatus.Pending,
+  setSelectedStatus: () => {},
 });
 
 type MainContextType = {
@@ -37,6 +39,8 @@ type MainContextType = {
   setMode: Dispatch<SetStateAction<Mode>>;
   title: string;
   setTitle: Dispatch<SetStateAction<string>>;
+  selectedStatus: Status;
+  setSelectedStatus: Dispatch<SetStateAction<Status>>;
   filterTitle: string;
   setFilterTitle: Dispatch<SetStateAction<string>>;
   filterStatus: Status | null;
@@ -56,6 +60,9 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   const { tasks } = useContext(GlobalContext);
   const [mode, setMode] = useState(Mode.Normal);
   const [title, setTitle] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<Status>(
+    DefaultStatus.Pending
+  );
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
   const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
@@ -106,6 +113,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         filterMemo,
         setFilterMemo,
         filteredTasks,
+        selectedStatus,
+        setSelectedStatus,
       }}
     >
       {children}
