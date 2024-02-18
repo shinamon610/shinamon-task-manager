@@ -1,9 +1,21 @@
-import { createContext } from "react";
+import { Mode } from "@/vim/mode";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
 
-export const MainContext = createContext<MainContextType>({});
+export const MainContext = createContext<MainContextType>({
+  mode: Mode.Normal,
+  setMode: () => {},
+});
 
-type MainContextType = {};
+type MainContextType = {
+  mode: Mode;
+  setMode: Dispatch<SetStateAction<Mode>>;
+};
 
 export function MainProvider({ children }: { children: React.ReactNode }) {
-  return <MainContext.Provider value={{}}>{children}</MainContext.Provider>;
+  const [mode, setMode] = useState(Mode.Normal);
+  return (
+    <MainContext.Provider value={{ mode, setMode }}>
+      {children}
+    </MainContext.Provider>
+  );
 }

@@ -1,14 +1,16 @@
+import { MainContext } from "@/contexts/mainContext";
 import { Mode } from "@/vim/mode";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 type Props = {
   editor: string;
   setEditor: React.Dispatch<React.SetStateAction<string>>;
-  mode: Mode;
 };
 
-export function EditorSettingTextBox({ editor, setEditor, mode }: Props) {
+export function EditorSettingTextBox({ editor, setEditor }: Props) {
   const ref = useRef(null);
+  const { mode } = useContext(MainContext);
+
   useEffect(() => {
     if (mode === Mode.EditorSetting) {
       // @ts-ignore

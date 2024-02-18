@@ -1,13 +1,14 @@
+import { MainContext } from "@/contexts/mainContext";
 import { Mode } from "@/vim/mode";
 import { TextareaAutosize } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 type Props = {
   memo: string;
   setMemo: React.Dispatch<React.SetStateAction<string>>;
-  mode: Mode;
 };
-export default function MarkdownViewer({ memo, setMemo, mode }: Props) {
+export default function MarkdownViewer({ memo, setMemo }: Props) {
+  const { mode } = useContext(MainContext);
   const ref = useRef(null);
   useEffect(() => {
     if (mode === Mode.MarkDownInputting) {

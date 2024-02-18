@@ -1,3 +1,4 @@
+import { MainContext } from "@/contexts/mainContext";
 import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
@@ -7,7 +8,7 @@ import { zip } from "@/utils";
 import { Command } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import ReactFlow, {
   Edge,
   MarkerType,
@@ -28,7 +29,6 @@ type TaskGraphProps = {
   tasks: Task[];
   assignees: Set<Assignee>;
   serialInput: string;
-  mode: Mode;
   viewMode: ViewMode;
   command: Command;
 };
@@ -137,11 +137,11 @@ function BaseNewTaskGraph({
   tasks,
   assignees,
   serialInput,
-  mode,
   viewMode,
   command,
 }: TaskGraphProps) {
   const { fitView } = useReactFlow();
+  const { mode } = useContext(MainContext);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -183,7 +183,6 @@ export default function TaskGraph({
   tasks,
   assignees,
   serialInput,
-  mode,
   viewMode,
   command,
 }: TaskGraphProps) {
@@ -194,7 +193,6 @@ export default function TaskGraph({
           tasks={tasks}
           assignees={assignees}
           serialInput={serialInput}
-          mode={mode}
           viewMode={viewMode}
           command={command}
         />

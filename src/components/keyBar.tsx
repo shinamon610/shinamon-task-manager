@@ -1,9 +1,12 @@
+import { MainContext } from "@/contexts/mainContext";
 import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
 import { Mode } from "@/vim/mode";
+import { useContext } from "react";
 import { Key } from "./key";
 
-export function KeyBar({ mode, tasks }: { mode: Mode; tasks: Task[] }) {
+export function KeyBar({ tasks }: { tasks: Task[] }) {
+  const { mode } = useContext(MainContext);
   return <div className="top-bar">{createElements(mode, tasks)}</div>;
 }
 
@@ -96,6 +99,7 @@ function createLabelsAndKeys(
       return [["Done"], [["Escape|Enter"]]];
   }
 }
+
 function createElements(mode: Mode, tasks: Task[]): React.JSX.Element[] {
   const [labels, keys] = createLabelsAndKeys(mode, tasks);
   return zip(labels, keys).map(([label, key]) => {

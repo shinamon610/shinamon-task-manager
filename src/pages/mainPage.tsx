@@ -5,6 +5,7 @@ import { KeyBar } from "@/components/keyBar";
 import MarkdownViewer from "@/components/markdownViewer";
 import TaskGraph from "@/components/taskGraph";
 import { GlobalContext } from "@/contexts/globalContext";
+import { MainContext } from "@/contexts/mainContext";
 import { Assignee } from "@/models/assignee";
 import { saveData } from "@/models/file";
 import {
@@ -33,7 +34,7 @@ export function MainPage() {
     assignees,
     setAssignees,
   } = useContext(GlobalContext);
-  const [mode, setMode] = useState(Mode.Normal);
+  const { mode, setMode } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -168,10 +169,10 @@ export function MainPage() {
     <div className={"homepage"}>
       {markdownModes.includes(mode) ? (
         <>
-          <MarkdownViewer memo={memo} setMemo={setMemo} mode={mode} />
+          <MarkdownViewer memo={memo} setMemo={setMemo} />
           <FlexContainer
             components={[
-              <KeyBar key={"m0"} mode={mode} tasks={tasks} />,
+              <KeyBar key={"m0"} tasks={tasks} />,
               <label key={"m1"} style={{ backgroundColor: "var(--active)" }}>
                 Editor:
               </label>,
@@ -179,7 +180,6 @@ export function MainPage() {
                 key={"m2"}
                 editor={editor}
                 setEditor={setEditor}
-                mode={mode}
               />,
             ]}
             isSelected={false}
@@ -200,11 +200,10 @@ export function MainPage() {
             )}
             assignees={assignees}
             serialInput={serialInput}
-            mode={mode}
             viewMode={viewMode}
             command={command}
           />
-          <KeyBar mode={mode} tasks={tasks} />
+          <KeyBar tasks={tasks} />
           <EditBar
             mode={mode}
             tasks={tasks}
