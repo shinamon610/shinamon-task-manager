@@ -418,7 +418,8 @@ export const EditBar = ({
   setMemo,
 }: EditBarProps) => {
   const { tasks, assignees, setAssignees } = useContext(GlobalContext);
-  const { mode } = useContext(MainContext);
+  const mainContext = useContext(MainContext);
+  const { mode } = mainContext;
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);
