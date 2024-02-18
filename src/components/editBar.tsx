@@ -1,3 +1,4 @@
+import { MainContext } from "@/contexts/mainContext";
 import { Assignee } from "@/models/assignee";
 import { Status } from "@/models/status";
 import {
@@ -16,14 +17,13 @@ import {
   selectingModes,
 } from "@/vim/mode";
 import moment, { Moment } from "moment";
-import { MutableRefObject, useEffect, useRef } from "react";
+import { MutableRefObject, useContext, useEffect, useRef } from "react";
 import { CreatableBox } from "./creatableBox";
 import { FlexContainer } from "./flexContainer";
 import { MultiBox } from "./multibox";
 import { SelectBox } from "./selectBox";
 
 type EditBarProps = {
-  mode: Mode;
   tasks: Task[];
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -395,7 +395,6 @@ function isDisabled(mode: Mode): boolean {
 }
 
 export const EditBar = ({
-  mode,
   tasks,
   title,
   setTitle,
@@ -423,6 +422,7 @@ export const EditBar = ({
   memo,
   setMemo,
 }: EditBarProps) => {
+  const { mode } = useContext(MainContext);
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const assigneeRef = useRef(null);

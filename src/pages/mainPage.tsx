@@ -205,7 +205,6 @@ export function MainPage() {
           />
           <KeyBar tasks={tasks} />
           <EditBar
-            mode={mode}
             tasks={tasks}
             title={isFilter(mode) ? filterTitle : title}
             setTitle={isFilter(mode) ? setFilterTitle : setTitle}
