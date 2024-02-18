@@ -54,7 +54,7 @@ export function MainPage() {
   const [memo, setMemo] = useState("");
 
   // filter設定
-  const [filterTitle, setFilterTitle] = useState("");
+  const { filterTitle, setFilterTitle } = useContext(MainContext);
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
   const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
   const [filterSources, setFilterSources] = useState<Set<UUID>>(
