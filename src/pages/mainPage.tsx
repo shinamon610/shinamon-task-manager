@@ -30,6 +30,7 @@ export function MainPage() {
     setSelectedTargets,
     memo,
     setMemo,
+    filteredTasks,
   } = useContext(MainContext);
   const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
@@ -42,19 +43,6 @@ export function MainPage() {
   const [spentTime, setSpentTime] = useState<number>(0);
   const [startDateTime, setStartDateTime] = useState<Moment | null>(null);
   const [endDateTime, setEndDateTime] = useState<Moment | null>(null);
-
-  // filter設定
-  const {
-    filterAssignee,
-    setFilterAssignee,
-    filterSources,
-    setFilterSources,
-    filterTargets,
-    setFilterTargets,
-    filterMemo,
-    setFilterMemo,
-    filteredTasks,
-  } = useContext(MainContext);
 
   // editor
   const [editor, setEditor] = useState("");
