@@ -19,6 +19,9 @@ export const MainContext = createContext<MainContextType>({
   setTitle: () => {},
   selectedAssignee: null,
   setSelectedAssignee: () => {},
+  selectedSources: new Set<UUID>([]),
+  setSelectedSources: () => {},
+
   filterTitle: "",
   setFilterTitle: () => {},
   filterStatus: null,
@@ -45,6 +48,8 @@ type MainContextType = {
   setSelectedStatus: Dispatch<SetStateAction<Status>>;
   selectedAssignee: Assignee | null;
   setSelectedAssignee: Dispatch<SetStateAction<Assignee | null>>;
+  selectedSources: Set<UUID>;
+  setSelectedSources: Dispatch<SetStateAction<Set<UUID>>>;
 
   filterTitle: string;
   setFilterTitle: Dispatch<SetStateAction<string>>;
@@ -71,6 +76,10 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
+  const [selectedSources, setSelectedSources] = useState<Set<UUID>>(
+    new Set<UUID>([])
+  );
+
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
   const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
@@ -112,6 +121,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setSelectedStatus,
         selectedAssignee,
         setSelectedAssignee,
+        selectedSources,
+        setSelectedSources,
 
         filterTitle,
         setFilterTitle,
