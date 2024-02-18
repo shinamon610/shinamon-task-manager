@@ -1,6 +1,3 @@
-import { EditBar } from "@/components/editBar";
-import { KeyBar } from "@/components/keyBar";
-import TaskGraph from "@/components/taskGraph";
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { saveData } from "@/models/file";
@@ -13,6 +10,7 @@ import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
 import { UUID, getSelectedTask } from "../models/task";
 import { MarkdownPage } from "./markdownPage";
+import { TaskPage } from "./taskPage";
 
 export function MainPage() {
   const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
@@ -146,26 +144,21 @@ export function MainPage() {
       {markdownModes.includes(mode) ? (
         <MarkdownPage editor={editor} setEditor={setEditor} />
       ) : (
-        <>
-          <TaskGraph
-            serialInput={serialInput}
-            viewMode={viewMode}
-            command={command}
-          />
-          <KeyBar />
-          <EditBar
-            sourcesRef={sourcesRef}
-            targetsRef={targetsRef}
-            estimatedTime={estimatedTime}
-            setEstimatedTime={setEstimatedTime}
-            spentTime={spentTime}
-            setSpentTime={setSpentTime}
-            startDateTime={startDateTime}
-            setStartDateTime={setStartDateTime}
-            endDateTime={endDateTime}
-            setEndDateTime={setEndDateTime}
-          />
-        </>
+        <TaskPage
+          serialInput={serialInput}
+          viewMode={viewMode}
+          command={command}
+          sourcesRef={sourcesRef}
+          targetsRef={targetsRef}
+          estimatedTime={estimatedTime}
+          setEstimatedTime={setEstimatedTime}
+          spentTime={spentTime}
+          setSpentTime={setSpentTime}
+          startDateTime={startDateTime}
+          setStartDateTime={setStartDateTime}
+          endDateTime={endDateTime}
+          setEndDateTime={setEndDateTime}
+        />
       )}
     </div>
   );
