@@ -1,4 +1,4 @@
-import { Task, taskUUID } from "@/models/task";
+import { Task, UUID } from "@/models/task";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -10,9 +10,9 @@ import { BoxRef, Option, boxStyles } from "./selectBox";
 
 type MultiBoxProps = {
   isDisabled: boolean;
-  defaultOption: Set<taskUUID>;
+  defaultOption: Set<UUID>;
   tasks: Task[];
-  setSelectedValue: React.Dispatch<React.SetStateAction<Set<taskUUID>>>;
+  setSelectedValue: React.Dispatch<React.SetStateAction<Set<UUID>>>;
 };
 
 export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
@@ -42,7 +42,7 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
         onChange={(newValue) => {
-          const selectedOptions = newValue as Option<taskUUID>[];
+          const selectedOptions = newValue as Option<UUID>[];
           setSelectedValue(new Set(selectedOptions.map((o) => o.value)));
         }}
         placeholder=""

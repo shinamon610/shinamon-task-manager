@@ -8,7 +8,7 @@ import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
-import { createTasks, getSelectedTask, taskUUID } from "../models/task";
+import { UUID, createTasks, getSelectedTask } from "../models/task";
 import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
@@ -97,8 +97,8 @@ export function MainPage() {
         );
         setSelectedStatus(selectedTask.status);
         setSelectedAssignee(selectedTask.assignee);
-        setSelectedSources(new Set<taskUUID>(selectedTask.from));
-        setSelectedTargets(new Set<taskUUID>(selectedTask.to));
+        setSelectedSources(new Set<UUID>(selectedTask.from));
+        setSelectedTargets(new Set<UUID>(selectedTask.to));
         setEstimatedTime(selectedTask.estimatedTime);
         setSpentTime(selectedTask.spentTime);
         setStartDateTime(selectedTask.startTime);
