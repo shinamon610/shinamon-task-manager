@@ -20,6 +20,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   histories: List([]),
   setHistories: () => {},
   pushHistory: () => {},
+  prevHistory: () => {},
+  nextHistory: () => {},
   currentHistoryIndex: 0,
   setCurrentHistoryIndex: () => {},
   assignees: new Set(),
@@ -36,6 +38,8 @@ type GlobalContextType = {
   histories: List<List<Task>>;
   setHistories: (newHistories: List<List<Task>>) => void;
   pushHistory: (tasks: List<Task>) => void;
+  prevHistory: () => void;
+  nextHistory: () => void;
   currentHistoryIndex: number;
   setCurrentHistoryIndex: Dispatch<SetStateAction<number>>;
   assignees: Set<Assignee>;
@@ -104,6 +108,8 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         histories,
         setHistories,
         pushHistory,
+        prevHistory,
+        nextHistory,
         currentHistoryIndex,
         setCurrentHistoryIndex,
         assignees,

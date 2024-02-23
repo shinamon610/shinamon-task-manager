@@ -14,8 +14,16 @@ import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
 export function MainPage() {
-  const { filePath, setFilePath, userName, setUserName, tasks, pushHistory } =
-    useContext(GlobalContext);
+  const {
+    filePath,
+    setFilePath,
+    userName,
+    setUserName,
+    tasks,
+    pushHistory,
+    prevHistory,
+    nextHistory,
+  } = useContext(GlobalContext);
   const {
     mode,
     setMode,
@@ -117,6 +125,14 @@ export function MainPage() {
         newCommand === Command.SetToDone
       ) {
         pushHistory(newTasks);
+      }
+
+      if (newCommand === Command.Undo) {
+        prevHistory();
+      }
+
+      if (newCommand === Command.Redo) {
+        nextHistory();
       }
 
       if (
