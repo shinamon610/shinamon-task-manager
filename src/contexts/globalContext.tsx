@@ -17,9 +17,11 @@ export const GlobalContext = createContext<GlobalContextType>({
   userName: "",
   setUserName: () => {},
   tasks: List([]),
-  setTasks: () => {},
   histories: List([]),
   setHistories: () => {},
+  pushHistory: () => {},
+  currentHistoryIndex: 0,
+  setCurrentHistoryIndex: () => {},
   assignees: new Set(),
   setAssignees: () => {},
 });
@@ -31,25 +33,52 @@ type GlobalContextType = {
   userName: Assignee;
   setUserName: Dispatch<SetStateAction<Assignee>>;
   tasks: List<Task>;
-  setTasks: Dispatch<SetStateAction<List<Task>>>;
   histories: List<List<Task>>;
-  setHistories: Dispatch<SetStateAction<List<List<Task>>>>;
+  setHistories: (newHistories: List<List<Task>>) => void;
+  pushHistory: (tasks: List<Task>) => void;
+  currentHistoryIndex: number;
+  setCurrentHistoryIndex: Dispatch<SetStateAction<number>>;
   assignees: Set<Assignee>;
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
 };
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
+  const historySize = 20;
   const [filePath, setFilePath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
-  const [tasks, setTasks] = useState<List<Task>>(List([]));
-  const [histories, setHistories] = useState<List<List<Task>>>(List([]));
+  const [histories, _setHistories] = useState<List<List<Task>>>(List([]));
+  const [currentHistoryIndex, setCurrentHistoryIndex] = useState(0);
   const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
+
+  const setHistories = useCallback(
+    (newHistories: List<List<Task>>) => {
+      const tailHistories = newHistories.takeLast(historySize);
+      _setHistories(tailHistories);
+      setCurrentHistoryIndex(tailHistories.size - 1);
+    },
+    [_setHistories]
+  );
+
+  const pushHistory = useCallback(
+    (tasks: List<Task>) => {
+      setHistories(histories.push(tasks));
+    },
+    [histories, setHistories]
+  );
 
   const initializeData = useCallback(() => {
     loadInitialFilePath().then((newFilePath) => {
-      loadData(newFilePath, setFilePath, setTasks, setAssignees, setUserName);
+      loadData(
+        newFilePath,
+        setFilePath,
+        setHistories,
+        setAssignees,
+        setUserName
+      );
     });
-  }, [setFilePath, setTasks, setAssignees, setUserName]);
+  }, [setFilePath, setHistories, setAssignees, setUserName]);
+
+  const tasks = histories.get(currentHistoryIndex)!;
 
   return (
     <GlobalContext.Provider
@@ -60,9 +89,11 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         userName,
         setUserName,
         tasks,
-        setTasks,
         histories,
         setHistories,
+        pushHistory,
+        currentHistoryIndex,
+        setCurrentHistoryIndex,
         assignees,
         setAssignees,
       }}

@@ -4,7 +4,7 @@ import { List } from "immutable";
 import { useContext } from "react";
 
 export function SelectSaveLocation() {
-  const { setFilePath, userName, setUserName, setTasks, setAssignees } =
+  const { setFilePath, userName, setUserName, setHistories, setAssignees } =
     useContext(GlobalContext);
   const style = {
     backgroundColor: "var(--active)",
@@ -31,7 +31,7 @@ export function SelectSaveLocation() {
               return;
             }
             setFilePath(getTasksJsonFile(newDir));
-            setTasks(List([]));
+            setHistories(List(List([])));
             setAssignees(new Set([userName]));
             setUserName(userName);
           });
@@ -49,7 +49,7 @@ export function SelectSaveLocation() {
             loadData(
               dirToLoad,
               setFilePath,
-              setTasks,
+              setHistories,
               setAssignees,
               setUserName
             );

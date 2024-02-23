@@ -14,7 +14,7 @@ import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
 export function MainPage() {
-  const { filePath, setFilePath, userName, setUserName, tasks, setTasks } =
+  const { filePath, setFilePath, userName, setUserName, tasks, pushHistory } =
     useContext(GlobalContext);
   const {
     mode,
@@ -48,27 +48,18 @@ export function MainPage() {
   // editor
   const [editor, setEditor] = useState("");
 
-  function setTaskData(
-    newMode: Mode,
-    newCommand: Command,
-    newTasks: List<Task>
-  ) {
-    if (
-      newMode === Mode.NodeSelecting ||
-      newCommand === Command.CreateTaskNode
-    ) {
-      const selectedTask = getSelectedTask(newTasks)!;
-      setTitle(newCommand === Command.CreateTaskNode ? "" : selectedTask.name);
-      setSelectedStatus(selectedTask.status);
-      setSelectedAssignee(selectedTask.assignee);
-      setSelectedSources(new Set<UUID>(selectedTask.from));
-      setSelectedTargets(new Set<UUID>(selectedTask.to));
-      setEstimatedTime(selectedTask.estimatedTime);
-      setSpentTime(selectedTask.spentTime);
-      setStartDateTime(selectedTask.startTime);
-      setEndDateTime(selectedTask.endTime);
-      setMemo(selectedTask.memo);
-    }
+  function setTaskData(newCommand: Command, newTasks: List<Task>) {
+    const selectedTask = getSelectedTask(newTasks)!;
+    setTitle(newCommand === Command.CreateTaskNode ? "" : selectedTask.name);
+    setSelectedStatus(selectedTask.status);
+    setSelectedAssignee(selectedTask.assignee);
+    setSelectedSources(new Set<UUID>(selectedTask.from));
+    setSelectedTargets(new Set<UUID>(selectedTask.to));
+    setEstimatedTime(selectedTask.estimatedTime);
+    setSpentTime(selectedTask.spentTime);
+    setStartDateTime(selectedTask.startTime);
+    setEndDateTime(selectedTask.endTime);
+    setMemo(selectedTask.memo);
   }
 
   useEffect(() => {
@@ -111,11 +102,29 @@ export function MainPage() {
       setCommand(newCommand);
       setMode(newMode);
       setViewMode(newViewMode);
-      setTasks(newTasks);
       setSerialInput(newSerialInput);
       saveData({ tasks: newTasks, userName }, filePath);
 
-      setTaskData(newMode, newCommand, newTasks);
+      // 条件によって更新するもの
+      if (
+        newCommand === Command.CreateTaskNode ||
+        newCommand === Command.DeleteTaskNode ||
+        newCommand === Command.SelectTaskNode ||
+        newCommand === Command.Cancel ||
+        newCommand === Command.ConfirmEdit ||
+        newCommand === Command.SetToWorking ||
+        newCommand === Command.SetToPending ||
+        newCommand === Command.SetToDone
+      ) {
+        pushHistory(newTasks);
+      }
+
+      if (
+        newMode === Mode.NodeSelecting ||
+        newCommand === Command.CreateTaskNode
+      ) {
+        setTaskData(newCommand, newTasks);
+      }
       if (newCommand === Command.SelectAnotherLocation) {
         setFilePath("");
       }
