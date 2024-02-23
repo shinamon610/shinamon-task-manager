@@ -9,6 +9,7 @@ import { zip } from "@/utils";
 import { Command } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
+import { List } from "immutable";
 import { useContext, useEffect } from "react";
 import ReactFlow, {
   Edge,
@@ -67,13 +68,13 @@ function boxShadow(
 }
 
 function createNodesAndEdgesFromTasks(
-  tasks: Task[],
+  tasks: List<Task>,
   assignees: Set<Assignee>,
   serialInput: string,
   mode: Mode
 ): [Node[], Edge[]] {
-  const labels = indexesToLabels(tasks.length);
-  const nodes = zip(tasks, labels).map(([task, label]) => {
+  const labels = indexesToLabels(tasks.size);
+  const nodes = zip(tasks.toJS(), labels).map(([task, label]) => {
     const color =
       task.assignee == null ? null : getColor(assignees, task.assignee);
     const [border, padding] = borderAndPadding(
@@ -108,7 +109,7 @@ function createNodesAndEdgesFromTasks(
     };
   });
 
-  const edges = tasks.flatMap((task) =>
+  const edges = (tasks.toJS() as Task[]).flatMap((task) =>
     task.to.map((targetId) => {
       const color = task.isSelected ? "var(--accent)" : "var(--active)";
       return {

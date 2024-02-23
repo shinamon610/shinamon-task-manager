@@ -1,6 +1,7 @@
 import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
 import { Task } from "@/models/task";
+import { List } from "immutable";
 import {
   Dispatch,
   SetStateAction,
@@ -15,7 +16,7 @@ export const GlobalContext = createContext<GlobalContextType>({
   setFilePath: () => {},
   userName: "",
   setUserName: () => {},
-  tasks: [],
+  tasks: List([]),
   setTasks: () => {},
   assignees: new Set(),
   setAssignees: () => {},
@@ -27,8 +28,8 @@ type GlobalContextType = {
   setFilePath: Dispatch<SetStateAction<string>>;
   userName: Assignee;
   setUserName: Dispatch<SetStateAction<Assignee>>;
-  tasks: Task[];
-  setTasks: Dispatch<SetStateAction<Task[]>>;
+  tasks: List<Task>;
+  setTasks: Dispatch<SetStateAction<List<Task>>>;
   assignees: Set<Assignee>;
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
 };
@@ -36,7 +37,7 @@ type GlobalContextType = {
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
   const [filePath, setFilePath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<List<Task>>(List([]));
   const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
 
   const initializeData = useCallback(() => {

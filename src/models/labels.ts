@@ -1,5 +1,6 @@
 import { combPair, flattenStrings, idf } from "@/utils";
 import { selectString } from "@/vim/commands";
+import { List } from "immutable";
 import { Task } from "./task";
 
 export function createLabelSelectedMatrix(
@@ -60,10 +61,10 @@ function createLabels(selectString: string, labelLength: number): string[] {
 }
 
 export function selectLabelIndex(
-  filteredTasks: Task[],
+  filteredTasks: List<Task>,
   serialInput: string
 ): number | null {
-  const labels = indexesToLabels(filteredTasks.length);
+  const labels = indexesToLabels(filteredTasks.size);
   const selectedMatrix = createLabelSelectedMatrix(labels, serialInput);
   const selectedIndex = selectedMatrix
     .map((selectedArray) => {

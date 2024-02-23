@@ -1,4 +1,5 @@
 import { Command } from "@/vim/commands";
+import { List } from "immutable";
 import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
 import { selectLabelIndex } from "./labels";
@@ -57,14 +58,14 @@ export type UserInput = {
 function createTask(
   userInput: UserInput,
   userName: Assignee,
-  tasks: Task[]
+  tasks: List<Task>
 ): Task {
   function toStatus(): Status {
     if (
       tasks.filter(
         ({ id, status }) =>
           userInput.from.includes(id) && status !== DefaultStatus.Done
-      ).length > 0
+      ).size > 0
     ) {
       return DefaultStatus.Pending;
     }
@@ -103,15 +104,15 @@ function createTask(
 }
 
 function selectTask(
-  tasks: Task[],
-  filteredTasks: Task[],
+  tasks: List<Task>,
+  filteredTasks: List<Task>,
   serialInput: string
-): Task[] {
+): List<Task> {
   const selectedIndex = selectLabelIndex(filteredTasks, serialInput);
   if (selectedIndex === null) {
     return tasks;
   }
-  const selectedTaskId = filteredTasks[selectedIndex].id;
+  const selectedTaskId = filteredTasks.get(selectedIndex)!.id;
   const newTasks = tasks.map((task): Task => {
     return {
       ...task,
@@ -121,7 +122,7 @@ function selectTask(
   return newTasks;
 }
 
-function unSelectAll(tasks: Task[]): Task[] {
+function unSelectAll(tasks: List<Task>): List<Task> {
   return tasks.map((task): Task => {
     return {
       ...task,
@@ -130,7 +131,7 @@ function unSelectAll(tasks: Task[]): Task[] {
   });
 }
 
-function deleteEdge(tasks: Task[], id: UUID): Task[] {
+function deleteEdge(tasks: List<Task>, id: UUID): List<Task> {
   return tasks.map((task): Task => {
     return {
       ...task,
@@ -140,7 +141,12 @@ function deleteEdge(tasks: Task[], id: UUID): Task[] {
   });
 }
 
-function createEdge(tasks: Task[], from: UUID[], to: UUID[], id: UUID): Task[] {
+function createEdge(
+  tasks: List<Task>,
+  from: UUID[],
+  to: UUID[],
+  id: UUID
+): List<Task> {
   const res = tasks.map((task): Task => {
     if (from.includes(task.id)) {
       return {
@@ -161,7 +167,7 @@ function createEdge(tasks: Task[], from: UUID[], to: UUID[], id: UUID): Task[] {
   });
 }
 
-function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
+function updateSelectedTask(tasks: List<Task>, newTask: Task): List<Task> {
   return tasks.map((task): Task => {
     if (task.isSelected) {
       return newTask;
@@ -190,10 +196,10 @@ function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
 }
 
 function updateTasks(
-  tasks: Task[],
+  tasks: List<Task>,
   userInfo: UserInput,
   userName: string
-): Task[] {
+): List<Task> {
   const oldSelectedTask = getSelectedTask(tasks)!;
   const newTask = {
     ...createTask(userInfo, userName, tasks),
@@ -207,7 +213,7 @@ function updateTasks(
   );
 }
 
-function deleteSelectedTask(tasks: Task[]): Task[] {
+function deleteSelectedTask(tasks: List<Task>): List<Task> {
   const targetID = getSelectedTask(tasks)!.id;
   return deleteEdge(
     tasks.filter((task): boolean => {
@@ -217,51 +223,56 @@ function deleteSelectedTask(tasks: Task[]): Task[] {
   );
 }
 
-export function getSelectedTask(tasks: Task[]): Task | undefined {
+export function getSelectedTask(tasks: List<Task>): Task | undefined {
   return tasks.find((task) => {
     return task.isSelected;
   });
 }
 
-export function getAllTasksFromSource(tasks: Task[], sourceId: UUID): Task[] {
+export function getAllTasksFromSource(
+  tasks: List<Task>,
+  sourceId: UUID
+): List<Task> {
   if (sourceId === noneId) {
     return tasks.filter((task) => task.from.length === 0);
   }
   const maybeSource = tasks.filter((task) => task.id === sourceId);
-  if (maybeSource.length === 0) {
-    return [];
+  if (maybeSource.size === 0) {
+    return List([]);
   }
-  const source = maybeSource[0];
-  return [
-    source,
-    ...source.to.flatMap((nextID) => getAllTasksFromSource(tasks, nextID)),
-  ];
+  const source = maybeSource.get(0)!;
+
+  return List(source.to)
+    .flatMap((nextID) => getAllTasksFromSource(tasks, nextID))
+    .push(source);
 }
 
-export function getAllTasksFromTarget(tasks: Task[], targetId: UUID): Task[] {
+export function getAllTasksFromTarget(
+  tasks: List<Task>,
+  targetId: UUID
+): List<Task> {
   if (targetId === noneId) {
     return tasks.filter((task) => task.to.length === 0);
   }
   const maybeTarget = tasks.filter((task) => task.id === targetId);
-  if (maybeTarget.length === 0) {
-    return [];
+  if (maybeTarget.size === 0) {
+    return List([]);
   }
-  const target = maybeTarget[0];
-  return [
-    target,
-    ...target.from.flatMap((nextID) => getAllTasksFromTarget(tasks, nextID)),
-  ];
+  const target = maybeTarget.get(0)!;
+  return List(target.from)
+    .flatMap((nextID) => getAllTasksFromTarget(tasks, nextID))
+    .push(target);
 }
 
 export function filterTasks(
-  tasks: Task[],
+  tasks: List<Task>,
   filterTitle: string,
   filterStatus: Status | null,
   filterAssignee: Assignee | null,
   filterSoucres: Set<UUID>,
   filterTargets: Set<UUID>,
   filterMemo: string
-): Task[] {
+): List<Task> {
   function baseFilter<S>(
     task: Task | null,
     filterValue: S | null,
@@ -301,14 +312,14 @@ export function filterTasks(
   }
 
   function filterByDependency(
-    tasks: Task[],
+    tasks: List<Task>,
     values: Set<UUID>,
-    f: (task: Task[], filterValue: UUID) => Task[]
-  ): Task[] {
+    f: (task: List<Task>, filterValue: UUID) => List<Task>
+  ): List<Task> {
     if (values.size === 0) {
       return tasks;
     }
-    const allowedTasks = Array.from(values).flatMap((id) => f(tasks, id));
+    const allowedTasks = List(Array.from(values)).flatMap((id) => f(tasks, id));
     return tasks.filter((task) => allowedTasks.includes(task));
   }
 
@@ -326,10 +337,10 @@ export function filterTasks(
 }
 
 function updateTaskStatus(
-  tasks: Task[],
+  tasks: List<Task>,
   status: Status,
   userName: string
-): Task[] {
+): List<Task> {
   const selectedTask = getSelectedTask(tasks)!;
   return updateTasks(
     tasks,
@@ -350,12 +361,13 @@ function updateTaskStatus(
   );
 }
 
-export function hasNotDoneChildTask(tasks: Task[]): boolean {
+export function hasNotDoneChildTask(tasks: List<Task>): boolean {
   const selectedTask = getSelectedTask(tasks)!;
   return (
     selectedTask.from.filter((id) => {
       return (
-        tasks.filter((task) => task.id === id)[0].status !== DefaultStatus.Done
+        tasks.filter((task) => task.id === id).get(0)!.status !==
+        DefaultStatus.Done
       );
     }).length > 0
   );
@@ -363,12 +375,12 @@ export function hasNotDoneChildTask(tasks: Task[]): boolean {
 
 export function createTasks(
   command: Command,
-  tasks: Task[],
-  filteredTasks: Task[],
+  tasks: List<Task>,
+  filteredTasks: List<Task>,
   serialInput: string,
   userInput: UserInput,
   userName: string
-): Task[] {
+): List<Task> {
   switch (command) {
     case Command.CreateTaskNode:
       const brankInput = {
@@ -387,7 +399,7 @@ export function createTasks(
       const newTask = createTask(brankInput, userName, tasks);
 
       return updateTasks(
-        [...unSelectAll(tasks), newTask],
+        unSelectAll(tasks).push(newTask),
         brankInput,
         userName
       );

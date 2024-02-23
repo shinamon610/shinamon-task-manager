@@ -1,3 +1,4 @@
+import { List } from "immutable";
 import { Task } from "./task";
 
 export type Assignee = string;
@@ -20,11 +21,12 @@ const colorlist: Color[] = [
   "yellow",
 ];
 
-export function extractAssignees(tasks: Task[]): Set<Assignee> {
+export function extractAssignees(tasks: List<Task>): Set<Assignee> {
   return new Set(
     tasks
       .map((task) => task.assignee)
-      .filter((assignee) => assignee != null) as Assignee[]
+      .filter((assignee): assignee is Assignee => assignee !== null)
+      .toList()
   );
 }
 

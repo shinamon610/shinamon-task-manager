@@ -3,6 +3,7 @@ import { MainContext } from "@/contexts/mainContext";
 import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
 import { Mode } from "@/vim/mode";
+import { List } from "immutable";
 import { useContext } from "react";
 import { Key } from "./key";
 
@@ -14,7 +15,7 @@ export function KeyBar() {
 
 function createLabelsAndKeys(
   mode: Mode,
-  tasks: Task[]
+  tasks: List<Task>
 ): [string[], string[][]] {
   switch (mode) {
     case Mode.Normal:
@@ -102,7 +103,7 @@ function createLabelsAndKeys(
   }
 }
 
-function createElements(mode: Mode, tasks: Task[]): React.JSX.Element[] {
+function createElements(mode: Mode, tasks: List<Task>): React.JSX.Element[] {
   const [labels, keys] = createLabelsAndKeys(mode, tasks);
   return zip(labels, keys).map(([label, key]) => {
     return Key({

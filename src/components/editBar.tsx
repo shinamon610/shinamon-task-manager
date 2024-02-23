@@ -22,6 +22,7 @@ import {
   selectingFilterModes,
   selectingModes,
 } from "@/vim/mode";
+import { List } from "immutable";
 import moment, { Moment } from "moment";
 import { MutableRefObject, useContext, useEffect, useRef } from "react";
 import { CreatableBox } from "./creatableBox";
@@ -47,13 +48,13 @@ type EditBarProps = {
 };
 
 function createMultiSelectBoxData(
-  tasks: Task[],
+  tasks: List<Task>,
   isInputting: boolean, // filtering中は絞り込む必要ないので、判別するためのフラグ
   selectedIDs: Set<UUID>,
-  f: (task: Task[], id: UUID) => Task[]
-): Task[] {
+  f: (task: List<Task>, id: UUID) => List<Task>
+): List<Task> {
   if (isInputting) {
-    const fobiddens = Array.from(selectedIDs)
+    const fobiddens = List(Array.from(selectedIDs))
       .flatMap((id) => f(tasks, id))
       .map(({ id }) => id);
     const res = tasks.filter(
@@ -61,12 +62,12 @@ function createMultiSelectBoxData(
     );
     return res;
   }
-  return [...tasks, noneTask]; // filtering中は先がないものを絞り込むためにnoneTaskが必要
+  return tasks.push(noneTask); // filtering中は先がないものを絞り込むためにnoneTaskが必要
 }
 
 function createContent(
   mode: Mode,
-  tasks: Task[],
+  tasks: List<Task>,
   title: string,
   setTitle: React.Dispatch<React.SetStateAction<string>>,
   selectedStatus: Status | null,

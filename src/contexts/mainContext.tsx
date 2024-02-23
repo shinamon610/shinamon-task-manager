@@ -1,6 +1,7 @@
 import { Assignee } from "@/models/assignee";
 import { DefaultStatus, Status } from "@/models/status";
 import { Mode } from "@/vim/mode";
+import { List } from "immutable";
 import {
   Dispatch,
   SetStateAction,
@@ -38,7 +39,7 @@ export const MainContext = createContext<MainContextType>({
   setFilterTargets: () => {},
   filterMemo: "",
   setFilterMemo: () => {},
-  filteredTasks: [],
+  filteredTasks: List([]),
   selectedStatus: DefaultStatus.Pending,
   setSelectedStatus: () => {},
 });
@@ -71,7 +72,7 @@ type MainContextType = {
   setFilterTargets: Dispatch<SetStateAction<Set<UUID>>>;
   filterMemo: string;
   setFilterMemo: Dispatch<SetStateAction<string>>;
-  filteredTasks: Task[];
+  filteredTasks: List<Task>;
 };
 
 export function MainProvider({ children }: { children: React.ReactNode }) {

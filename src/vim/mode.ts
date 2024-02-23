@@ -1,5 +1,6 @@
 import { selectLabelIndex } from "@/models/labels";
 import { Task } from "@/models/task";
+import { List } from "immutable";
 import { Command } from "./commands";
 
 export enum Mode {
@@ -95,7 +96,7 @@ export const inputtingFilterModes = [
 export function createMode(
   mode: Mode,
   command: Command,
-  filteredTasks: Task[],
+  filteredTasks: List<Task>,
   serialInput: string
 ): Mode {
   switch (command) {

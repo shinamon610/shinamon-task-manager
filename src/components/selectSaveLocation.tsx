@@ -1,5 +1,6 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { createDir, getTasksJsonFile, loadData, openDir } from "@/models/file";
+import { List } from "immutable";
 import { useContext } from "react";
 
 export function SelectSaveLocation() {
@@ -30,7 +31,7 @@ export function SelectSaveLocation() {
               return;
             }
             setFilePath(getTasksJsonFile(newDir));
-            setTasks([]);
+            setTasks(List([]));
             setAssignees(new Set([userName]));
             setUserName(userName);
           });

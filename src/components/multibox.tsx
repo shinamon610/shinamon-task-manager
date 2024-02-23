@@ -1,4 +1,5 @@
 import { Task, UUID } from "@/models/task";
+import { List } from "immutable";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -11,7 +12,7 @@ import { BoxRef, Option, boxStyles } from "./selectBox";
 type MultiBoxProps = {
   isDisabled: boolean;
   defaultOption: Set<UUID>;
-  tasks: Task[];
+  tasks: List<Task>;
   setSelectedValue: React.Dispatch<React.SetStateAction<Set<UUID>>>;
 };
 
@@ -35,10 +36,12 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
     return (
       <Select
         className="selectbox"
-        options={tasks.map((task) => ({
-          value: task.id,
-          label: task.name,
-        }))}
+        options={tasks
+          .map((task) => ({
+            value: task.id,
+            label: task.name,
+          }))
+          .toJS()}
         components={{ DropdownIndicator: null }}
         filterOption={createFilter({ ignoreAccents: false })}
         onChange={(newValue) => {
@@ -53,7 +56,7 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         ref={selectRef}
         value={Array.from(defaultOption).map((id) => ({
           value: id,
-          label: tasks.filter((task) => task.id === id)[0].name,
+          label: tasks.filter((task) => task.id === id).get(0)!.name,
         }))}
         isMulti={true}
         onMenuOpen={() => setInnerMenuIsOpen(true)}

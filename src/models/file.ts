@@ -1,3 +1,4 @@
+import { List } from "immutable";
 import moment from "moment";
 import path from "path";
 import { Dispatch, SetStateAction } from "react";
@@ -81,7 +82,7 @@ export async function loadInitialFilePath(): Promise<string | null> {
 }
 
 type DataToSave = {
-  tasks: Task[];
+  tasks: List<Task>;
   userName: string;
 };
 
@@ -106,13 +107,13 @@ async function load(filePath: string): Promise<DataToSave> {
     }
   });
 
-  return { tasks, userName };
+  return { tasks: List(tasks), userName };
 }
 
 export async function loadData(
   dir: string | null,
   setFilePath: Dispatch<SetStateAction<string>>,
-  setTasks: Dispatch<SetStateAction<Task[]>>,
+  setTasks: Dispatch<SetStateAction<List<Task>>>,
   setAssignees: Dispatch<SetStateAction<Set<string>>>,
   setUserName: Dispatch<SetStateAction<string>>
 ) {
