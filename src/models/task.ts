@@ -333,17 +333,17 @@ export function filterTasks(
     return tasks.filter((task) => allowedTasks.includes(task));
   }
 
-  const res = tasks.filter((task) => {
+  const filteredByDependency = filterByDependency(
+    filterByDependency(tasks, filterSoucres, getAllTasksFromSource),
+    filterTargets,
+    getAllTasksFromTarget
+  );
+  return filteredByDependency.filter((task) => {
     return (
       filterByMemo(filterByAssignee(filterByStatus(filterByTitle(task)))) !=
       null
     );
   });
-  return filterByDependency(
-    filterByDependency(res, filterSoucres, getAllTasksFromSource),
-    filterTargets,
-    getAllTasksFromTarget
-  );
 }
 
 function updateTaskStatus(
