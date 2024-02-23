@@ -195,6 +195,8 @@ export function createMode(
     case Command.Nothing:
     case Command.ToGraph:
     case Command.ToTile:
+    case Command.Undo:
+    case Command.Redo:
       return mode;
   }
 }

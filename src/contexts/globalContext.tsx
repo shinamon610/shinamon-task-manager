@@ -66,6 +66,18 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     [histories, setHistories]
   );
 
+  const prevHistory = useCallback(() => {
+    if (currentHistoryIndex > 0) {
+      setCurrentHistoryIndex(currentHistoryIndex - 1);
+    }
+  }, [currentHistoryIndex]);
+
+  const nextHistory = useCallback(() => {
+    if (currentHistoryIndex < histories.size - 1) {
+      setCurrentHistoryIndex(currentHistoryIndex + 1);
+    }
+  }, [currentHistoryIndex, histories.size]);
+
   const initializeData = useCallback(() => {
     loadInitialFilePath().then((newFilePath) => {
       loadData(

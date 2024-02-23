@@ -21,6 +21,8 @@ export enum Command {
   SetToWorking,
   SetToPending,
   SetToDone,
+  Undo,
+  Redo,
 
   // Markdown
   ViewMarkdownFile,
@@ -223,7 +225,7 @@ export function keyEventToCommand(
       if (key === "f") {
         return Command.Filter;
       }
-      if (key === "r") {
+      if (key === "q") {
         return Command.Rename;
       }
       if (key === "g") {
@@ -231,6 +233,12 @@ export function keyEventToCommand(
       }
       if (key === "t") {
         return Command.ToTile;
+      }
+      if (key === "u") {
+        return Command.Undo;
+      }
+      if (key === "r") {
+        return Command.Redo;
       }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;

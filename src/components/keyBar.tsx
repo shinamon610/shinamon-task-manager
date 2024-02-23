@@ -27,8 +27,10 @@ function createLabelsAndKeys(
           "Rename User",
           "Tile",
           "Graph",
+          "Undo",
+          "Redo",
         ],
-        [["n"], ["w"], ["f"], ["r"], ["t"], ["g"]],
+        [["n"], ["w"], ["f"], ["q"], ["t"], ["g"], ["u"], ["r"]],
       ];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [
