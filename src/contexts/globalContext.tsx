@@ -18,6 +18,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   setUserName: () => {},
   tasks: List([]),
   setTasks: () => {},
+  histories: List([]),
+  setHistories: () => {},
   assignees: new Set(),
   setAssignees: () => {},
 });
@@ -30,6 +32,8 @@ type GlobalContextType = {
   setUserName: Dispatch<SetStateAction<Assignee>>;
   tasks: List<Task>;
   setTasks: Dispatch<SetStateAction<List<Task>>>;
+  histories: List<List<Task>>;
+  setHistories: Dispatch<SetStateAction<List<List<Task>>>>;
   assignees: Set<Assignee>;
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
 };
@@ -38,6 +42,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
   const [filePath, setFilePath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
   const [tasks, setTasks] = useState<List<Task>>(List([]));
+  const [histories, setHistories] = useState<List<List<Task>>>(List([]));
   const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
 
   const initializeData = useCallback(() => {
@@ -56,6 +61,8 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         setUserName,
         tasks,
         setTasks,
+        histories,
+        setHistories,
         assignees,
         setAssignees,
       }}
