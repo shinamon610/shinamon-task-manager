@@ -130,15 +130,9 @@ export function selectTask(
   }
   const selectedTaskId = filteredTasks[selectedIndex].id;
   const newTasks = tasks.map((task): Task => {
-    if (selectedTaskId === task.id) {
-      return {
-        ...task,
-        isSelected: true,
-      };
-    }
     return {
       ...task,
-      isSelected: false,
+      isSelected: selectedTaskId === task.id,
     };
   });
   return [Mode.NodeSelecting, newTasks];
