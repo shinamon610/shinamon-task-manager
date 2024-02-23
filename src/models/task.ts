@@ -1,8 +1,6 @@
-import { idf } from "@/utils";
-import { Mode } from "@/vim/mode";
 import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
-import { createLabelSelectedMatrix, indexesToLabels } from "./labels";
+import { selectLabelIndex } from "./labels";
 import { DefaultStatus, NotStatus, Status, toDefaultStatus } from "./status";
 
 export type taskUUID = string;
@@ -117,16 +115,10 @@ export function selectTask(
   tasks: Task[],
   filteredTasks: Task[],
   serialInput: string
-): [Mode, Task[]] {
-  const labels = indexesToLabels(filteredTasks.length);
-  const selectedMatrix = createLabelSelectedMatrix(labels, serialInput);
-  const selectedIndex = selectedMatrix
-    .map((selectedArray) => {
-      return selectedArray.every(idf);
-    })
-    .indexOf(true);
-  if (selectedIndex === -1) {
-    return [Mode.Normal, tasks];
+): Task[] {
+  const selectedIndex = selectLabelIndex(filteredTasks, serialInput);
+  if (selectedIndex === null) {
+    return tasks;
   }
   const selectedTaskId = filteredTasks[selectedIndex].id;
   const newTasks = tasks.map((task): Task => {
@@ -135,7 +127,7 @@ export function selectTask(
       isSelected: selectedTaskId === task.id,
     };
   });
-  return [Mode.NodeSelecting, newTasks];
+  return newTasks;
 }
 
 export function unSelectAll(tasks: Task[]): Task[] {

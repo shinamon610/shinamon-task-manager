@@ -1,5 +1,6 @@
-import { combPair, flattenStrings } from "@/utils";
+import { combPair, flattenStrings, idf } from "@/utils";
 import { selectString } from "@/vim/commands";
+import { Task } from "./task";
 
 export function createLabelSelectedMatrix(
   labels: string[],
@@ -34,7 +35,7 @@ export function indexesToLabels(totalTasks: number): string[] {
   return createLabels(selectString, labelLength).slice(0, totalTasks);
 }
 
-export function countLabelLength(
+function countLabelLength(
   totalTasks: number,
   selectStringLength: number
 ): number {
@@ -46,10 +47,8 @@ export function countLabelLength(
   }
   return num;
 }
-export function createLabels(
-  selectString: string,
-  labelLength: number
-): string[] {
+
+function createLabels(selectString: string, labelLength: number): string[] {
   const oneLetters = selectString.split("");
   const sources = Array.from({ length: labelLength }, () => oneLetters);
   const reduced = sources.reduce(
@@ -58,4 +57,21 @@ export function createLabels(
   );
   const res = flattenStrings(reduced);
   return res;
+}
+
+export function selectLabelIndex(
+  filteredTasks: Task[],
+  serialInput: string
+): number | null {
+  const labels = indexesToLabels(filteredTasks.length);
+  const selectedMatrix = createLabelSelectedMatrix(labels, serialInput);
+  const selectedIndex = selectedMatrix
+    .map((selectedArray) => {
+      return selectedArray.every(idf);
+    })
+    .indexOf(true);
+  if (selectedIndex === -1) {
+    return null;
+  }
+  return selectedIndex;
 }

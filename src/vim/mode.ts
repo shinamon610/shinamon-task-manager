@@ -1,3 +1,4 @@
+import { selectLabelIndex } from "@/models/labels";
 import { DefaultStatus } from "@/models/status";
 import {
   Task,
@@ -174,7 +175,12 @@ export function createModeAndTasks(
     case Command.InputMemo:
       return [Mode.MemoInputting, tasks];
     case Command.SelectTaskNode:
-      const [newMode, newTasks] = selectTask(tasks, filteredTasks, serialInput);
+      const [newMode, newTasks] = [
+        selectLabelIndex(filteredTasks, serialInput) === null
+          ? Mode.Normal
+          : Mode.NodeSelecting,
+        selectTask(tasks, filteredTasks, serialInput),
+      ];
       return [newMode, newTasks];
     case Command.Nothing:
       return [mode, tasks];
