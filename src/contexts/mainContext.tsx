@@ -9,7 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Task, UUID, filterTasks } from "../models/task";
+import { Task, filterTasks, taskUUID } from "../models/task";
 import { GlobalContext } from "./globalContext";
 
 export const MainContext = createContext<MainContextType>({
@@ -19,9 +19,9 @@ export const MainContext = createContext<MainContextType>({
   setTitle: () => {},
   selectedAssignee: null,
   setSelectedAssignee: () => {},
-  selectedSources: new Set<UUID>([]),
+  selectedSources: new Set<taskUUID>([]),
   setSelectedSources: () => {},
-  selectedTargets: new Set<UUID>([]),
+  selectedTargets: new Set<taskUUID>([]),
   setSelectedTargets: () => {},
   memo: "",
   setMemo: () => {},
@@ -32,9 +32,9 @@ export const MainContext = createContext<MainContextType>({
   setFilterStatus: () => {},
   filterAssignee: null,
   setFilterAssignee: () => {},
-  filterSources: new Set<UUID>([]),
+  filterSources: new Set<taskUUID>([]),
   setFilterSources: () => {},
-  filterTargets: new Set<UUID>([]),
+  filterTargets: new Set<taskUUID>([]),
   setFilterTargets: () => {},
   filterMemo: "",
   setFilterMemo: () => {},
@@ -52,10 +52,10 @@ type MainContextType = {
   setSelectedStatus: Dispatch<SetStateAction<Status>>;
   selectedAssignee: Assignee | null;
   setSelectedAssignee: Dispatch<SetStateAction<Assignee | null>>;
-  selectedSources: Set<UUID>;
-  setSelectedSources: Dispatch<SetStateAction<Set<UUID>>>;
-  selectedTargets: Set<UUID>;
-  setSelectedTargets: Dispatch<SetStateAction<Set<UUID>>>;
+  selectedSources: Set<taskUUID>;
+  setSelectedSources: Dispatch<SetStateAction<Set<taskUUID>>>;
+  selectedTargets: Set<taskUUID>;
+  setSelectedTargets: Dispatch<SetStateAction<Set<taskUUID>>>;
   memo: string;
   setMemo: Dispatch<SetStateAction<string>>;
 
@@ -65,10 +65,10 @@ type MainContextType = {
   setFilterStatus: Dispatch<SetStateAction<Status | null>>;
   filterAssignee: Assignee | null;
   setFilterAssignee: Dispatch<SetStateAction<Assignee | null>>;
-  filterSources: Set<UUID>;
-  setFilterSources: Dispatch<SetStateAction<Set<UUID>>>;
-  filterTargets: Set<UUID>;
-  setFilterTargets: Dispatch<SetStateAction<Set<UUID>>>;
+  filterSources: Set<taskUUID>;
+  setFilterSources: Dispatch<SetStateAction<Set<taskUUID>>>;
+  filterTargets: Set<taskUUID>;
+  setFilterTargets: Dispatch<SetStateAction<Set<taskUUID>>>;
   filterMemo: string;
   setFilterMemo: Dispatch<SetStateAction<string>>;
   filteredTasks: Task[];
@@ -84,22 +84,22 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
-  const [selectedSources, setSelectedSources] = useState<Set<UUID>>(
-    new Set<UUID>([])
+  const [selectedSources, setSelectedSources] = useState<Set<taskUUID>>(
+    new Set<taskUUID>([])
   );
-  const [selectedTargets, setSelectedTargets] = useState<Set<UUID>>(
-    new Set<UUID>([])
+  const [selectedTargets, setSelectedTargets] = useState<Set<taskUUID>>(
+    new Set<taskUUID>([])
   );
   const [memo, setMemo] = useState("");
 
   const [filterTitle, setFilterTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState<Status | null>(null);
   const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
-  const [filterSources, setFilterSources] = useState<Set<UUID>>(
-    new Set<UUID>([])
+  const [filterSources, setFilterSources] = useState<Set<taskUUID>>(
+    new Set<taskUUID>([])
   );
-  const [filterTargets, setFilterTargets] = useState<Set<UUID>>(
-    new Set<UUID>([])
+  const [filterTargets, setFilterTargets] = useState<Set<taskUUID>>(
+    new Set<taskUUID>([])
   );
   const [filterMemo, setFilterMemo] = useState("");
   const filteredTasks = useMemo(() => {

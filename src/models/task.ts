@@ -5,17 +5,27 @@ import { Assignee } from "./assignee";
 import { createLabelSelectedMatrix, indexesToLabels } from "./labels";
 import { DefaultStatus, NotStatus, Status, toDefaultStatus } from "./status";
 
-export type UUID = string;
+export type taskUUID = string;
+export type historyUUID = string;
+
+export type History = {
+  id: historyUUID;
+  tops: taskUUID[];
+  bottoms: taskUUID[];
+  to: historyUUID[];
+  from: historyUUID[];
+  isSelected: boolean;
+};
 
 export type Task = {
-  id: UUID;
+  id: taskUUID;
   name: string;
   startTime: moment.Moment | null;
   endTime: moment.Moment | null;
   estimatedTime: number | null;
   spentTime: number;
-  to: UUID[];
-  from: UUID[]; // fromを辿って検索するから、やっぱり必要
+  to: taskUUID[];
+  from: taskUUID[]; // fromを辿って検索するから、やっぱり必要
   priority: number;
   memo: string;
   status: Status;
@@ -47,8 +57,8 @@ export type UserInput = {
   endTime: moment.Moment | null;
   estimatedTime: number | null;
   spentTime: number | null;
-  to: UUID[];
-  from: UUID[];
+  to: taskUUID[];
+  from: taskUUID[];
   priority: number | null;
   memo: string | null;
   status: Status | null;
@@ -143,7 +153,7 @@ export function unSelectAll(tasks: Task[]): Task[] {
   });
 }
 
-function deleteEdge(tasks: Task[], id: UUID): Task[] {
+function deleteEdge(tasks: Task[], id: taskUUID): Task[] {
   return tasks.map((task): Task => {
     return {
       ...task,
@@ -153,7 +163,12 @@ function deleteEdge(tasks: Task[], id: UUID): Task[] {
   });
 }
 
-function createEdge(tasks: Task[], from: UUID[], to: UUID[], id: UUID): Task[] {
+function createEdge(
+  tasks: Task[],
+  from: taskUUID[],
+  to: taskUUID[],
+  id: taskUUID
+): Task[] {
   const res = tasks.map((task): Task => {
     if (from.includes(task.id)) {
       return {
@@ -236,7 +251,10 @@ export function getSelectedTask(tasks: Task[]): Task | undefined {
   });
 }
 
-export function getAllTasksFromSource(tasks: Task[], sourceId: UUID): Task[] {
+export function getAllTasksFromSource(
+  tasks: Task[],
+  sourceId: taskUUID
+): Task[] {
   if (sourceId === noneId) {
     return tasks.filter((task) => task.from.length === 0);
   }
@@ -251,7 +269,10 @@ export function getAllTasksFromSource(tasks: Task[], sourceId: UUID): Task[] {
   ];
 }
 
-export function getAllTasksFromTarget(tasks: Task[], targetId: UUID): Task[] {
+export function getAllTasksFromTarget(
+  tasks: Task[],
+  targetId: taskUUID
+): Task[] {
   if (targetId === noneId) {
     return tasks.filter((task) => task.to.length === 0);
   }
@@ -271,8 +292,8 @@ export function filterTasks(
   filterTitle: string,
   filterStatus: Status | null,
   filterAssignee: Assignee | null,
-  filterSoucres: Set<UUID>,
-  filterTargets: Set<UUID>,
+  filterSoucres: Set<taskUUID>,
+  filterTargets: Set<taskUUID>,
   filterMemo: string
 ): Task[] {
   function baseFilter<S>(
@@ -315,8 +336,8 @@ export function filterTasks(
 
   function filterByDependency(
     tasks: Task[],
-    values: Set<UUID>,
-    f: (task: Task[], filterValue: UUID) => Task[]
+    values: Set<taskUUID>,
+    f: (task: Task[], filterValue: taskUUID) => Task[]
   ): Task[] {
     if (values.size === 0) {
       return tasks;

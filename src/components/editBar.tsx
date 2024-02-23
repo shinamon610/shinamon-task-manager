@@ -8,10 +8,10 @@ import {
 } from "@/models/status";
 import {
   Task,
-  UUID,
   getAllTasksFromSource,
   getAllTasksFromTarget,
   noneTask,
+  taskUUID,
 } from "@/models/task";
 import { flatten, idf } from "@/utils";
 import {
@@ -49,8 +49,8 @@ type EditBarProps = {
 function createMultiSelectBoxData(
   tasks: Task[],
   isInputting: boolean, // filtering中は絞り込む必要ないので、判別するためのフラグ
-  selectedIDs: Set<UUID>,
-  f: (task: Task[], id: UUID) => Task[]
+  selectedIDs: Set<taskUUID>,
+  f: (task: Task[], id: taskUUID) => Task[]
 ): Task[] {
   if (isInputting) {
     const fobiddens = Array.from(selectedIDs)
@@ -78,11 +78,11 @@ function createContent(
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>,
   assignees: Set<Assignee>,
   setAssignees: React.Dispatch<React.SetStateAction<Set<Assignee>>>,
-  selectedSources: Set<UUID>,
-  setSelectedSources: React.Dispatch<React.SetStateAction<Set<UUID>>>,
+  selectedSources: Set<taskUUID>,
+  setSelectedSources: React.Dispatch<React.SetStateAction<Set<taskUUID>>>,
   sourcesRef: MutableRefObject<null>,
-  selectedTargets: Set<UUID>,
-  setSelectedTargets: React.Dispatch<React.SetStateAction<Set<UUID>>>,
+  selectedTargets: Set<taskUUID>,
+  setSelectedTargets: React.Dispatch<React.SetStateAction<Set<taskUUID>>>,
   targetsRef: MutableRefObject<null>,
   estimatedTime: number | null,
   setEstimatedTime: React.Dispatch<React.SetStateAction<number | null>>,
