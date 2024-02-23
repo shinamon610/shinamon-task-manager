@@ -3,12 +3,12 @@ import { MainContext } from "@/contexts/mainContext";
 import { saveData } from "@/models/file";
 import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
-import { Mode, createModeAndTasks, markdownModes } from "@/vim/mode";
+import { Mode, createMode, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
-import { getSelectedTask, taskUUID } from "../models/task";
+import { createTasks, getSelectedTask, taskUUID } from "../models/task";
 import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
@@ -58,28 +58,30 @@ export function MainPage() {
         serialInput,
         filteredTasks
       );
-      const [newMode, newTasks] = createModeAndTasks(
-        mode,
-        newCommand,
-        tasks,
-        filteredTasks,
-        newSerialInput,
-        {
-          name: title,
-          startTime: startDateTime,
-          endTime: endDateTime,
-          estimatedTime: estimatedTime,
-          spentTime: spentTime,
-          to: Array.from(selectedTargets),
-          from: Array.from(selectedSources),
-          priority: null,
-          memo: memo,
-          status: selectedStatus,
-          assignee: selectedAssignee,
-        },
-        userName
-      );
-      const newViewMode = createViewMode(newCommand, viewMode);
+      const [newMode, newViewMode, newTasks] = [
+        createMode(mode, newCommand, filteredTasks, newSerialInput),
+        createViewMode(newCommand, viewMode),
+        createTasks(
+          newCommand,
+          tasks,
+          filteredTasks,
+          newSerialInput,
+          {
+            name: title,
+            startTime: startDateTime,
+            endTime: endDateTime,
+            estimatedTime: estimatedTime,
+            spentTime: spentTime,
+            to: Array.from(selectedTargets),
+            from: Array.from(selectedSources),
+            priority: null,
+            memo: memo,
+            status: selectedStatus,
+            assignee: selectedAssignee,
+          },
+          userName
+        ),
+      ];
       setCommand(newCommand);
       setMode(newMode);
       setViewMode(newViewMode);

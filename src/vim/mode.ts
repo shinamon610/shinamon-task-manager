@@ -1,15 +1,5 @@
 import { selectLabelIndex } from "@/models/labels";
-import { DefaultStatus } from "@/models/status";
-import {
-  Task,
-  UserInput,
-  createTask,
-  deleteSelectedTask,
-  selectTask,
-  unSelectAll,
-  updateTaskStatus,
-  updateTasks,
-} from "@/models/task";
+import { Task } from "@/models/task";
 import { Command } from "./commands";
 
 export enum Mode {
@@ -102,147 +92,109 @@ export const inputtingFilterModes = [
   [Mode.FilterMemoInputting],
 ];
 
-export function createModeAndTasks(
+export function createMode(
   mode: Mode,
   command: Command,
-  tasks: Task[],
   filteredTasks: Task[],
-  serialInput: string,
-  userInput: UserInput,
-  userName: string
-): [Mode, Task[]] {
+  serialInput: string
+): Mode {
   switch (command) {
     case Command.CreateTaskNode:
-      const brankInput = {
-        name: "",
-        startTime: null,
-        endTime: null,
-        estimatedTime: null,
-        spentTime: null,
-        to: [],
-        from: [],
-        priority: null,
-        memo: null,
-        status: null,
-        assignee: null,
-      };
-      const newTask = createTask(brankInput, userName, tasks);
-
-      return [
-        Mode.TitleInputting,
-        updateTasks([...unSelectAll(tasks), newTask], brankInput, userName),
-      ];
+      return Mode.TitleInputting;
     case Command.DeleteTaskNode:
-      return [Mode.Normal, deleteSelectedTask(tasks)];
-    case Command.SelectTitle:
-      return [Mode.TitleSelecting, tasks];
-    case Command.InputTitle:
-      return [Mode.TitleInputting, tasks];
-    case Command.SelectStatus:
-      return [Mode.StatusSelecting, tasks];
-    case Command.InputStatus:
-      return [Mode.StatusInputting, tasks];
-    case Command.SelectAssignee:
-      return [Mode.AssigneeSelecting, tasks];
-    case Command.InputAssignee:
-      return [Mode.AssigneeInputting, tasks];
-    case Command.SelectSources:
-      return [Mode.SourcesSelecting, tasks];
-    case Command.InputSources:
-      return [Mode.SourcesInputting, tasks];
-    case Command.SelectTargets:
-      return [Mode.TargetsSelecting, tasks];
-    case Command.InputTargets:
-      return [Mode.TargetsInputting, tasks];
-    case Command.SelectEstimatedTime:
-      return [Mode.EstimatedTimeSelecting, tasks];
-    case Command.InputEstimatedTime:
-      return [Mode.EstimatedTimeInputting, tasks];
-    case Command.SelectSpentTime:
-      return [Mode.SpentTimeSelecting, tasks];
-    case Command.InputSpentTime:
-      return [Mode.SpentTimeInputting, tasks];
-    case Command.SelectStartDateTime:
-      return [Mode.StartDateTimeSelecting, tasks];
-    case Command.InputStartDateTime:
-      return [Mode.StartDateTimeInputting, tasks];
-    case Command.SelectEndDateTime:
-      return [Mode.EndDateTimeSelecting, tasks];
-    case Command.InputEndDateTime:
-      return [Mode.EndDateTimeInputting, tasks];
-    case Command.SelectMemo:
-      return [Mode.MemoSelecting, tasks];
-    case Command.InputMemo:
-      return [Mode.MemoInputting, tasks];
-    case Command.SelectTaskNode:
-      const [newMode, newTasks] = [
-        selectLabelIndex(filteredTasks, serialInput) === null
-          ? Mode.Normal
-          : Mode.NodeSelecting,
-        selectTask(tasks, filteredTasks, serialInput),
-      ];
-      return [newMode, newTasks];
-    case Command.Nothing:
-      return [mode, tasks];
     case Command.Cancel:
-      return [Mode.Normal, unSelectAll(tasks)];
     case Command.ConfirmEdit:
-      return [Mode.Normal, updateTasks(tasks, userInput, userName)];
-    case Command.SelectAnotherLocation:
     case Command.Rename:
-      return [Mode.Normal, tasks];
+      return Mode.Normal;
+    case Command.SelectTitle:
+      return Mode.TitleSelecting;
+    case Command.InputTitle:
+      return Mode.TitleInputting;
+    case Command.SelectStatus:
+      return Mode.StatusSelecting;
+    case Command.InputStatus:
+      return Mode.StatusInputting;
+    case Command.SelectAssignee:
+      return Mode.AssigneeSelecting;
+    case Command.InputAssignee:
+      return Mode.AssigneeInputting;
+    case Command.SelectSources:
+      return Mode.SourcesSelecting;
+    case Command.InputSources:
+      return Mode.SourcesInputting;
+    case Command.SelectTargets:
+      return Mode.TargetsSelecting;
+    case Command.InputTargets:
+      return Mode.TargetsInputting;
+    case Command.SelectEstimatedTime:
+      return Mode.EstimatedTimeSelecting;
+    case Command.InputEstimatedTime:
+      return Mode.EstimatedTimeInputting;
+    case Command.SelectSpentTime:
+      return Mode.SpentTimeSelecting;
+    case Command.InputSpentTime:
+      return Mode.SpentTimeInputting;
+    case Command.SelectStartDateTime:
+      return Mode.StartDateTimeSelecting;
+    case Command.InputStartDateTime:
+      return Mode.StartDateTimeInputting;
+    case Command.SelectEndDateTime:
+      return Mode.EndDateTimeSelecting;
+    case Command.InputEndDateTime:
+      return Mode.EndDateTimeInputting;
+    case Command.SelectMemo:
+      return Mode.MemoSelecting;
+    case Command.InputMemo:
+      return Mode.MemoInputting;
+    case Command.SelectTaskNode:
+      return selectLabelIndex(filteredTasks, serialInput) === null
+        ? Mode.Normal
+        : Mode.NodeSelecting;
+    case Command.SelectAnotherLocation:
     case Command.Filter:
-      return [Mode.FilterTitleSelecting, tasks];
+      return Mode.FilterTitleSelecting;
     case Command.SelectFilterTitle:
-      return [Mode.FilterTitleSelecting, tasks];
+      return Mode.FilterTitleSelecting;
     case Command.InputFilterTitle:
-      return [Mode.FilterTitleInputting, tasks];
+      return Mode.FilterTitleInputting;
     case Command.SelectFilterStatus:
-      return [Mode.FilterStatusSelecting, tasks];
+      return Mode.FilterStatusSelecting;
     case Command.InputFilterStatus:
-      return [Mode.FilterStatusInputting, tasks];
+      return Mode.FilterStatusInputting;
     case Command.SelectFilterAssignee:
-      return [Mode.FilterAssigneeSelecting, tasks];
+      return Mode.FilterAssigneeSelecting;
     case Command.InputFilterAssignee:
-      return [Mode.FilterAssigneeInputting, tasks];
+      return Mode.FilterAssigneeInputting;
     case Command.SelectFilterSources:
-      return [Mode.FilterSourcesSelecting, tasks];
+      return Mode.FilterSourcesSelecting;
     case Command.InputFilterSources:
-      return [Mode.FilterSourcesInputting, tasks];
+      return Mode.FilterSourcesInputting;
     case Command.SelectFilterTargets:
-      return [Mode.FilterTargetsSelecting, tasks];
+      return Mode.FilterTargetsSelecting;
     case Command.InputFilterTargets:
-      return [Mode.FilterTargetsInputting, tasks];
+      return Mode.FilterTargetsInputting;
     case Command.SelectFilterMemo:
-      return [Mode.FilterMemoSelecting, tasks];
+      return Mode.FilterMemoSelecting;
     case Command.InputFilterMemo:
-      return [Mode.FilterMemoInputting, tasks];
+      return Mode.FilterMemoInputting;
     case Command.SetToWorking:
-      return [
-        Mode.NodeSelecting,
-        updateTaskStatus(tasks, DefaultStatus.Working, userName),
-      ];
+      return Mode.NodeSelecting;
     case Command.SetToPending:
-      return [
-        Mode.NodeSelecting,
-        updateTaskStatus(tasks, DefaultStatus.Pending, userName),
-      ];
+      return Mode.NodeSelecting;
     case Command.SetToDone:
-      return [
-        Mode.NodeSelecting,
-        updateTaskStatus(tasks, DefaultStatus.Done, userName),
-      ];
+      return Mode.NodeSelecting;
+    case Command.ViewMarkdownFile:
+      return Mode.MarkDownViewing;
+    case Command.InputMarkdownFile:
+      return Mode.MarkDownInputting;
+    case Command.SetEditor:
+      return Mode.EditorSetting;
+    case Command.OpenEditor:
+      return Mode.MarkDownViewing;
+    case Command.Nothing:
     case Command.ToGraph:
     case Command.ToTile:
-      return [mode, tasks];
-    case Command.ViewMarkdownFile:
-      return [Mode.MarkDownViewing, tasks];
-    case Command.InputMarkdownFile:
-      return [Mode.MarkDownInputting, tasks];
-    case Command.SetEditor:
-      return [Mode.EditorSetting, tasks];
-    case Command.OpenEditor:
-      return [Mode.MarkDownViewing, tasks];
+      return mode;
   }
 }
 

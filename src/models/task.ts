@@ -1,3 +1,4 @@
+import { Command } from "@/vim/commands";
 import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
 import { selectLabelIndex } from "./labels";
@@ -63,7 +64,7 @@ export type UserInput = {
   assignee: Assignee | null;
 };
 
-export function createTask(
+function createTask(
   userInput: UserInput,
   userName: Assignee,
   tasks: Task[]
@@ -111,7 +112,7 @@ export function createTask(
   };
 }
 
-export function selectTask(
+function selectTask(
   tasks: Task[],
   filteredTasks: Task[],
   serialInput: string
@@ -130,7 +131,7 @@ export function selectTask(
   return newTasks;
 }
 
-export function unSelectAll(tasks: Task[]): Task[] {
+function unSelectAll(tasks: Task[]): Task[] {
   return tasks.map((task): Task => {
     return {
       ...task,
@@ -203,7 +204,7 @@ function updateSelectedTask(tasks: Task[], newTask: Task): Task[] {
   });
 }
 
-export function updateTasks(
+function updateTasks(
   tasks: Task[],
   userInfo: UserInput,
   userName: string
@@ -221,7 +222,7 @@ export function updateTasks(
   );
 }
 
-export function deleteSelectedTask(tasks: Task[]): Task[] {
+function deleteSelectedTask(tasks: Task[]): Task[] {
   const targetID = getSelectedTask(tasks)!.id;
   return deleteEdge(
     tasks.filter((task): boolean => {
@@ -345,7 +346,7 @@ export function filterTasks(
   );
 }
 
-export function updateTaskStatus(
+function updateTaskStatus(
   tasks: Task[],
   status: Status,
   userName: string
@@ -379,4 +380,94 @@ export function hasNotDoneChildTask(tasks: Task[]): boolean {
       );
     }).length > 0
   );
+}
+
+export function createTasks(
+  command: Command,
+  tasks: Task[],
+  filteredTasks: Task[],
+  serialInput: string,
+  userInput: UserInput,
+  userName: string
+): Task[] {
+  switch (command) {
+    case Command.CreateTaskNode:
+      const brankInput = {
+        name: "",
+        startTime: null,
+        endTime: null,
+        estimatedTime: null,
+        spentTime: null,
+        to: [],
+        from: [],
+        priority: null,
+        memo: null,
+        status: null,
+        assignee: null,
+      };
+      const newTask = createTask(brankInput, userName, tasks);
+
+      return updateTasks(
+        [...unSelectAll(tasks), newTask],
+        brankInput,
+        userName
+      );
+    case Command.DeleteTaskNode:
+      return deleteSelectedTask(tasks);
+    case Command.SelectTaskNode:
+      return selectTask(tasks, filteredTasks, serialInput);
+    case Command.Cancel:
+      return unSelectAll(tasks);
+    case Command.ConfirmEdit:
+      return updateTasks(tasks, userInput, userName);
+    case Command.SetToWorking:
+      return updateTaskStatus(tasks, DefaultStatus.Working, userName);
+    case Command.SetToPending:
+      return updateTaskStatus(tasks, DefaultStatus.Pending, userName);
+    case Command.SetToDone:
+      return updateTaskStatus(tasks, DefaultStatus.Done, userName);
+    case Command.ToGraph:
+    case Command.ToTile:
+    case Command.ViewMarkdownFile:
+    case Command.InputMarkdownFile:
+    case Command.SetEditor:
+    case Command.OpenEditor:
+    case Command.SelectTitle:
+    case Command.InputTitle:
+    case Command.SelectStatus:
+    case Command.InputStatus:
+    case Command.SelectAssignee:
+    case Command.InputAssignee:
+    case Command.SelectSources:
+    case Command.InputSources:
+    case Command.SelectTargets:
+    case Command.InputTargets:
+    case Command.SelectEstimatedTime:
+    case Command.InputEstimatedTime:
+    case Command.SelectSpentTime:
+    case Command.InputSpentTime:
+    case Command.SelectStartDateTime:
+    case Command.InputStartDateTime:
+    case Command.SelectEndDateTime:
+    case Command.InputEndDateTime:
+    case Command.SelectMemo:
+    case Command.InputMemo:
+    case Command.SelectAnotherLocation:
+    case Command.Rename:
+    case Command.Filter:
+    case Command.SelectFilterTitle:
+    case Command.InputFilterTitle:
+    case Command.SelectFilterStatus:
+    case Command.InputFilterStatus:
+    case Command.SelectFilterAssignee:
+    case Command.InputFilterAssignee:
+    case Command.SelectFilterSources:
+    case Command.InputFilterSources:
+    case Command.SelectFilterTargets:
+    case Command.InputFilterTargets:
+    case Command.SelectFilterMemo:
+    case Command.InputFilterMemo:
+    case Command.Nothing:
+      return tasks;
+  }
 }
