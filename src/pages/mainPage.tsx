@@ -6,9 +6,10 @@ import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createMode, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { ViewMode, createViewMode } from "@/vim/viewMode";
+import { List } from "immutable";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
-import { UUID, createTasks, getSelectedTask } from "../models/task";
+import { Task, UUID, createTasks, getSelectedTask } from "../models/task";
 import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
@@ -47,6 +48,29 @@ export function MainPage() {
   // editor
   const [editor, setEditor] = useState("");
 
+  function setTaskData(
+    newMode: Mode,
+    newCommand: Command,
+    newTasks: List<Task>
+  ) {
+    if (
+      newMode === Mode.NodeSelecting ||
+      newCommand === Command.CreateTaskNode
+    ) {
+      const selectedTask = getSelectedTask(newTasks)!;
+      setTitle(newCommand === Command.CreateTaskNode ? "" : selectedTask.name);
+      setSelectedStatus(selectedTask.status);
+      setSelectedAssignee(selectedTask.assignee);
+      setSelectedSources(new Set<UUID>(selectedTask.from));
+      setSelectedTargets(new Set<UUID>(selectedTask.to));
+      setEstimatedTime(selectedTask.estimatedTime);
+      setSpentTime(selectedTask.spentTime);
+      setStartDateTime(selectedTask.startTime);
+      setEndDateTime(selectedTask.endTime);
+      setMemo(selectedTask.memo);
+    }
+  }
+
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
       const newCommand = keyEventToCommand(mode, event, sourcesRef, targetsRef);
@@ -82,29 +106,16 @@ export function MainPage() {
           userName
         ),
       ];
+
+      // とりあえず毎回更新するもの
       setCommand(newCommand);
       setMode(newMode);
       setViewMode(newViewMode);
       setTasks(newTasks);
       setSerialInput(newSerialInput);
-      if (
-        newMode === Mode.NodeSelecting ||
-        newCommand === Command.CreateTaskNode
-      ) {
-        const selectedTask = getSelectedTask(newTasks)!;
-        setTitle(
-          newCommand === Command.CreateTaskNode ? "" : selectedTask.name
-        );
-        setSelectedStatus(selectedTask.status);
-        setSelectedAssignee(selectedTask.assignee);
-        setSelectedSources(new Set<UUID>(selectedTask.from));
-        setSelectedTargets(new Set<UUID>(selectedTask.to));
-        setEstimatedTime(selectedTask.estimatedTime);
-        setSpentTime(selectedTask.spentTime);
-        setStartDateTime(selectedTask.startTime);
-        setEndDateTime(selectedTask.endTime);
-        setMemo(selectedTask.memo);
-      }
+      saveData({ tasks: newTasks, userName }, filePath);
+
+      setTaskData(newMode, newCommand, newTasks);
       if (newCommand === Command.SelectAnotherLocation) {
         setFilePath("");
       }
@@ -121,7 +132,6 @@ export function MainPage() {
       if (newCommand === Command.Rename) {
         setUserName("");
       }
-      saveData({ tasks: newTasks, userName }, filePath);
     };
     window.addEventListener("keydown", handle);
     return () => {
