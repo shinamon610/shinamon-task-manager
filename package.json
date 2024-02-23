@@ -22,6 +22,7 @@
     "cytoscape-dagre": "^2.5.0",
     "cytoscape-dom-node": "^1.2.0",
     "cytoscape-popper": "^2.0.0",
+    "immutable": "^5.0.0-beta.5",
     "moment": "^2.29.4",
     "next": "14.0.4",
     "prettier": "^3.2.5",
