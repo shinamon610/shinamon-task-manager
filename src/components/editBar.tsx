@@ -13,7 +13,7 @@ import {
   noneTask,
   taskUUID,
 } from "@/models/task";
-import { flatten, idf } from "@/utils";
+import { idf } from "@/utils";
 import {
   Mode,
   inputtingFilterModes,
@@ -373,7 +373,7 @@ function isDisabled(mode: Mode): boolean {
     selectingFilterModes,
     inputtingFilterModes,
   ].every((modes) => {
-    return !flatten(modes).includes(mode);
+    return !modes.flat().includes(mode);
   });
 }
 

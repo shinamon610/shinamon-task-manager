@@ -9,7 +9,6 @@ import {
   updateTaskStatus,
   updateTasks,
 } from "@/models/task";
-import { flatten } from "@/utils";
 import { Command } from "./commands";
 
 export enum Mode {
@@ -243,6 +242,6 @@ export function createModeAndTasks(
 
 export function isFilter(mode: Mode): boolean {
   return [selectingFilterModes, inputtingFilterModes].some((modes) => {
-    return flatten(modes).includes(mode);
+    return modes.flat().includes(mode);
   });
 }
