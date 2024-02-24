@@ -1,11 +1,11 @@
 import { EditBar } from "@/components/editBar";
+import { MyGantt } from "@/components/gantt";
 import { KeyBar } from "@/components/keyBar";
 import TaskGraph from "@/components/taskGraph";
 import { Command } from "@/vim/commands";
 import { ViewMode } from "@/vim/viewMode";
 import { Moment } from "moment";
 import { Dispatch, MutableRefObject, SetStateAction } from "react";
-import { Gantt } from "./ganttPage";
 
 type Props = {
   serialInput: string;
@@ -47,7 +47,7 @@ export function TaskPage({
           command={command}
         />
       ) : (
-        <Gantt />
+        <MyGantt />
       )}
       <KeyBar />
       <EditBar
