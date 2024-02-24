@@ -74,7 +74,7 @@ export enum Command {
   ToGantt,
 }
 
-export const selectString = "aehik";
+export const selectString = "ahik";
 const leftStrings = ["ArrowLeft", "h"];
 const downStrings = ["ArrowDown", "j"];
 const upStrings = ["ArrowUp", "k"];
