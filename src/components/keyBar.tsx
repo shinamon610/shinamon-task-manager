@@ -57,8 +57,8 @@ function createLabelsAndKeys(
         : [labelsNodeSelecting, keyNodeSelecting];
     case Mode.ViewSelecting:
       return [
-        ["Graph", "Tile", "Confirm"],
-        [["e"], ["t"], ["esc", "Enter"]],
+        ["Graph", "Tile", "Gantt", "Confirm"],
+        [["e"], ["t"], ["g"], ["esc", "Enter"]],
       ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:

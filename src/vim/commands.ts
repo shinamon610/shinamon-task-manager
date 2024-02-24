@@ -71,6 +71,7 @@ export enum Command {
   // ViewMode
   ToGraph,
   ToTile,
+  ToGantt,
 }
 
 export const selectString = "aehik";
@@ -271,6 +272,9 @@ export function keyEventToCommand(
       }
       if (key === "t") {
         return Command.ToTile;
+      }
+      if (key === "g") {
+        return Command.ToGantt;
       }
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;

@@ -1,3 +1,3 @@
-export function GanttPage() {
-  return <></>;
+export function Gantt() {
+  return <>Gantt</>;
 }

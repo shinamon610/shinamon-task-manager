@@ -5,6 +5,7 @@ import { Command } from "@/vim/commands";
 import { ViewMode } from "@/vim/viewMode";
 import { Moment } from "moment";
 import { Dispatch, MutableRefObject, SetStateAction } from "react";
+import { Gantt } from "./ganttPage";
 
 type Props = {
   serialInput: string;
@@ -39,11 +40,15 @@ export function TaskPage({
 }: Props) {
   return (
     <>
-      <TaskGraph
-        serialInput={serialInput}
-        viewMode={viewMode}
-        command={command}
-      />
+      {viewMode === ViewMode.Graph || viewMode === ViewMode.Tile ? (
+        <TaskGraph
+          serialInput={serialInput}
+          viewMode={viewMode}
+          command={command}
+        />
+      ) : (
+        <Gantt />
+      )}
       <KeyBar />
       <EditBar
         sourcesRef={sourcesRef}

@@ -419,6 +419,7 @@ export function createTasks(
       return updateTaskStatus(tasks, DefaultStatus.Done, userName);
     case Command.ToGraph:
     case Command.ToTile:
+    case Command.ToGantt:
     case Command.ViewMarkdownFile:
     case Command.InputMarkdownFile:
     case Command.SetEditor:
