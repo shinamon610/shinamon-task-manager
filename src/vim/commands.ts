@@ -23,6 +23,7 @@ export enum Command {
   SetToDone,
   Undo,
   Redo,
+  SelectView,
 
   // Markdown
   ViewMarkdownFile,
@@ -228,17 +229,14 @@ export function keyEventToCommand(
       if (key === "q") {
         return Command.Rename;
       }
-      if (key === "g") {
-        return Command.ToGraph;
-      }
-      if (key === "t") {
-        return Command.ToTile;
-      }
       if (key === "u") {
         return Command.Undo;
       }
       if (key === "r") {
         return Command.Redo;
+      }
+      if (key === "v") {
+        return Command.SelectView;
       }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
@@ -267,6 +265,18 @@ export function keyEventToCommand(
         return Command.ViewMarkdownFile;
       }
       return Command.Nothing;
+    case Mode.ViewSelecting:
+      if (key === "e") {
+        return Command.ToGraph;
+      }
+      if (key === "t") {
+        return Command.ToTile;
+      }
+      if (key === "Escape" || key === "Enter") {
+        return Command.Cancel;
+      }
+      return Command.Nothing;
+
     case Mode.TitleSelecting:
     case Mode.StatusSelecting:
     case Mode.AssigneeSelecting:

@@ -461,6 +461,7 @@ export function createTasks(
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:
+    case Command.SelectView:
       return null;
   }
 }

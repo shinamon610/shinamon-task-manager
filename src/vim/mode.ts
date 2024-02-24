@@ -6,6 +6,7 @@ import { Command } from "./commands";
 export enum Mode {
   Normal,
   NodeSelecting,
+  ViewSelecting,
 
   // Markdown
   MarkDownViewing,
@@ -151,6 +152,8 @@ export function createMode(
       return selectLabelIndex(filteredTasks, serialInput) === null
         ? Mode.Normal
         : Mode.NodeSelecting;
+    case Command.SelectView:
+      return Mode.ViewSelecting;
     case Command.SelectAnotherLocation:
     case Command.Filter:
       return Mode.FilterTitleSelecting;

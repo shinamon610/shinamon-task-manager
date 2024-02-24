@@ -25,12 +25,11 @@ function createLabelsAndKeys(
           "Select Another File",
           "Filter",
           "Rename User",
-          "Tile",
-          "Graph",
+          "View",
           "Undo",
           "Redo",
         ],
-        [["n"], ["w"], ["f"], ["q"], ["t"], ["g"], ["u"], ["r"]],
+        [["n"], ["w"], ["f"], ["q"], ["v"], ["u"], ["r"]],
       ];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [
@@ -56,6 +55,11 @@ function createLabelsAndKeys(
       return hasNotDoneChildTask(tasks)
         ? [labelsNodeSelecting.slice(0, 3), keyNodeSelecting.slice(0, 3)]
         : [labelsNodeSelecting, keyNodeSelecting];
+    case Mode.ViewSelecting:
+      return [
+        ["Graph", "Tile", "Confirm"],
+        [["e"], ["t"], ["esc", "Enter"]],
+      ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
     case Mode.StatusSelecting:
