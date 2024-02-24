@@ -1,6 +1,8 @@
-import { Gantt, Task } from "gantt-task-react";
+import { MainContext } from "@/contexts/mainContext";
+import { Task } from "@/models/task";
+import { Gantt, Task as GanttTask } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
-import { useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./gantt.module.css";
 
 const TaskListHeaderDefault: React.FC<{
@@ -93,10 +95,10 @@ export const TaskListTableDefault: React.FC<{
   fontFamily: string;
   fontSize: string;
   locale: string;
-  tasks: Task[];
+  tasks: GanttTask[];
   selectedTaskId: string;
   setSelectedTask: (taskId: string) => void;
-  onExpanderClick: (task: Task) => void;
+  onExpanderClick: (task: GanttTask) => void;
 }> = ({
   rowHeight,
   rowWidth,
@@ -180,23 +182,57 @@ export const TaskListTableDefault: React.FC<{
   );
 };
 export function MyGantt() {
-  let tasks: Task[] = [
-    {
-      start: new Date(2020, 1, 1),
-      end: new Date(2020, 1, 2),
-      name: "Idea",
-      id: "Task 0",
-      type: "task",
-      progress: 45,
-      isDisabled: true,
-      styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
-    },
-  ];
+  const headerHeight = 50;
+  const scrollHeight = 20;
+  const { filteredTasks } = useContext(MainContext);
+  const ganttContainerRef = useRef(null);
+  const [ganttHeight, setGanttHeight] = useState(0);
+
+  useEffect(() => {
+    const updateGanttHeight = () => {
+      if (ganttContainerRef.current) {
+        setGanttHeight(
+          // @ts-ignore
+          ganttContainerRef.current.offsetHeight - headerHeight - scrollHeight
+        );
+      }
+    };
+
+    window.addEventListener("resize", updateGanttHeight); // ウィンドウリサイズ時に高さを更新
+    updateGanttHeight(); // コンポーネントマウント時にも高さを初期化
+
+    return () => {
+      window.removeEventListener("resize", updateGanttHeight); // イベントリスナーのクリーンアップ
+    };
+  }, []);
+
+  const gantTasks: GanttTask[] = (filteredTasks.toJS() as Task[]).map(
+    ({ id, name, startTime, endTime, from }) => {
+      const now = new Date();
+      return {
+        id,
+        start: startTime?.toDate() ?? now,
+        end:
+          endTime?.toDate() ??
+          new Date(now.getFullYear() + 1, now.getMonth(), now.getDate()),
+        name,
+        type: "task",
+        progress: 10,
+        isDisabled: true,
+        styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
+        dependencies: from,
+      };
+    }
+  );
   return (
-    <Gantt
-      tasks={tasks}
-      TaskListHeader={TaskListHeaderDefault}
-      TaskListTable={TaskListTableDefault}
-    />
+    <div ref={ganttContainerRef} style={{ flexGrow: 1 }}>
+      <Gantt
+        tasks={gantTasks}
+        TaskListHeader={TaskListHeaderDefault}
+        TaskListTable={TaskListTableDefault}
+        ganttHeight={ganttHeight}
+        headerHeight={headerHeight}
+      />
+    </div>
   );
 }
