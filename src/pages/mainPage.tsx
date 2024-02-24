@@ -81,7 +81,7 @@ export function MainPage() {
         serialInput,
         filteredTasks
       );
-      const [newMode, newViewMode, newTasks] = [
+      const [newMode, newViewMode, maybeNewTasks] = [
         createMode(mode, newCommand, filteredTasks, newSerialInput),
         createViewMode(newCommand, viewMode),
         createTasks(
@@ -106,40 +106,16 @@ export function MainPage() {
         ),
       ];
 
-      // とりあえず毎回更新するもの
       setCommand(newCommand);
       setMode(newMode);
       setViewMode(newViewMode);
       setSerialInput(newSerialInput);
-      saveData({ tasks: newTasks, userName }, filePath);
-
-      // 条件によって更新するもの
-      if (
-        newCommand === Command.CreateTaskNode ||
-        newCommand === Command.DeleteTaskNode ||
-        newCommand === Command.SelectTaskNode ||
-        newCommand === Command.Cancel ||
-        newCommand === Command.ConfirmEdit ||
-        newCommand === Command.SetToWorking ||
-        newCommand === Command.SetToPending ||
-        newCommand === Command.SetToDone
-      ) {
-        pushHistory(newTasks);
-      }
-
       if (newCommand === Command.Undo) {
         prevHistory();
       }
 
       if (newCommand === Command.Redo) {
         nextHistory();
-      }
-
-      if (
-        newMode === Mode.NodeSelecting ||
-        newCommand === Command.CreateTaskNode
-      ) {
-        setTaskData(newCommand, newTasks);
       }
       if (newCommand === Command.SelectAnotherLocation) {
         setFilePath("");
@@ -156,6 +132,32 @@ export function MainPage() {
       }
       if (newCommand === Command.Rename) {
         setUserName("");
+      }
+
+      if (maybeNewTasks === null) {
+        return;
+      }
+      const newTasks = maybeNewTasks;
+      saveData({ tasks: newTasks, userName }, filePath);
+
+      if (
+        newCommand === Command.CreateTaskNode ||
+        newCommand === Command.DeleteTaskNode ||
+        newCommand === Command.SelectTaskNode ||
+        newCommand === Command.Cancel ||
+        newCommand === Command.ConfirmEdit ||
+        newCommand === Command.SetToWorking ||
+        newCommand === Command.SetToPending ||
+        newCommand === Command.SetToDone
+      ) {
+        pushHistory(newTasks);
+      }
+
+      if (
+        newMode === Mode.NodeSelecting ||
+        newCommand === Command.CreateTaskNode
+      ) {
+        setTaskData(newCommand, newTasks);
       }
     };
     window.addEventListener("keydown", handle);

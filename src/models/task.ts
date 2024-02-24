@@ -380,7 +380,7 @@ export function createTasks(
   serialInput: string,
   userInput: UserInput,
   userName: string
-): List<Task> {
+): List<Task> | null {
   switch (command) {
     case Command.CreateTaskNode:
       const brankInput = {
@@ -461,6 +461,6 @@ export function createTasks(
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:
-      return tasks;
+      return null;
   }
 }
