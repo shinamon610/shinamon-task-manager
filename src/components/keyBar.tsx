@@ -29,7 +29,7 @@ function createLabelsAndKeys(
           "Undo",
           "Redo",
         ],
-        [["n"], ["w"], ["f"], ["q"], ["v"], ["u"], ["r"]],
+        [["n"], ["w"], ["f"], ["q"], ["e"], ["u"], ["r"]],
       ];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [
@@ -57,8 +57,8 @@ function createLabelsAndKeys(
         : [labelsNodeSelecting, keyNodeSelecting];
     case Mode.ViewSelecting:
       return [
-        ["Graph", "Tile", "Gantt", "Confirm"],
-        [["e"], ["t"], ["g"], ["esc", "Enter"]],
+        ["Graph", "Tile", "Gantt"],
+        [["e"], ["t"], ["g"]],
       ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:

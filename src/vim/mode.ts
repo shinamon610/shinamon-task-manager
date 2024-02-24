@@ -107,6 +107,9 @@ export function createMode(
     case Command.Cancel:
     case Command.ConfirmEdit:
     case Command.Rename:
+    case Command.ToGraph:
+    case Command.ToTile:
+    case Command.ToGantt:
       return Mode.Normal;
     case Command.SelectTitle:
       return Mode.TitleSelecting;
@@ -196,9 +199,6 @@ export function createMode(
     case Command.OpenEditor:
       return Mode.MarkDownViewing;
     case Command.Nothing:
-    case Command.ToGraph:
-    case Command.ToTile:
-    case Command.ToGantt:
     case Command.Undo:
     case Command.Redo:
       return mode;

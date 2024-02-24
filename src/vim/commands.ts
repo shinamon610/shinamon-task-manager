@@ -236,7 +236,7 @@ export function keyEventToCommand(
       if (key === "r") {
         return Command.Redo;
       }
-      if (key === "v") {
+      if (key === "e") {
         return Command.SelectView;
       }
       if (selectString.includes(key)) {
