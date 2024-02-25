@@ -206,7 +206,7 @@ export function MyGantt() {
     };
   }, []);
 
-  const gantTasks: GanttTask[] = (filteredTasks.toJS() as Task[]).map(
+  const ganttTasks: GanttTask[] = (filteredTasks.toJS() as Task[]).map(
     ({ id, name, startTime, endTime, from, spentTime, estimatedTime }) => {
       const now = new Date();
       return {
@@ -228,7 +228,7 @@ export function MyGantt() {
   return (
     <div ref={ganttContainerRef} style={{ flexGrow: 1 }}>
       <Gantt
-        tasks={gantTasks}
+        tasks={ganttTasks}
         TaskListHeader={TaskListHeaderDefault}
         TaskListTable={TaskListTableDefault}
         ganttHeight={ganttHeight}
