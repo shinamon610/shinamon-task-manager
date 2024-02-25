@@ -27,7 +27,6 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.SetToWorking:
     case Command.SetToPending:
     case Command.SetToDone:
-    case Command.ToGantt:
     case Command.ViewMarkdownFile:
     case Command.InputMarkdownFile:
     case Command.SetEditor:
