@@ -6,6 +6,7 @@ import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createMode, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
 import { createViewMode } from "@/vim/viewMode";
+import { ViewMode as GanttViewMode } from "gantt-task-react";
 import { List } from "immutable";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -42,6 +43,7 @@ export function MainPage() {
     filteredTasks,
     viewMode,
     setViewMode,
+    setGanttViewMode,
   } = useContext(MainContext);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -139,6 +141,21 @@ export function MainPage() {
       }
       if (newCommand === Command.Rename) {
         setUserName("");
+      }
+      if (newCommand === Command.SpanHour) {
+        setGanttViewMode(GanttViewMode.Hour);
+      }
+      if (newCommand === Command.SpanDay) {
+        setGanttViewMode(GanttViewMode.Day);
+      }
+      if (newCommand === Command.SpanWeek) {
+        setGanttViewMode(GanttViewMode.Week);
+      }
+      if (newCommand === Command.SpanMonth) {
+        setGanttViewMode(GanttViewMode.Month);
+      }
+      if (newCommand === Command.SpanYear) {
+        setGanttViewMode(GanttViewMode.Year);
       }
 
       // taskが存在するとき
