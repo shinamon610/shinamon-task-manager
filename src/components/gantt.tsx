@@ -207,7 +207,7 @@ export function MyGantt() {
   }, []);
 
   const gantTasks: GanttTask[] = (filteredTasks.toJS() as Task[]).map(
-    ({ id, name, startTime, endTime, from }) => {
+    ({ id, name, startTime, endTime, from, spentTime, estimatedTime }) => {
       const now = new Date();
       return {
         id,
@@ -217,7 +217,8 @@ export function MyGantt() {
           new Date(now.getFullYear() + 1, now.getMonth(), now.getDate()),
         name,
         type: "task",
-        progress: 10,
+        progress:
+          estimatedTime === null ? 0 : (spentTime / estimatedTime) * 100,
         isDisabled: true,
         styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
         dependencies: from,
