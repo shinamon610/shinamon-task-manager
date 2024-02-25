@@ -206,25 +206,30 @@ export function MyGantt() {
     };
   }, []);
 
-  const ganttTasks: GanttTask[] = (filteredTasks.toJS() as Task[]).map(
-    ({ id, name, startTime, endTime, from, spentTime, estimatedTime }) => {
-      const now = new Date();
-      return {
-        id,
-        start: startTime?.toDate() ?? now,
-        end:
-          endTime?.toDate() ??
-          new Date(now.getFullYear() + 1, now.getMonth(), now.getDate()),
-        name,
-        type: "task",
-        progress:
-          estimatedTime === null ? 0 : (spentTime / estimatedTime) * 100,
-        isDisabled: true,
-        styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
-        dependencies: from,
-      };
-    }
-  );
+  const ganttTasks: GanttTask[] = useMemo(() => {
+    return (filteredTasks.toJS() as Task[]).map(
+      ({ id, name, startTime, endTime, from, spentTime, estimatedTime }) => {
+        const now = new Date();
+        return {
+          id,
+          start: startTime?.toDate() ?? now,
+          end:
+            endTime?.toDate() ??
+            new Date(now.getFullYear() + 1, now.getMonth(), now.getDate()),
+          name,
+          type: "task",
+          progress:
+            estimatedTime === null ? 0 : (spentTime / estimatedTime) * 100,
+          isDisabled: true,
+          styles: {
+            progressColor: "#ffbb54",
+            progressSelectedColor: "#ff9e0d",
+          },
+          dependencies: from,
+        };
+      }
+    );
+  }, [filteredTasks]);
   return (
     <div ref={ganttContainerRef} style={{ flexGrow: 1 }}>
       <Gantt
