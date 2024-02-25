@@ -5,7 +5,7 @@ import { Command, keyEventToCommand } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createMode, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
-import { ViewMode, createViewMode } from "@/vim/viewMode";
+import { createViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -40,8 +40,9 @@ export function MainPage() {
     memo,
     setMemo,
     filteredTasks,
+    viewMode,
+    setViewMode,
   } = useContext(MainContext);
-  const [viewMode, setViewMode] = useState(ViewMode.Graph);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
 
@@ -72,7 +73,13 @@ export function MainPage() {
 
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
-      const newCommand = keyEventToCommand(mode, event, sourcesRef, targetsRef);
+      const newCommand = keyEventToCommand(
+        mode,
+        viewMode,
+        event,
+        sourcesRef,
+        targetsRef
+      );
       preventKey(event, newCommand);
 
       const newSerialInput = createSerialInput(
@@ -134,6 +141,7 @@ export function MainPage() {
         setUserName("");
       }
 
+      // taskが存在するとき
       if (maybeNewTasks === null) {
         return;
       }

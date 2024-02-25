@@ -8,6 +8,7 @@ import {
   selectingFilterModes,
   selectingModes,
 } from "./mode";
+import { ViewMode } from "./viewMode";
 
 export enum Command {
   CreateTaskNode,
@@ -24,6 +25,14 @@ export enum Command {
   Undo,
   Redo,
   SelectView,
+
+  // gantt
+  SelectSpan,
+  SpanHour,
+  SpanDay,
+  SpanWeek,
+  SpanMonth,
+  SpanYear,
 
   // Markdown
   ViewMarkdownFile,
@@ -207,6 +216,7 @@ function handleInputMode(
 
 export function keyEventToCommand(
   mode: Mode,
+  viewMode: ViewMode,
   event: KeyboardEvent,
   sourcesRef: MutableRefObject<null>,
   targetsRef: MutableRefObject<null>
@@ -241,6 +251,11 @@ export function keyEventToCommand(
       }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
+      }
+      if (viewMode === ViewMode.Gantt) {
+        if (key === "s") {
+          return Command.SelectSpan;
+        }
       }
       return Command.Nothing;
     case Mode.NodeSelecting:
@@ -278,6 +293,24 @@ export function keyEventToCommand(
       }
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;
+      }
+      return Command.Nothing;
+
+    case Mode.SpanSelecting:
+      if (key === "h") {
+        return Command.SpanHour;
+      }
+      if (key === "d") {
+        return Command.SpanDay;
+      }
+      if (key === "w") {
+        return Command.SpanWeek;
+      }
+      if (key === "m") {
+        return Command.SpanMonth;
+      }
+      if (key === "y") {
+        return Command.SpanYear;
       }
       return Command.Nothing;
 

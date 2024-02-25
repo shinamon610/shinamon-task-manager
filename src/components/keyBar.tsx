@@ -3,34 +3,41 @@ import { MainContext } from "@/contexts/mainContext";
 import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
 import { Mode } from "@/vim/mode";
+import { ViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
 import { useContext } from "react";
 import { Key } from "./key";
 
 export function KeyBar() {
   const { tasks } = useContext(GlobalContext);
-  const { mode } = useContext(MainContext);
-  return <div className="top-bar">{createElements(mode, tasks)}</div>;
+  const { mode, viewMode } = useContext(MainContext);
+  return <div className="top-bar">{createElements(mode, viewMode, tasks)}</div>;
 }
 
 function createLabelsAndKeys(
   mode: Mode,
+  viewMode: ViewMode,
   tasks: List<Task>
 ): [string[], string[][]] {
   switch (mode) {
     case Mode.Normal:
-      return [
-        [
-          "New node",
-          "Select Another File",
-          "Filter",
-          "Rename User",
-          "Change View",
-          "Undo",
-          "Redo",
-        ],
-        [["n"], ["w"], ["f"], ["q"], ["e"], ["u"], ["r"]],
+      const normalLabels = [
+        "New node",
+        "Select Another File",
+        "Filter",
+        "Rename User",
+        "Change View",
+        "Undo",
+        "Redo",
       ];
+      const normalKeys = [["n"], ["w"], ["f"], ["q"], ["e"], ["u"], ["r"]];
+      if (viewMode === ViewMode.Gantt) {
+        return [
+          [...normalLabels, "Select Span"],
+          [...normalKeys, ["s"]],
+        ];
+      }
+      return [normalLabels, normalKeys];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [
         "Edit",
@@ -59,6 +66,11 @@ function createLabelsAndKeys(
       return [
         ["Graph", "Tile", "Gantt"],
         [["e"], ["t"], ["g"]],
+      ];
+    case Mode.SpanSelecting:
+      return [
+        ["Hour", "Day", "Week", "Month", "Year"],
+        [["h"], ["d"], ["w"], ["m"], ["y"]],
       ];
     case Mode.TitleSelecting:
     case Mode.TitleInputting:
@@ -109,8 +121,12 @@ function createLabelsAndKeys(
   }
 }
 
-function createElements(mode: Mode, tasks: List<Task>): React.JSX.Element[] {
-  const [labels, keys] = createLabelsAndKeys(mode, tasks);
+function createElements(
+  mode: Mode,
+  viewMode: ViewMode,
+  tasks: List<Task>
+): React.JSX.Element[] {
+  const [labels, keys] = createLabelsAndKeys(mode, viewMode, tasks);
   return zip(labels, keys).map(([label, key]) => {
     return Key({
       label: label,

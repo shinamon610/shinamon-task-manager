@@ -7,6 +7,7 @@ export enum Mode {
   Normal,
   NodeSelecting,
   ViewSelecting,
+  SpanSelecting,
 
   // Markdown
   MarkDownViewing,
@@ -101,6 +102,8 @@ export function createMode(
   serialInput: string
 ): Mode {
   switch (command) {
+    case Command.SelectSpan:
+      return Mode.SpanSelecting;
     case Command.CreateTaskNode:
       return Mode.TitleInputting;
     case Command.DeleteTaskNode:
@@ -110,6 +113,11 @@ export function createMode(
     case Command.ToGraph:
     case Command.ToTile:
     case Command.ToGantt:
+    case Command.SpanHour:
+    case Command.SpanDay:
+    case Command.SpanWeek:
+    case Command.SpanMonth:
+    case Command.SpanYear:
       return Mode.Normal;
     case Command.SelectTitle:
       return Mode.TitleSelecting;

@@ -12,6 +12,12 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.ToTile:
       return ViewMode.Tile;
     case Command.ToGantt:
+    case Command.SelectSpan:
+    case Command.SpanHour:
+    case Command.SpanDay:
+    case Command.SpanWeek:
+    case Command.SpanMonth:
+    case Command.SpanYear:
       return ViewMode.Gantt;
     case Command.CreateTaskNode:
     case Command.DeleteTaskNode:

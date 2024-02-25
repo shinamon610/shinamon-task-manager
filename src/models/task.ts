@@ -463,6 +463,12 @@ export function createTasks(
     case Command.Undo:
     case Command.Redo:
     case Command.SelectView:
+    case Command.SelectSpan:
+    case Command.SpanHour:
+    case Command.SpanDay:
+    case Command.SpanWeek:
+    case Command.SpanMonth:
+    case Command.SpanYear:
       return null;
   }
 }
