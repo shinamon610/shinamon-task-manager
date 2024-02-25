@@ -3,6 +3,7 @@ export enum ViewMode {
   Graph,
   Tile,
   Gantt,
+  TimeLine,
 }
 
 export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
@@ -19,6 +20,8 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.SpanMonth:
     case Command.SpanYear:
       return ViewMode.Gantt;
+    case Command.ToTimeLine:
+      return ViewMode.TimeLine;
     case Command.CreateTaskNode:
     case Command.DeleteTaskNode:
     case Command.SelectTaskNode:

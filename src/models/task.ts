@@ -420,6 +420,7 @@ export function createTasks(
     case Command.ToGraph:
     case Command.ToTile:
     case Command.ToGantt:
+    case Command.ToTimeLine:
     case Command.ViewMarkdownFile:
     case Command.InputMarkdownFile:
     case Command.SetEditor:

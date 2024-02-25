@@ -113,6 +113,7 @@ export function createMode(
     case Command.ToGraph:
     case Command.ToTile:
     case Command.ToGantt:
+    case Command.ToTimeLine:
     case Command.SpanHour:
     case Command.SpanDay:
     case Command.SpanWeek:

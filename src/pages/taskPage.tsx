@@ -46,8 +46,12 @@ export function TaskPage({
           viewMode={viewMode}
           command={command}
         />
-      ) : (
+      ) : viewMode === ViewMode.TimeLine ? (
+        <></>
+      ) : viewMode === ViewMode.Gantt ? (
         <MyGantt />
+      ) : (
+        <></>
       )}
       <KeyBar />
       <EditBar

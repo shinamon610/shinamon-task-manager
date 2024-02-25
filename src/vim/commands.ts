@@ -81,6 +81,7 @@ export enum Command {
   ToGraph,
   ToTile,
   ToGantt,
+  ToTimeLine,
 }
 
 export const selectString = "ahik";
@@ -290,6 +291,9 @@ export function keyEventToCommand(
       }
       if (key === "g") {
         return Command.ToGantt;
+      }
+      if (key === "l") {
+        return Command.ToTimeLine;
       }
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;
