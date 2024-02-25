@@ -25,7 +25,7 @@ function createLabelsAndKeys(
           "Select Another File",
           "Filter",
           "Rename User",
-          "View",
+          "Change View",
           "Undo",
           "Redo",
         ],
