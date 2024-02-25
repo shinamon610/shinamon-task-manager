@@ -1,6 +1,7 @@
 import { Assignee } from "@/models/assignee";
 import { DefaultStatus, Status } from "@/models/status";
 import { Mode } from "@/vim/mode";
+import { ViewMode as GanttViewMode } from "gantt-task-react";
 import { List } from "immutable";
 import {
   Dispatch,
@@ -42,6 +43,9 @@ export const MainContext = createContext<MainContextType>({
   filteredTasks: List([]),
   selectedStatus: DefaultStatus.Pending,
   setSelectedStatus: () => {},
+
+  ganttViewMode: GanttViewMode.Day,
+  setGanttViewMode: () => {},
 });
 
 type MainContextType = {
@@ -73,10 +77,15 @@ type MainContextType = {
   filterMemo: string;
   setFilterMemo: Dispatch<SetStateAction<string>>;
   filteredTasks: List<Task>;
+  ganttViewMode: GanttViewMode;
+  setGanttViewMode: Dispatch<SetStateAction<GanttViewMode>>;
 };
 
 export function MainProvider({ children }: { children: React.ReactNode }) {
   const { tasks } = useContext(GlobalContext);
+  const [ganttViewMode, setGanttViewMode] = useState<GanttViewMode>(
+    GanttViewMode.Day
+  );
   const [mode, setMode] = useState(Mode.Normal);
   const [title, setTitle] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<Status>(
@@ -154,6 +163,9 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         filterMemo,
         setFilterMemo,
         filteredTasks,
+
+        ganttViewMode,
+        setGanttViewMode,
       }}
     >
       {children}

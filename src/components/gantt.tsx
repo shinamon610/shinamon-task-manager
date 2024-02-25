@@ -184,7 +184,7 @@ export const TaskListTableDefault: React.FC<{
 export function MyGantt() {
   const headerHeight = 50;
   const scrollHeight = 20;
-  const { filteredTasks } = useContext(MainContext);
+  const { filteredTasks, ganttViewMode } = useContext(MainContext);
   const ganttContainerRef = useRef(null);
   const [ganttHeight, setGanttHeight] = useState(0);
 
@@ -233,6 +233,7 @@ export function MyGantt() {
         TaskListTable={TaskListTableDefault}
         ganttHeight={ganttHeight}
         headerHeight={headerHeight}
+        viewMode={ganttViewMode}
       />
     </div>
   );
