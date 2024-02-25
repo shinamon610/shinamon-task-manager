@@ -2,6 +2,7 @@ import { EditBar } from "@/components/editBar";
 import { MyGantt } from "@/components/gantt";
 import { KeyBar } from "@/components/keyBar";
 import TaskGraph from "@/components/taskGraph";
+import { TimeLine } from "@/components/timeLine";
 import { Command } from "@/vim/commands";
 import { ViewMode } from "@/vim/viewMode";
 import { Moment } from "moment";
@@ -47,7 +48,7 @@ export function TaskPage({
           command={command}
         />
       ) : viewMode === ViewMode.TimeLine ? (
-        <></>
+        <TimeLine />
       ) : viewMode === ViewMode.Gantt ? (
         <MyGantt />
       ) : (
