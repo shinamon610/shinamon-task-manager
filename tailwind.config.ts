@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         inactive: "#1a5c96",
         accent: "#ff8c00",
+        darkGray: "#5e5c5c",
       },
     },
   },

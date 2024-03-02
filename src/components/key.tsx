@@ -23,7 +23,7 @@ export function Key({ label, keys, isSelectedArray }: KeyProps) {
   });
 
   return (
-    <div className="node-label" key={v4()}>
+    <div className="bg-darkGray flex" key={v4()}>
       {results}
     </div>
   );

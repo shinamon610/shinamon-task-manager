@@ -44,11 +44,6 @@ body {
   height: auto;
 }
 
-.node-label {
-  background-color: var(--dark-gray);
-  display: flex;
-}
-
 .node-content {
   width: 100%;
 }
