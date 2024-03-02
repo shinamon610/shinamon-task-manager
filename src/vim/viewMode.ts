@@ -56,7 +56,6 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.InputMemo:
     case Command.SelectAnotherLocation:
     case Command.Rename:
-    case Command.Filter:
     case Command.SelectFilterTitle:
     case Command.InputFilterTitle:
     case Command.SelectFilterStatus:

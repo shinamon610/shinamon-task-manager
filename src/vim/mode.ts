@@ -167,8 +167,6 @@ export function createMode(
     case Command.SelectView:
       return Mode.ViewSelecting;
     case Command.SelectAnotherLocation:
-    case Command.Filter:
-      return Mode.FilterTitleSelecting;
     case Command.SelectFilterTitle:
       return Mode.FilterTitleSelecting;
     case Command.InputFilterTitle:

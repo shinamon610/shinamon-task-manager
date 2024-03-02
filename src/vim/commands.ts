@@ -63,7 +63,6 @@ export enum Command {
   InputMemo,
 
   // filter
-  Filter,
   SelectFilterTitle,
   InputFilterTitle,
   SelectFilterStatus,
@@ -236,7 +235,7 @@ export function keyEventToCommand(
         return Command.SelectAnotherLocation;
       }
       if (key === "f") {
-        return Command.Filter;
+        return Command.SelectFilterTitle;
       }
       if (key === "q") {
         return Command.Rename;
