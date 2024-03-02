@@ -22,6 +22,7 @@ type Props = {
   setStartDateTime: Dispatch<SetStateAction<Moment | null>>;
   endDateTime: Moment | null;
   setEndDateTime: Dispatch<SetStateAction<Moment | null>>;
+  refresh: boolean;
 };
 
 export function TaskPage({
@@ -38,6 +39,7 @@ export function TaskPage({
   setStartDateTime,
   endDateTime,
   setEndDateTime,
+  refresh,
 }: Props) {
   return (
     <>
@@ -46,6 +48,7 @@ export function TaskPage({
           serialInput={serialInput}
           viewMode={viewMode}
           command={command}
+          refresh={refresh}
         />
       ) : viewMode === ViewMode.TimeLine ? (
         <TimeLine />

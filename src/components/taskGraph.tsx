@@ -31,6 +31,7 @@ type TaskGraphProps = {
   serialInput: string;
   viewMode: ViewMode;
   command: Command;
+  refresh: boolean;
 };
 
 function borderAndPadding(
@@ -133,7 +134,12 @@ function createNodesAndEdgesFromTasks(
   return [nodes, edges];
 }
 
-function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
+function BaseNewTaskGraph({
+  serialInput,
+  viewMode,
+  command,
+  refresh,
+}: TaskGraphProps) {
   const { filteredTasks } = useContext(MainContext);
   const { assignees } = useContext(GlobalContext);
   const { fitView, zoomIn, zoomOut, getZoom } = useReactFlow();
@@ -186,6 +192,7 @@ function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
     command,
     fitView,
     viewMode,
+    refresh,
   ]);
 
   return (
@@ -204,6 +211,7 @@ export default function TaskGraph({
   serialInput,
   viewMode,
   command,
+  refresh,
 }: TaskGraphProps) {
   return (
     <div className="task-graph">
@@ -212,6 +220,7 @@ export default function TaskGraph({
           serialInput={serialInput}
           viewMode={viewMode}
           command={command}
+          refresh={refresh}
         />
       </ReactFlowProvider>
     </div>

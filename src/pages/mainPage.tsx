@@ -55,6 +55,7 @@ export function MainPage() {
   } = useContext(MainContext);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
+  const [refresh, setRefresh] = useState(false);
 
   // edit barの要素
   const sourcesRef = useRef(null);
@@ -178,6 +179,9 @@ export function MainPage() {
       if (newCommand === Command.SpanYear) {
         setGanttViewMode(GanttViewMode.Year);
       }
+      if (command === Command.ZoomIn || command === Command.ZoomOut) {
+        setRefresh(!refresh);
+      }
 
       // taskが存在するとき
       if (maybeNewTasks === null) {
@@ -231,6 +235,7 @@ export function MainPage() {
           setStartDateTime={setStartDateTime}
           endDateTime={endDateTime}
           setEndDateTime={setEndDateTime}
+          refresh={refresh}
         />
       )}
     </div>
