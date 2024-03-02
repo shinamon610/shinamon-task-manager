@@ -148,7 +148,7 @@ function handleSelectMode(
   const iy = selectingModes[ix].indexOf(mode);
   if (key === "Enter") {
     if (event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) {
-      return isFilter(mode) ? Command.Nothing : Command.ConfirmEdit;
+      return isFilter(mode) ? Command.ConfirmFilterEdit : Command.ConfirmEdit;
     }
     return inputtingCommands[ix][iy];
   }

@@ -108,7 +108,7 @@ function createLabelsAndKeys(
     case Mode.FilterTargetsInputting:
     case Mode.FilterMemoSelecting:
     case Mode.FilterMemoInputting:
-      return [["Done"], [["esc"]]];
+      return [["Done"], [["esc|((shift|ctrl|cmd|alt)Enter)"]]];
     case Mode.MarkDownViewing:
       return [
         ["Input", "Back", "Editor", "Set Editor"],
