@@ -10,7 +10,13 @@ import { ViewMode as GanttViewMode } from "gantt-task-react";
 import { List } from "immutable";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Task, UUID, createTasks, getSelectedTask } from "../models/task";
+import {
+  Task,
+  UUID,
+  createTasks,
+  getSelectedTask,
+  noneId,
+} from "../models/task";
 import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
@@ -44,6 +50,8 @@ export function MainPage() {
     viewMode,
     setViewMode,
     setGanttViewMode,
+    filterSources,
+    filterTargets,
   } = useContext(MainContext);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -111,7 +119,20 @@ export function MainPage() {
             status: selectedStatus,
             assignee: selectedAssignee,
           },
-          userName
+          userName,
+          {
+            name: "",
+            startTime: null,
+            endTime: null,
+            estimatedTime: null,
+            spentTime: null,
+            to: Array.from(filterTargets).filter((id) => id !== noneId),
+            from: Array.from(filterSources).filter((id) => id !== noneId),
+            priority: null,
+            memo: null,
+            status: null,
+            assignee: null,
+          }
         ),
       ];
 

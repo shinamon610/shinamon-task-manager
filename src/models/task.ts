@@ -379,25 +379,12 @@ export function createTasks(
   filteredTasks: List<Task>,
   serialInput: string,
   userInput: UserInput,
-  userName: string
+  userName: string,
+  brankInput: UserInput
 ): List<Task> | null {
   switch (command) {
     case Command.CreateTaskNode:
-      const brankInput = {
-        name: "",
-        startTime: null,
-        endTime: null,
-        estimatedTime: null,
-        spentTime: null,
-        to: [],
-        from: [],
-        priority: null,
-        memo: null,
-        status: null,
-        assignee: null,
-      };
       const newTask = createTask(brankInput, userName, tasks);
-
       return updateTasks(
         unSelectAll(tasks).push(newTask),
         brankInput,
