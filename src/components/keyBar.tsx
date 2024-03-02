@@ -54,24 +54,24 @@ function createLabelsAndKeys(
         "Edit",
         "Delete",
         "Cancel",
+        "View Memo",
         "Set to Working",
         "Set to Pending",
         "Set to Done",
-        "View Memo",
       ];
       const keyNodeSelecting = [
         ["e"],
         ["x"],
         [ESC],
+        ["f"],
         ["w"],
         ["p"],
         ["d"],
-        ["f"],
       ];
 
       // Doneじゃないタスクがある場合、statusは選択できないようにする
       return hasNotDoneChildTask(tasks)
-        ? [labelsNodeSelecting.slice(0, 3), keyNodeSelecting.slice(0, 3)]
+        ? [labelsNodeSelecting.slice(0, 4), keyNodeSelecting.slice(0, 4)]
         : [labelsNodeSelecting, keyNodeSelecting];
     case Mode.ViewSelecting:
       return [
