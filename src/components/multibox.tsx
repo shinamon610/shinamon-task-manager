@@ -8,12 +8,21 @@ import React, {
 } from "react";
 import Select, { SelectInstance, createFilter } from "react-select";
 import { BoxRef, Option, boxStyles } from "./selectBox";
-
 type MultiBoxProps = {
   isDisabled: boolean;
   defaultOption: Set<UUID>;
   tasks: List<Task>;
   setSelectedValue: React.Dispatch<React.SetStateAction<Set<UUID>>>;
+};
+
+const customBoxStyles = (isDisabled: boolean) => {
+  return {
+    ...boxStyles(isDisabled),
+    valueContainer: (base: any) => ({
+      ...base,
+      maxHeight: "50px", // 最大高さを設定
+    }),
+  };
 };
 
 export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
@@ -23,6 +32,8 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
     const selectRef = useRef<SelectInstance>(null);
     const [innerMenuIsOpen, setInnerMenuIsOpen] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const [focused, setFocused] = useState(false);
+
     useImperativeHandle(ref, () => ({
       focus: () => {
         selectRef.current?.focus();
@@ -52,7 +63,7 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         isClearable
         isDisabled={isDisabled}
         menuPlacement="top"
-        styles={boxStyles(isDisabled)}
+        styles={focused ? boxStyles(isDisabled) : customBoxStyles(isDisabled)}
         ref={selectRef}
         value={Array.from(defaultOption).map((id) => ({
           value: id,
@@ -66,6 +77,8 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         onKeyDown={(e) => {
           setMenuIsOpen(innerMenuIsOpen);
         }}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
     );
   }
