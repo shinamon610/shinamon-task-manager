@@ -457,6 +457,7 @@ export function createTasks(
     case Command.SpanWeek:
     case Command.SpanMonth:
     case Command.SpanYear:
+    case Command.ZoomIn:
       return null;
   }
 }

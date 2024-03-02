@@ -27,6 +27,9 @@ export enum Command {
   Redo,
   SelectView,
 
+  // zoomとpan
+  ZoomIn,
+
   // gantt
   SelectSpan,
   SpanHour,
@@ -252,6 +255,11 @@ export function keyEventToCommand(
       }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
+      }
+      if (viewMode === ViewMode.Graph) {
+        if (key === "+") {
+          return Command.ZoomIn;
+        }
       }
       if (viewMode === ViewMode.Gantt) {
         if (key === "s") {

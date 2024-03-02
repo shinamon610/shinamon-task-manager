@@ -209,6 +209,7 @@ export function createMode(
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:
+    case Command.ZoomIn:
       return mode;
   }
 }

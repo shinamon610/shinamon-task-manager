@@ -73,6 +73,7 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.Undo:
     case Command.Redo:
     case Command.SelectView:
+    case Command.ZoomIn:
       return viewMode;
   }
 }

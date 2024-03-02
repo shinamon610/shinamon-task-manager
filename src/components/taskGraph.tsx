@@ -136,7 +136,7 @@ function createNodesAndEdgesFromTasks(
 function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
   const { filteredTasks } = useContext(MainContext);
   const { assignees } = useContext(GlobalContext);
-  const { fitView } = useReactFlow();
+  const { fitView, zoomIn, getZoom } = useReactFlow();
   const { mode } = useContext(MainContext);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -153,6 +153,9 @@ function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
     );
     setNodes(newNodes);
     setEdges(newEdges);
+    if (command === Command.ZoomIn) {
+      zoomIn();
+    }
     if (
       mode === Mode.NodeSelecting ||
       inputtingModes.flat().includes(mode) ||
@@ -163,8 +166,9 @@ function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
     ) {
       setTimeout(() => {
         fitView({
-          minZoom: 1,
-          maxZoom: 1,
+          minZoom: getZoom(),
+          maxZoom: getZoom(),
+          duration: 100,
           nodes: newNodes.filter((node) => node.selected),
         });
       }, 10);
