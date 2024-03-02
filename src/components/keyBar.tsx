@@ -143,7 +143,6 @@ function createElements(
       label: label,
       keys: [...key],
       isSelectedArray: Array.from({ length: key.length }, () => false),
-      isDeadArray: Array.from({ length: key.length }, () => false),
     });
   });
 }

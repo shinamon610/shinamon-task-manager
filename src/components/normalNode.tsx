@@ -19,10 +19,6 @@ function createLabels(
         label: "",
         keys: l.split(""),
         isSelectedArray,
-        isDeadArray: Array.from(
-          { length: isSelectedArray.length },
-          () => false
-        ),
       }),
     ];
   }

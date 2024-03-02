@@ -5,31 +5,22 @@ type KeyProps = {
   label: string;
   keys: string[];
   isSelectedArray: boolean[];
-  isDeadArray: boolean[];
 };
 
-export function Key({ label, keys, isSelectedArray, isDeadArray }: KeyProps) {
+export function Key({ label, keys, isSelectedArray }: KeyProps) {
   const results = label === "" ? [] : [<samp key={label}>{label}</samp>];
 
-  zip(zip(keys, isSelectedArray), isDeadArray).forEach(
-    ([[keyLabel, isSelected], isDead], i) => {
-      if (isDead) {
-        results.push(
-          <kbd key={keyLabel} className="dead">
-            {keyLabel}
-          </kbd>
-        );
-      } else if (isSelected) {
-        results.push(
-          <kbd key={i} className="key-pushed">
-            {keyLabel}
-          </kbd>
-        );
-      } else {
-        results.push(<kbd key={i}>{keyLabel}</kbd>);
-      }
+  zip(keys, isSelectedArray).forEach(([keyLabel, isSelected], i) => {
+    if (isSelected) {
+      results.push(
+        <kbd key={i} className="key-pushed">
+          {keyLabel}
+        </kbd>
+      );
+    } else {
+      results.push(<kbd key={i}>{keyLabel}</kbd>);
     }
-  );
+  });
 
   return (
     <div className="node-label" key={v4()}>
