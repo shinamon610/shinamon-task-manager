@@ -458,6 +458,7 @@ export function createTasks(
     case Command.SpanMonth:
     case Command.SpanYear:
     case Command.ZoomIn:
+    case Command.ZoomOut:
       return null;
   }
 }

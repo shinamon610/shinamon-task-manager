@@ -136,7 +136,7 @@ function createNodesAndEdgesFromTasks(
 function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
   const { filteredTasks } = useContext(MainContext);
   const { assignees } = useContext(GlobalContext);
-  const { fitView, zoomIn, getZoom } = useReactFlow();
+  const { fitView, zoomIn, zoomOut, getZoom } = useReactFlow();
   const { mode } = useContext(MainContext);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -155,6 +155,9 @@ function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
     setEdges(newEdges);
     if (command === Command.ZoomIn) {
       zoomIn();
+    }
+    if (command === Command.ZoomOut) {
+      zoomOut();
     }
     if (
       mode === Mode.NodeSelecting ||

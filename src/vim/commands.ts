@@ -29,6 +29,7 @@ export enum Command {
 
   // zoomとpan
   ZoomIn,
+  ZoomOut,
 
   // gantt
   SelectSpan,
@@ -226,7 +227,7 @@ export function keyEventToCommand(
   targetsRef: MutableRefObject<null>
 ): Command {
   const key = event.key;
-  // console.log(key);
+  // console.log("key", key);
   switch (mode) {
     case Mode.Normal:
       if (key === "Escape" || key === "c" || key === "Backspace") {
@@ -259,6 +260,9 @@ export function keyEventToCommand(
       if (viewMode === ViewMode.Graph) {
         if (key === "+") {
           return Command.ZoomIn;
+        }
+        if (key === "-") {
+          return Command.ZoomOut;
         }
       }
       if (viewMode === ViewMode.Gantt) {
