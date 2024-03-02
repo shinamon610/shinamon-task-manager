@@ -13,7 +13,7 @@ export function Key({ label, keys, isSelectedArray }: KeyProps) {
   zip(keys, isSelectedArray).forEach(([keyLabel, isSelected], i) => {
     if (isSelected) {
       results.push(
-        <kbd key={i} className="key-pushed">
+        <kbd key={i} className="bg-accent">
           {keyLabel}
         </kbd>
       );
