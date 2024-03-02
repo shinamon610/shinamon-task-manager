@@ -182,16 +182,16 @@ function BaseNewTaskGraph({
           x:
             viewPort.x +
             (command === Command.PanLeft
-              ? -100
+              ? +100
               : command === Command.PanRight
-                ? +100
+                ? -100
                 : 0),
           y:
             viewPort.y +
             (command === Command.PanUp
-              ? -100
+              ? +100
               : command === Command.PanDown
-                ? +100
+                ? -100
                 : 0),
         },
         { duration: 100 }
