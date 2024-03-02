@@ -69,7 +69,7 @@ samp {
   background: var(--light-gray);
   border-radius: 2px;
   vertical-align: middle;
-  font-size: 0.9em;
+  font-size: 1vmin;
   line-height: 1.1;
 }
 
