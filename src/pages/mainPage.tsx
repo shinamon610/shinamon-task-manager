@@ -179,7 +179,11 @@ export function MainPage() {
       if (newCommand === Command.SpanYear) {
         setGanttViewMode(GanttViewMode.Year);
       }
-      if (command === Command.ZoomIn || command === Command.ZoomOut) {
+      if (
+        command === Command.ZoomIn ||
+        command === Command.ZoomOut ||
+        command === Command.PanLeft
+      ) {
         setRefresh(!refresh);
       }
 

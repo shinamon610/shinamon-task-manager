@@ -211,6 +211,7 @@ export function createMode(
     case Command.Redo:
     case Command.ZoomIn:
     case Command.ZoomOut:
+    case Command.PanLeft:
       return mode;
   }
 }

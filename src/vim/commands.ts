@@ -30,6 +30,7 @@ export enum Command {
   // zoomとpan
   ZoomIn,
   ZoomOut,
+  PanLeft,
 
   // gantt
   SelectSpan,
@@ -263,6 +264,9 @@ export function keyEventToCommand(
         }
         if (key === "-") {
           return Command.ZoomOut;
+        }
+        if (leftStrings.includes(key)) {
+          return Command.PanLeft;
         }
       }
       if (viewMode === ViewMode.Gantt) {

@@ -142,10 +142,12 @@ function BaseNewTaskGraph({
 }: TaskGraphProps) {
   const { filteredTasks } = useContext(MainContext);
   const { assignees } = useContext(GlobalContext);
-  const { fitView, zoomIn, zoomOut, getZoom } = useReactFlow();
+  const { fitView, zoomIn, zoomOut, getZoom, getViewport, setViewport } =
+    useReactFlow();
   const { mode, zoom, setZoom } = useContext(MainContext);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
   const delaySetZoom = () => {
     setTimeout(() => {
       setZoom(getZoom());
@@ -171,6 +173,10 @@ function BaseNewTaskGraph({
     if (command === Command.ZoomOut) {
       zoomOut();
       delaySetZoom();
+    }
+    if (command === Command.PanLeft) {
+      const viewPort = getViewport();
+      setViewport({ ...viewPort, x: viewPort.x + 100 });
     }
     if (
       mode === Mode.NodeSelecting ||
