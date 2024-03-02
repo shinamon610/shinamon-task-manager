@@ -109,6 +109,7 @@ export function createMode(
     case Command.DeleteTaskNode:
     case Command.Cancel:
     case Command.ConfirmEdit:
+    case Command.ConfirmFilterEdit:
     case Command.Rename:
     case Command.ToGraph:
     case Command.ToTile:

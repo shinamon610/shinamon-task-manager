@@ -17,6 +17,7 @@ export enum Command {
   Nothing,
   Cancel,
   ConfirmEdit,
+  ConfirmFilterEdit,
   SelectAnotherLocation,
   Rename,
   SetToWorking,
@@ -142,7 +143,7 @@ function handleSelectMode(
     return Command.Nothing;
   }
   if (key === "Escape" || key == "c" || key == "Backspace") {
-    return Command.Cancel;
+    return isFilter(mode) ? Command.ConfirmFilterEdit : Command.Cancel;
   }
   const iy = selectingModes[ix].indexOf(mode);
   if (key === "Enter") {

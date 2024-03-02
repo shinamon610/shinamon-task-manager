@@ -27,6 +27,7 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.SelectTaskNode:
     case Command.Cancel:
     case Command.ConfirmEdit:
+    case Command.ConfirmFilterEdit:
     case Command.SetToWorking:
     case Command.SetToPending:
     case Command.SetToDone:

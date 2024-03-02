@@ -408,6 +408,7 @@ export function createTasks(
     case Command.SelectTaskNode:
       return selectTask(tasks, filteredTasks, serialInput);
     case Command.Cancel:
+    case Command.ConfirmFilterEdit:
       return unSelectAll(tasks);
     case Command.ConfirmEdit:
       return updateTasks(tasks, userInput, userName);
