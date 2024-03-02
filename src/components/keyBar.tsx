@@ -41,6 +41,13 @@ function createLabelsAndKeys(
           [...normalKeys, ["s"]],
         ];
       }
+      if (viewMode === ViewMode.Graph || viewMode === ViewMode.Tile) {
+        return [
+          [...normalLabels, "ZoomIn", "ZoomOut"],
+
+          [...normalKeys, ["+"], ["-"]],
+        ];
+      }
       return [normalLabels, normalKeys];
     case Mode.NodeSelecting:
       const labelsNodeSelecting = [

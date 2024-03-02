@@ -49,6 +49,9 @@ export const MainContext = createContext<MainContextType>({
   setViewMode: () => {},
   ganttViewMode: GanttViewMode.Day,
   setGanttViewMode: () => {},
+
+  zoom: 1,
+  setZoom: () => {},
 });
 
 type MainContextType = {
@@ -84,6 +87,9 @@ type MainContextType = {
   setViewMode: Dispatch<SetStateAction<ViewMode>>;
   ganttViewMode: GanttViewMode;
   setGanttViewMode: Dispatch<SetStateAction<GanttViewMode>>;
+
+  zoom: number;
+  setZoom: Dispatch<SetStateAction<number>>;
 };
 
 export function MainProvider({ children }: { children: React.ReactNode }) {
@@ -138,6 +144,7 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
     filterMemo,
   ]);
 
+  const [zoom, setZoom] = useState(1);
   return (
     <MainContext.Provider
       value={{
@@ -174,6 +181,9 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setViewMode,
         ganttViewMode,
         setGanttViewMode,
+
+        zoom,
+        setZoom,
       }}
     >
       {children}

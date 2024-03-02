@@ -143,9 +143,14 @@ function BaseNewTaskGraph({
   const { filteredTasks } = useContext(MainContext);
   const { assignees } = useContext(GlobalContext);
   const { fitView, zoomIn, zoomOut, getZoom } = useReactFlow();
-  const { mode } = useContext(MainContext);
+  const { mode, zoom, setZoom } = useContext(MainContext);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const delaySetZoom = () => {
+    setTimeout(() => {
+      setZoom(getZoom());
+    }, 300);
+  };
 
   useEffect(() => {
     const [newNodes, newEdges] = createLayoutedNodeAndEdges(
@@ -161,9 +166,11 @@ function BaseNewTaskGraph({
     setEdges(newEdges);
     if (command === Command.ZoomIn) {
       zoomIn();
+      delaySetZoom();
     }
     if (command === Command.ZoomOut) {
       zoomOut();
+      delaySetZoom();
     }
     if (
       mode === Mode.NodeSelecting ||
@@ -175,8 +182,8 @@ function BaseNewTaskGraph({
     ) {
       setTimeout(() => {
         fitView({
-          minZoom: getZoom(),
-          maxZoom: getZoom(),
+          minZoom: zoom,
+          maxZoom: zoom,
           duration: 100,
           nodes: newNodes.filter((node) => node.selected),
         });

@@ -257,7 +257,7 @@ export function keyEventToCommand(
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
       }
-      if (viewMode === ViewMode.Graph) {
+      if (viewMode === ViewMode.Graph || viewMode === ViewMode.Tile) {
         if (key === "+") {
           return Command.ZoomIn;
         }
