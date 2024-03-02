@@ -187,7 +187,7 @@ export function MainPage() {
         setRefresh(!refresh);
       }
 
-      // taskが存在するとき
+      // 新しいtaskが存在するとき
       if (maybeNewTasks === null) {
         return;
       }
