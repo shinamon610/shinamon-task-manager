@@ -43,10 +43,6 @@ body {
   background: var(--active);
   height: auto;
 }
-.top-bar {
-  background: var(--background);
-  display: flex;
-}
 
 .node-label {
   background-color: var(--dark-gray);

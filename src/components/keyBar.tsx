@@ -11,7 +11,7 @@ import { Key } from "./key";
 export function KeyBar() {
   const { tasks } = useContext(GlobalContext);
   const { mode, viewMode } = useContext(MainContext);
-  return <div className="top-bar">{createElements(mode, viewMode, tasks)}</div>;
+  return <div className="flex">{createElements(mode, viewMode, tasks)}</div>;
 }
 
 function createLabelsAndKeys(
