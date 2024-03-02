@@ -213,7 +213,7 @@ function updateTasks(
   );
 }
 
-function deleteSelectedTask(tasks: List<Task>): List<Task> {
+export function deleteSelectedTask(tasks: List<Task>): List<Task> {
   const targetID = getSelectedTask(tasks)!.id;
   return deleteEdge(
     tasks.filter((task): boolean => {
@@ -380,7 +380,8 @@ export function createTasks(
   serialInput: string,
   userInput: UserInput,
   userName: string,
-  brankInput: UserInput
+  brankInput: UserInput,
+  isCreatingNewTask: boolean
 ): List<Task> | null {
   switch (command) {
     case Command.CreateTaskNode:
@@ -395,6 +396,10 @@ export function createTasks(
     case Command.SelectTaskNode:
       return selectTask(tasks, filteredTasks, serialInput);
     case Command.Cancel:
+      if (isCreatingNewTask) {
+        return unSelectAll(deleteSelectedTask(tasks));
+      }
+      return unSelectAll(tasks);
     case Command.ConfirmFilterEdit:
       return unSelectAll(tasks);
     case Command.ConfirmEdit:

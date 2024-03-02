@@ -56,6 +56,7 @@ export function MainPage() {
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
   const [refresh, setRefresh] = useState(false);
+  const [isCreatingNewTask, setIsCreatingNewTask] = useState(false);
 
   // edit barの要素
   const sourcesRef = useRef(null);
@@ -133,7 +134,8 @@ export function MainPage() {
             memo: null,
             status: null,
             assignee: null,
-          }
+          },
+          isCreatingNewTask
         ),
       ];
 
@@ -185,6 +187,12 @@ export function MainPage() {
         panCommands.includes(newCommand)
       ) {
         setRefresh(!refresh);
+      }
+      if (newCommand === Command.CreateTaskNode) {
+        setIsCreatingNewTask(true);
+      }
+      if (newCommand === Command.ConfirmEdit || newCommand === Command.Cancel) {
+        setIsCreatingNewTask(false);
       }
 
       // 新しいtaskが存在するとき
