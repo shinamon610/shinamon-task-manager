@@ -7,7 +7,7 @@ import { DefaultStatus, Status } from "@/models/status";
 import { Task } from "@/models/task";
 import { zip } from "@/utils";
 import { Command } from "@/vim/commands";
-import { Mode } from "@/vim/mode";
+import { Mode, inputtingFilterModes, inputtingModes } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
 import { useContext, useEffect } from "react";
@@ -153,9 +153,22 @@ function BaseNewTaskGraph({ serialInput, viewMode, command }: TaskGraphProps) {
     );
     setNodes(newNodes);
     setEdges(newEdges);
-    setTimeout(() => {
-      fitView();
-    }, 10);
+    if (
+      mode === Mode.NodeSelecting ||
+      inputtingModes.flat().includes(mode) ||
+      inputtingFilterModes.flat().includes(mode) ||
+      command === Command.ToTile ||
+      command === Command.ToGraph ||
+      command === Command.ConfirmFilterEdit
+    ) {
+      setTimeout(() => {
+        fitView({
+          minZoom: 1,
+          maxZoom: 1,
+          nodes: newNodes.filter((node) => node.selected),
+        });
+      }, 10);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filteredTasks,
