@@ -1,7 +1,7 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { saveData } from "@/models/file";
-import { Command, keyEventToCommand } from "@/vim/commands";
+import { Command, keyEventToCommand, panCommands } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createMode, markdownModes } from "@/vim/mode";
 import { preventKey } from "@/vim/preventKey";
@@ -180,9 +180,9 @@ export function MainPage() {
         setGanttViewMode(GanttViewMode.Year);
       }
       if (
-        command === Command.ZoomIn ||
-        command === Command.ZoomOut ||
-        command === Command.PanLeft
+        newCommand === Command.ZoomIn ||
+        newCommand === Command.ZoomOut ||
+        panCommands.includes(newCommand)
       ) {
         setRefresh(!refresh);
       }

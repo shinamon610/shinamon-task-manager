@@ -460,6 +460,7 @@ export function createTasks(
     case Command.ZoomIn:
     case Command.ZoomOut:
     case Command.PanLeft:
+    case Command.PanRight:
       return null;
   }
 }

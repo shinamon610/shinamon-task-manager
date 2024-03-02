@@ -6,7 +6,7 @@ import { indexesToLabels } from "@/models/labels";
 import { DefaultStatus, Status } from "@/models/status";
 import { Task } from "@/models/task";
 import { zip } from "@/utils";
-import { Command } from "@/vim/commands";
+import { Command, panCommands } from "@/vim/commands";
 import { Mode, inputtingFilterModes, inputtingModes } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
@@ -174,9 +174,18 @@ function BaseNewTaskGraph({
       zoomOut();
       delaySetZoom();
     }
-    if (command === Command.PanLeft) {
+    if (panCommands.includes(command)) {
       const viewPort = getViewport();
-      setViewport({ ...viewPort, x: viewPort.x + 100 });
+      setViewport({
+        ...viewPort,
+        x:
+          viewPort.x +
+          (command === Command.PanLeft
+            ? 100
+            : command === Command.PanRight
+              ? -100
+              : 0),
+      });
     }
     if (
       mode === Mode.NodeSelecting ||
