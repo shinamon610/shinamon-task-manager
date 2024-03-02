@@ -176,16 +176,26 @@ function BaseNewTaskGraph({
     }
     if (panCommands.includes(command)) {
       const viewPort = getViewport();
-      setViewport({
-        ...viewPort,
-        x:
-          viewPort.x +
-          (command === Command.PanLeft
-            ? 100
-            : command === Command.PanRight
+      setViewport(
+        {
+          ...viewPort,
+          x:
+            viewPort.x +
+            (command === Command.PanLeft
               ? -100
-              : 0),
-      });
+              : command === Command.PanRight
+                ? +100
+                : 0),
+          y:
+            viewPort.y +
+            (command === Command.PanUp
+              ? -100
+              : command === Command.PanDown
+                ? +100
+                : 0),
+        },
+        { duration: 100 }
+      );
     }
     if (
       mode === Mode.NodeSelecting ||

@@ -32,6 +32,8 @@ export enum Command {
   ZoomOut,
   PanLeft,
   PanRight,
+  PanDown,
+  PanUp,
 
   // gantt
   SelectSpan,
@@ -134,7 +136,12 @@ const inputtingFilterCommands = [
   [Command.InputFilterMemo],
 ];
 
-export const panCommands = [Command.PanLeft, Command.PanRight];
+export const panCommands = [
+  Command.PanLeft,
+  Command.PanRight,
+  Command.PanDown,
+  Command.PanUp,
+];
 function handleSelectMode(
   mode: Mode,
   event: KeyboardEvent,
@@ -267,11 +274,18 @@ export function keyEventToCommand(
         if (key === "-") {
           return Command.ZoomOut;
         }
-        if (leftStrings.includes(key)) {
-          return Command.PanLeft;
-        }
-        if (rightStrings.includes(key)) {
-          return Command.PanRight;
+        const stringsAndCommands: [string[], Command][] = [
+          [leftStrings, Command.PanLeft],
+          [rightStrings, Command.PanRight],
+          [downStrings, Command.PanDown],
+          [upStrings, Command.PanUp],
+        ];
+        const maybeC = stringsAndCommands
+          .filter(([strings, _]) => strings.includes(key))
+          .map(([_, command]) => command)
+          .at(0);
+        if (maybeC) {
+          return maybeC;
         }
       }
       if (viewMode === ViewMode.Gantt) {

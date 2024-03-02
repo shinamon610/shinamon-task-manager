@@ -77,6 +77,8 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.ZoomOut:
     case Command.PanLeft:
     case Command.PanRight:
+    case Command.PanDown:
+    case Command.PanUp:
       return viewMode;
   }
 }
