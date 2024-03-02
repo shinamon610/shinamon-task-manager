@@ -19,6 +19,10 @@ function createLabelsAndKeys(
   viewMode: ViewMode,
   tasks: List<Task>
 ): [string[], string[][]] {
+  const ESC = "Escape";
+  const Enter = "Enter";
+  const ModifierEnter = "(shift|ctrl|cmd|alt)Enter";
+
   switch (mode) {
     case Mode.Normal:
       const normalLabels = [
@@ -51,7 +55,7 @@ function createLabelsAndKeys(
       const keyNodeSelecting = [
         ["e"],
         ["x"],
-        ["esc"],
+        [ESC],
         ["w"],
         ["p"],
         ["d"],
@@ -94,7 +98,7 @@ function createLabelsAndKeys(
     case Mode.MemoInputting:
       return [
         ["Confirm", "Cancel"],
-        [["ctrl|cmd|alt", "Enter"], ["esc"]],
+        [[ModifierEnter], [ESC]],
       ];
     case Mode.FilterTitleSelecting:
     case Mode.FilterTitleInputting:
@@ -108,16 +112,16 @@ function createLabelsAndKeys(
     case Mode.FilterTargetsInputting:
     case Mode.FilterMemoSelecting:
     case Mode.FilterMemoInputting:
-      return [["Done"], [["esc|((shift|ctrl|cmd|alt)Enter)"]]];
+      return [["Done"], [[`${ESC}|${ModifierEnter}`]]];
     case Mode.MarkDownViewing:
       return [
         ["Input", "Back", "Editor", "Set Editor"],
-        [["i"], ["Escape"], ["e"], ["s"]],
+        [["i"], [ESC], ["e"], ["s"]],
       ];
     case Mode.MarkDownInputting:
-      return [["Done"], [["Escape"]]];
+      return [["Done"], [[ESC]]];
     case Mode.EditorSetting:
-      return [["Done"], [["Escape|Enter"]]];
+      return [["Done"], [[`${ESC}|${Enter}`]]];
   }
 }
 
