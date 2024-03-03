@@ -43,8 +43,8 @@ export function TaskPage({
   refresh,
 }: Props) {
   return (
-    <div className="flex flex-col h-full w-full">
-      <div className="grow flex">
+    <div className="parent h-screen w-screen">
+      <div className="div1">
         {viewMode === ViewMode.Graph || viewMode === ViewMode.Tile ? (
           <TaskGraph
             serialInput={serialInput}
@@ -59,21 +59,27 @@ export function TaskPage({
         ) : (
           <></>
         )}
+      </div>
+      <div className="div2">
         <SideBar />
       </div>
-      <KeyBar />
-      <EditBar
-        sourcesRef={sourcesRef}
-        targetsRef={targetsRef}
-        estimatedTime={estimatedTime}
-        setEstimatedTime={setEstimatedTime}
-        spentTime={spentTime}
-        setSpentTime={setSpentTime}
-        startDateTime={startDateTime}
-        setStartDateTime={setStartDateTime}
-        endDateTime={endDateTime}
-        setEndDateTime={setEndDateTime}
-      />
+      <div className="div3">
+        <KeyBar />
+      </div>
+      <div className="div4">
+        <EditBar
+          sourcesRef={sourcesRef}
+          targetsRef={targetsRef}
+          estimatedTime={estimatedTime}
+          setEstimatedTime={setEstimatedTime}
+          spentTime={spentTime}
+          setSpentTime={setSpentTime}
+          startDateTime={startDateTime}
+          setStartDateTime={setStartDateTime}
+          endDateTime={endDateTime}
+          setEndDateTime={setEndDateTime}
+        />
+      </div>
     </div>
   );
 }

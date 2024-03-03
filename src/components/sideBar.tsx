@@ -27,7 +27,7 @@ export function SideBar() {
     }));
   }, [tasks]);
   return (
-    <div className="w-64 h-64 overflow-auto  ">
+    <div>
       {cards.map((card) => (
         <CardComponent key={card.id} card={card} />
       ))}

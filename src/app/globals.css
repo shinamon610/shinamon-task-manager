@@ -97,3 +97,32 @@ input:disabled {
   min-width: 100vw;
   max-width: 100vw;
 }
+
+.parent {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  grid-template-rows: 1fr auto auto;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.div2 {
+  grid-area: 1 / 2 / 2 / 3;
+  max-height: fit-content;
+  overflow-y: scroll;
+}
+.div3 {
+  grid-area: 2 / 1 / 3 / 3;
+}
+.div4 {
+  grid-area: 3 / 1 / 4 / 3;
+}
+
+.gantt {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
