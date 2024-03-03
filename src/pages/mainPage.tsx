@@ -27,6 +27,7 @@ export function MainPage() {
     userName,
     setUserName,
     tasks,
+    stackedTasks,
     pushHistory,
     prevHistory,
     nextHistory,
@@ -109,6 +110,7 @@ export function MainPage() {
           newCommand,
           tasks,
           filteredTasks,
+          stackedTasks,
           newSerialInput,
           {
             name: title,
@@ -215,6 +217,7 @@ export function MainPage() {
         newCommand === Command.CreateTaskNode ||
         newCommand === Command.DeleteTaskNode ||
         newCommand === Command.SelectTaskNode ||
+        newCommand === Command.OpenSideBar ||
         newCommand === Command.Cancel ||
         newCommand === Command.ConfirmEdit ||
         newCommand === Command.SetToWorking ||

@@ -379,6 +379,7 @@ export function createTasks(
   command: Command,
   tasks: List<Task>,
   filteredTasks: List<Task>,
+  stackedTasks: List<Task>,
   serialInput: string,
   userInput: UserInput,
   userName: string,
@@ -401,6 +402,11 @@ export function createTasks(
         return tasks;
       }
       return selectTask(tasks, selectedId);
+    case Command.OpenSideBar:
+      if (getSelectedTask(tasks) === undefined && stackedTasks.size > 0) {
+        return selectTask(tasks, stackedTasks.first()!.id);
+      }
+      return tasks;
     case Command.Cancel:
       if (isCreatingNewTask) {
         return unSelectAll(deleteSelectedTask(tasks));
@@ -474,7 +480,6 @@ export function createTasks(
     case Command.PanRight:
     case Command.PanDown:
     case Command.PanUp:
-    case Command.OpenSideBar:
     case Command.CloseSideBar:
     case Command.SelectAbove:
     case Command.SelectBelow:
