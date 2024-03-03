@@ -10,17 +10,9 @@ type Card = {
 
 const CardComponent: React.FC<{ card: Card }> = ({ card }) => {
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "20px",
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: "var(--active)",
-      }}
-    >
-      <h2>{card.title}</h2>
-      <p>{card.content}</p>
+    <div className="border border-white items-center bg-active">
+      <div>{card.title}</div>
+      <div>{card.content}</div>
     </div>
   );
 };
