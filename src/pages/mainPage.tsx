@@ -146,8 +146,11 @@ export function MainPage() {
       setViewMode(newViewMode);
       setSerialInput(newSerialInput);
 
-      if (newCommand === Command.OpenSideBar) {
-        setIsSideBarOpen(true);
+      if (
+        newCommand === Command.OpenSideBar ||
+        newCommand === Command.CloseSideBar
+      ) {
+        setIsSideBarOpen(newCommand === Command.OpenSideBar);
       }
       if (newCommand === Command.Undo) {
         prevHistory();

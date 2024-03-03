@@ -63,7 +63,7 @@ export function TaskPage({
         )}
       </div>
       {isSideBarOpen ? (
-        <div className="div2">
+        <div className="div2" style={{ width: "200px" }}>
           <SideBar />
         </div>
       ) : (

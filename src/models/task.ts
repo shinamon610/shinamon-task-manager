@@ -469,6 +469,7 @@ export function createTasks(
     case Command.PanDown:
     case Command.PanUp:
     case Command.OpenSideBar:
+    case Command.CloseSideBar:
       return null;
   }
 }

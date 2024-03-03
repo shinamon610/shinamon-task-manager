@@ -100,7 +100,7 @@ input:disabled {
 
 .parent {
   display: grid;
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 1fr auto;
   grid-template-rows: 1fr auto auto;
   grid-column-gap: 0px;
   grid-row-gap: 0px;

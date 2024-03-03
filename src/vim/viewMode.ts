@@ -80,6 +80,7 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.PanDown:
     case Command.PanUp:
     case Command.OpenSideBar:
+    case Command.CloseSideBar:
       return viewMode;
   }
 }

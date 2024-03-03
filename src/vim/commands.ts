@@ -28,6 +28,7 @@ export enum Command {
   SelectView,
 
   OpenSideBar,
+  CloseSideBar,
 
   // zoomとpan
   ZoomIn,
@@ -449,6 +450,9 @@ export function keyEventToCommand(
     case Mode.SideBarSelecting:
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;
+      }
+      if (key === "c") {
+        return Command.CloseSideBar;
       }
       return Command.Nothing;
   }

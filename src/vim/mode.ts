@@ -210,6 +210,8 @@ export function createMode(
       return Mode.MarkDownViewing;
     case Command.OpenSideBar:
       return Mode.SideBarSelecting;
+    case Command.CloseSideBar:
+      return Mode.Normal;
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:
