@@ -36,7 +36,7 @@ export function SideBar() {
   return (
     <div
       className="bg-darkGray"
-      style={getSelectedStyle(mode === Mode.SideBarSelecting, AccentColor)}
+      style={getSelectedStyle(mode === Mode.SideBarSelecting, "blue")}
     >
       {cards.map((card) => (
         <CardComponent key={card.id} card={card} />
