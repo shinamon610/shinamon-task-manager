@@ -34,12 +34,12 @@ export function getNextItem<T>(items: T[][], x: number, y: number): T {
   if (items[x].length - 1 > y) {
     return items[x][y + 1];
   }
-  return items[(x + 1) % items.length][0];
+  return items[getCircularIndex(x, items.length, 1)][0];
 }
 
 export function getPrevItem<T>(items: T[][], x: number, y: number): T {
   if (y == 0) {
-    const prevx = (x - 1 + items.length) % items.length;
+    const prevx = getCircularIndex(x, items.length, -1);
     return items[prevx][items[prevx].length - 1];
   }
   return items[x][y - 1];

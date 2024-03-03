@@ -1,4 +1,4 @@
-import { getNextItem, getPrevItem } from "@/utils";
+import { getCircularIndex, getNextItem, getPrevItem } from "@/utils";
 import { MutableRefObject } from "react";
 import {
   Mode,
@@ -172,22 +172,21 @@ function handleSelectMode(
     return inputtingCommands[ix][iy];
   }
   if (downStrings.includes(key)) {
-    const nextIx = (ix + 1) % selectingCommands.length;
+    const nextIx = getCircularIndex(ix, selectingCommands.length, 1);
     return selectingCommands[nextIx][iy % selectingCommands[nextIx].length];
   }
   if (upStrings.includes(key)) {
-    const nextIx =
-      (ix + selectingCommands.length - 1) % selectingCommands.length;
-    return selectingCommands[
-      (selectingCommands.length + ix - 1) % selectingCommands.length
-    ][iy % selectingCommands[nextIx].length];
+    const nextIx = getCircularIndex(ix, selectingCommands.length, -1);
+    return selectingCommands[nextIx][iy % selectingCommands[nextIx].length];
   }
   if (rightStrings.includes(key)) {
-    return selectingCommands[ix][(iy + 1) % selectingCommands[ix].length];
+    return selectingCommands[ix][
+      getCircularIndex(iy, selectingCommands[ix].length, 1)
+    ];
   }
   if (leftStrings.includes(key)) {
     return selectingCommands[ix][
-      (selectingCommands[ix].length + iy - 1) % selectingCommands[ix].length
+      getCircularIndex(iy, selectingCommands[ix].length, -1)
     ];
   }
   return Command.Nothing;
