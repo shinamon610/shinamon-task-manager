@@ -9,11 +9,15 @@ import { useContext, useMemo } from "react";
 type Card = {
   id: UUID;
   title: string;
+  isSelected: boolean;
 };
 
 const CardComponent: React.FC<{ card: Card }> = ({ card }) => {
   return (
-    <div className="border border-white items-center bg-active">
+    <div
+      className="m-1 items-center bg-active"
+      style={getSelectedStyle(card.isSelected, AccentColor)}
+    >
       <div className="truncate">{card.title}</div>
     </div>
   );
@@ -33,6 +37,7 @@ export function SideBar() {
     ).map((task) => ({
       id: task.id,
       title: task.name,
+      isSelected: task.isSelected,
     }));
   }, [tasks, userName]);
   return (
