@@ -33,8 +33,18 @@ function createLabelsAndKeys(
         "Change View",
         "Undo",
         "Redo",
+        "SideBar",
       ];
-      const normalKeys = [["n"], ["w"], ["f"], ["q"], ["e"], ["u"], ["r"]];
+      const normalKeys = [
+        ["n"],
+        ["w"],
+        ["f"],
+        ["q"],
+        ["e"],
+        ["u"],
+        ["r"],
+        ["b"],
+      ];
       if (viewMode === ViewMode.Gantt) {
         return [
           [...normalLabels, "Select Span"],
