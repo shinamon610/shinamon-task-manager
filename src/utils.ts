@@ -22,6 +22,14 @@ export function flattenStrings(targets: string[][]): string[] {
   return targets.map((target) => target.reduce((a, b) => a + b, ""));
 }
 
+export function getCircularIndex(
+  current: number,
+  length: number,
+  x: number
+): number {
+  return (current + x + length) % length;
+}
+
 export function getNextItem<T>(items: T[][], x: number, y: number): T {
   if (items[x].length - 1 > y) {
     return items[x][y + 1];
