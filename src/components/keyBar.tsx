@@ -21,7 +21,7 @@ function createLabelsAndKeys(
 ): [string[], string[][]] {
   const ESC = "Escape";
   const Enter = "Enter";
-  const ModifierEnter = "(shift|ctrl|cmd|alt)Enter";
+  const ModifierEnter = "(ctrl|cmd|alt)Enter"; // shiftは戻る時に使っている時がある。
 
   switch (mode) {
     case Mode.Normal:
