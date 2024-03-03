@@ -40,6 +40,7 @@ export function SideBar() {
       isSelected: task.isSelected,
     }));
   }, [tasks, userName]);
+
   return (
     <div
       className="bg-darkGray"

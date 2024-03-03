@@ -324,6 +324,9 @@ export function keyEventToCommand(
       if (key === "f") {
         return Command.ViewMarkdownFile;
       }
+      if (key === "b") {
+        return Command.OpenSideBar;
+      }
       return Command.Nothing;
     case Mode.ViewSelecting:
       if (key === "e") {
