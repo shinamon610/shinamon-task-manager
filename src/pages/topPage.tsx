@@ -14,7 +14,7 @@ export function TopPage() {
   }, [initializeData]);
 
   return (
-    <div className={"homepage"}>
+    <div>
       {filePath === "" ? (
         <SelectSaveLocation />
       ) : userName === "" ? (

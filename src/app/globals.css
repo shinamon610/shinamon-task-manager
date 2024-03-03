@@ -91,9 +91,6 @@ input:disabled {
   display: flex;
   flex-direction: column;
   height: 100vh;
-}
-
-.task-graph {
-  width: 100vw;
-  flex-grow: 1;
+  min-height: 100vh;
+  max-height: 100vh;
 }

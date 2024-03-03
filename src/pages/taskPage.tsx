@@ -42,21 +42,23 @@ export function TaskPage({
   refresh,
 }: Props) {
   return (
-    <>
-      {viewMode === ViewMode.Graph || viewMode === ViewMode.Tile ? (
-        <TaskGraph
-          serialInput={serialInput}
-          viewMode={viewMode}
-          command={command}
-          refresh={refresh}
-        />
-      ) : viewMode === ViewMode.TimeLine ? (
-        <TimeLine />
-      ) : viewMode === ViewMode.Gantt ? (
-        <MyGantt />
-      ) : (
-        <></>
-      )}
+    <div className="flex flex-col h-full">
+      <div className="flex-grow">
+        {viewMode === ViewMode.Graph || viewMode === ViewMode.Tile ? (
+          <TaskGraph
+            serialInput={serialInput}
+            viewMode={viewMode}
+            command={command}
+            refresh={refresh}
+          />
+        ) : viewMode === ViewMode.TimeLine ? (
+          <TimeLine />
+        ) : viewMode === ViewMode.Gantt ? (
+          <MyGantt />
+        ) : (
+          <></>
+        )}
+      </div>
       <KeyBar />
       <EditBar
         sourcesRef={sourcesRef}
@@ -70,6 +72,6 @@ export function TaskPage({
         endDateTime={endDateTime}
         setEndDateTime={setEndDateTime}
       />
-    </>
+    </div>
   );
 }

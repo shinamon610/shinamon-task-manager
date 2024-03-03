@@ -229,7 +229,7 @@ export function MainPage() {
   });
 
   return (
-    <div className={"homepage"}>
+    <div className="homepage">
       {markdownModes.includes(mode) ? (
         <MarkdownPage editor={editor} setEditor={setEditor} />
       ) : (

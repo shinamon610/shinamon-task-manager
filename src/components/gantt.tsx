@@ -231,7 +231,7 @@ export function MyGantt() {
     );
   }, [filteredTasks]);
   return (
-    <div ref={ganttContainerRef} style={{ flexGrow: 1 }}>
+    <div ref={ganttContainerRef} className="flex-grow h-full">
       <Gantt
         tasks={ganttTasks}
         TaskListHeader={TaskListHeaderDefault}

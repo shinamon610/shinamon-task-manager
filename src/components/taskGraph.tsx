@@ -246,7 +246,7 @@ export default function TaskGraph({
   refresh,
 }: TaskGraphProps) {
   return (
-    <div className="task-graph">
+    <div className="flex-grow h-full w-full">
       <ReactFlowProvider>
         <BaseNewTaskGraph
           serialInput={serialInput}
