@@ -209,6 +209,8 @@ export function createMode(
     case Command.OpenEditor:
       return Mode.MarkDownViewing;
     case Command.OpenSideBar:
+    case Command.SelectAbove:
+    case Command.SelectBelow:
       return Mode.SideBarSelecting;
     case Command.CloseSideBar:
       return Mode.Normal;

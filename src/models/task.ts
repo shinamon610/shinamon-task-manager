@@ -470,6 +470,8 @@ export function createTasks(
     case Command.PanUp:
     case Command.OpenSideBar:
     case Command.CloseSideBar:
+    case Command.SelectAbove:
+    case Command.SelectBelow:
       return null;
   }
 }

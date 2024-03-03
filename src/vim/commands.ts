@@ -29,6 +29,8 @@ export enum Command {
 
   OpenSideBar,
   CloseSideBar,
+  SelectAbove,
+  SelectBelow,
 
   // zoomとpan
   ZoomIn,
@@ -453,6 +455,12 @@ export function keyEventToCommand(
       }
       if (key === "c") {
         return Command.CloseSideBar;
+      }
+      if (upStrings.includes(key)) {
+        return Command.SelectAbove;
+      }
+      if (downStrings.includes(key)) {
+        return Command.SelectBelow;
       }
       return Command.Nothing;
   }
