@@ -1,6 +1,7 @@
 import { EditBar } from "@/components/editBar";
 import { MyGantt } from "@/components/gantt";
 import { KeyBar } from "@/components/keyBar";
+import { SideBar } from "@/components/sideBar";
 import TaskGraph from "@/components/taskGraph";
 import { TimeLine } from "@/components/timeLine";
 import { Command } from "@/vim/commands";
@@ -42,8 +43,8 @@ export function TaskPage({
   refresh,
 }: Props) {
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-grow">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow flex">
         {viewMode === ViewMode.Graph || viewMode === ViewMode.Tile ? (
           <TaskGraph
             serialInput={serialInput}
@@ -58,6 +59,7 @@ export function TaskPage({
         ) : (
           <></>
         )}
+        <SideBar />
       </div>
       <KeyBar />
       <EditBar
