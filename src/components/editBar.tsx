@@ -1,5 +1,6 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
+import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
 import { Assignee } from "@/models/assignee";
 import {
   Status,
@@ -467,11 +468,7 @@ export const EditBar = ({
   return (
     <div
       className="edit-bar"
-      style={
-        isDisabled(mode)
-          ? { padding: "3px" }
-          : { border: "3px solid var(--accent)" }
-      }
+      style={getSelectedStyle(!isDisabled(mode), AccentColor)}
     >
       {createContent(
         mode,

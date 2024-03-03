@@ -1,6 +1,6 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { getSelectedStyle } from "@/lib/layoutUtils";
+import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
 import { Task, UUID } from "@/models/task";
 import { Mode } from "@/vim/mode";
 import { useContext, useMemo } from "react";
@@ -31,7 +31,7 @@ export function SideBar() {
     }));
   }, [tasks]);
   return (
-    <div style={getSelectedStyle(mode === Mode.SideBarSelecting)}>
+    <div style={getSelectedStyle(mode === Mode.SideBarSelecting, AccentColor)}>
       {cards.map((card) => (
         <CardComponent key={card.id} card={card} />
       ))}
