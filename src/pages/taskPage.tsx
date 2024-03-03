@@ -44,7 +44,7 @@ export function TaskPage({
 }: Props) {
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="flex-grow flex">
+      <div className="grow flex">
         {viewMode === ViewMode.Graph || viewMode === ViewMode.Tile ? (
           <TaskGraph
             serialInput={serialInput}
