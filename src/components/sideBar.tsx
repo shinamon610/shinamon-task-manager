@@ -41,7 +41,10 @@ export function SideBar() {
     }));
   }, [tasks, userName]);
   return (
-    <div style={getSelectedStyle(mode === Mode.SideBarSelecting, AccentColor)}>
+    <div
+      className="bg-darkGray"
+      style={getSelectedStyle(mode === Mode.SideBarSelecting, AccentColor)}
+    >
       {cards.map((card) => (
         <CardComponent key={card.id} card={card} />
       ))}
