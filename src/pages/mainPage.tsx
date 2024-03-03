@@ -218,6 +218,8 @@ export function MainPage() {
         newCommand === Command.DeleteTaskNode ||
         newCommand === Command.SelectTaskNode ||
         newCommand === Command.OpenSideBar ||
+        newCommand === Command.SelectAbove ||
+        newCommand === Command.SelectBelow ||
         newCommand === Command.Cancel ||
         newCommand === Command.ConfirmEdit ||
         newCommand === Command.SetToWorking ||

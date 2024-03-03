@@ -1,3 +1,4 @@
+import { getCircularIndex } from "@/utils";
 import { Command } from "@/vim/commands";
 import { List } from "immutable";
 import { v4 as uuidv4 } from "uuid";
@@ -407,6 +408,23 @@ export function createTasks(
         return selectTask(tasks, stackedTasks.first()!.id);
       }
       return tasks;
+    case Command.SelectAbove:
+    case Command.SelectBelow:
+      const currentIndex = stackedTasks.findIndex((task) => task.isSelected);
+      if (currentIndex === -1) {
+        return tasks;
+      }
+      return selectTask(
+        tasks,
+        stackedTasks.get(
+          getCircularIndex(
+            currentIndex,
+            stackedTasks.size,
+            command === Command.SelectAbove ? -1 : 1
+          )
+        )!.id
+      );
+
     case Command.Cancel:
       if (isCreatingNewTask) {
         return unSelectAll(deleteSelectedTask(tasks));
@@ -481,8 +499,6 @@ export function createTasks(
     case Command.PanDown:
     case Command.PanUp:
     case Command.CloseSideBar:
-    case Command.SelectAbove:
-    case Command.SelectBelow:
       return null;
   }
 }
