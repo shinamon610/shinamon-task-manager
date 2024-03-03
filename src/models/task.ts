@@ -103,20 +103,22 @@ function createTask(
   };
 }
 
-function selectTask(
-  tasks: List<Task>,
+function getSelectedIdFromInput(
   filteredTasks: List<Task>,
   serialInput: string
-): List<Task> {
+): UUID | null {
   const selectedIndex = selectLabelIndex(filteredTasks, serialInput);
   if (selectedIndex === null) {
-    return tasks;
+    return null;
   }
-  const selectedTaskId = filteredTasks.get(selectedIndex)!.id;
+  return filteredTasks.get(selectedIndex)!.id;
+}
+
+function selectTask(tasks: List<Task>, idToSelect: UUID): List<Task> {
   const newTasks = tasks.map((task): Task => {
     return {
       ...task,
-      isSelected: selectedTaskId === task.id,
+      isSelected: task.id === idToSelect,
     };
   });
   return newTasks;
@@ -394,7 +396,11 @@ export function createTasks(
     case Command.DeleteTaskNode:
       return deleteSelectedTask(tasks);
     case Command.SelectTaskNode:
-      return selectTask(tasks, filteredTasks, serialInput);
+      const selectedId = getSelectedIdFromInput(filteredTasks, serialInput);
+      if (selectedId === null) {
+        return tasks;
+      }
+      return selectTask(tasks, selectedId);
     case Command.Cancel:
       if (isCreatingNewTask) {
         return unSelectAll(deleteSelectedTask(tasks));
