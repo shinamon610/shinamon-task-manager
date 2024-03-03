@@ -9,6 +9,8 @@ export enum Mode {
   ViewSelecting,
   SpanSelecting,
 
+  SideBarSelecting,
+
   // Markdown
   MarkDownViewing,
   MarkDownInputting,
@@ -206,6 +208,8 @@ export function createMode(
       return Mode.EditorSetting;
     case Command.OpenEditor:
       return Mode.MarkDownViewing;
+    case Command.OpenSideBar:
+      return Mode.SideBarSelecting;
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:

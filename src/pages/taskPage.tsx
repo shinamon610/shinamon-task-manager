@@ -24,6 +24,7 @@ type Props = {
   endDateTime: Moment | null;
   setEndDateTime: Dispatch<SetStateAction<Moment | null>>;
   refresh: boolean;
+  isSideBarOpen: boolean;
 };
 
 export function TaskPage({
@@ -41,6 +42,7 @@ export function TaskPage({
   endDateTime,
   setEndDateTime,
   refresh,
+  isSideBarOpen,
 }: Props) {
   return (
     <div className="parent h-screen w-screen">
@@ -60,9 +62,13 @@ export function TaskPage({
           <></>
         )}
       </div>
-      <div className="div2">
-        <SideBar />
-      </div>
+      {isSideBarOpen ? (
+        <div className="div2">
+          <SideBar />
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="div3">
         <KeyBar />
       </div>

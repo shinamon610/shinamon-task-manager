@@ -129,6 +129,11 @@ function createLabelsAndKeys(
       return [["Done"], [[ESC]]];
     case Mode.EditorSetting:
       return [["Done"], [[`${ESC}|${Enter}`]]];
+    case Mode.SideBarSelecting:
+      return [
+        ["Done", "Close"],
+        [[`${ESC}|${Enter}`], ["c"]],
+      ];
   }
 }
 

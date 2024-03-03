@@ -69,6 +69,8 @@ export function MainPage() {
   // editor
   const [editor, setEditor] = useState("");
 
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+
   function setTaskData(newCommand: Command, newTasks: List<Task>) {
     const selectedTask = getSelectedTask(newTasks)!;
     setTitle(newCommand === Command.CreateTaskNode ? "" : selectedTask.name);
@@ -143,6 +145,10 @@ export function MainPage() {
       setMode(newMode);
       setViewMode(newViewMode);
       setSerialInput(newSerialInput);
+
+      if (newCommand === Command.OpenSideBar) {
+        setIsSideBarOpen(true);
+      }
       if (newCommand === Command.Undo) {
         prevHistory();
       }
@@ -248,6 +254,7 @@ export function MainPage() {
           endDateTime={endDateTime}
           setEndDateTime={setEndDateTime}
           refresh={refresh}
+          isSideBarOpen={isSideBarOpen}
         />
       )}
     </div>

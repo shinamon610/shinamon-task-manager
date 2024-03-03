@@ -27,6 +27,8 @@ export enum Command {
   Redo,
   SelectView,
 
+  OpenSideBar,
+
   // zoomとpan
   ZoomIn,
   ZoomOut,
@@ -267,6 +269,9 @@ export function keyEventToCommand(
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
       }
+      if (key === "b") {
+        return Command.OpenSideBar;
+      }
       if (viewMode === ViewMode.Graph || viewMode === ViewMode.Tile) {
         if (key === "+") {
           return Command.ZoomIn;
@@ -440,6 +445,8 @@ export function keyEventToCommand(
       if (key === "Escape") {
         return Command.ViewMarkdownFile;
       }
+      return Command.Nothing;
+    case Mode.SideBarSelecting:
       return Command.Nothing;
   }
 }
