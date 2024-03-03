@@ -1,5 +1,6 @@
 import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
+import { DefaultStatus } from "@/models/status";
 import { Task } from "@/models/task";
 import { List } from "immutable";
 import {
@@ -7,6 +8,7 @@ import {
   SetStateAction,
   createContext,
   useCallback,
+  useMemo,
   useState,
 } from "react";
 
@@ -26,6 +28,7 @@ export const GlobalContext = createContext<GlobalContextType>({
   setCurrentHistoryIndex: () => {},
   assignees: new Set(),
   setAssignees: () => {},
+  stackedTasks: List([]),
 });
 
 type GlobalContextType = {
@@ -44,6 +47,7 @@ type GlobalContextType = {
   setCurrentHistoryIndex: Dispatch<SetStateAction<number>>;
   assignees: Set<Assignee>;
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
+  stackedTasks: List<Task>;
 };
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
@@ -96,6 +100,12 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
 
   const tasks = histories.get(currentHistoryIndex)!;
 
+  const stackedTasks = useMemo(() => {
+    return tasks.filter(
+      (task) => task.assignee === userName && task.status !== DefaultStatus.Done
+    );
+  }, [tasks, userName]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -114,6 +124,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         setCurrentHistoryIndex,
         assignees,
         setAssignees,
+        stackedTasks,
       }}
     >
       {children}
