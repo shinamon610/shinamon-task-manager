@@ -1,3 +1,4 @@
+import { getSelectedStyle } from "@/lib/layoutUtils";
 import { zip } from "@/utils";
 
 export const FlexContainer = ({
@@ -11,8 +12,7 @@ export const FlexContainer = ({
 }) => {
   const containerStyle = {
     display: "flex",
-    border: isSelected ? "3px solid blue" : "none",
-    padding: isSelected ? "0px" : "3px",
+    ...getSelectedStyle(isSelected, "blue"),
   };
   const contents = zip(components, ratios).map(([element, ratio], i) => (
     <div key={i} style={{ flex: ratio }}>

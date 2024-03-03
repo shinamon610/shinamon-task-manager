@@ -1,6 +1,7 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
+import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
 import { DefaultStatus, Status } from "@/models/status";
@@ -34,21 +35,18 @@ type TaskGraphProps = {
   refresh: boolean;
 };
 
-function borderAndPadding(
+function isColoredAndColor(
   status: Status,
   isSelected: boolean,
   color: string | null
-): [string, string] {
+): [boolean, string] {
   if (isSelected) {
-    return ["3px solid var(--accent)", "0px"];
+    return [true, AccentColor];
   }
   if (status === DefaultStatus.Working) {
-    if (color == null) {
-      return ["", "3px"];
-    }
-    return [`3px solid ${color}`, "0px"];
+    return [color !== null, color ?? ""];
   }
-  return ["", "3px"];
+  return [false, ""];
 }
 
 function boxShadow(
@@ -78,11 +76,12 @@ function createNodesAndEdgesFromTasks(
   const nodes = zip(tasks.toJS(), labels).map(([task, label]) => {
     const color =
       task.assignee == null ? null : getColor(assignees, task.assignee);
-    const [border, padding] = borderAndPadding(
+    const [isSelected, outerColor] = isColoredAndColor(
       task.status,
       task.isSelected,
       color
     );
+    const { border, padding } = getSelectedStyle(isSelected, outerColor);
 
     return {
       id: task.id,
