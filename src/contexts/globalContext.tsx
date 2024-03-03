@@ -98,13 +98,17 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     });
   }, [setFilePath, setHistories, setAssignees, setUserName]);
 
-  const tasks = histories.get(currentHistoryIndex)!;
+  const _tasks = histories.get(currentHistoryIndex);
+  const tasks = _tasks === undefined ? List([]) : _tasks;
 
   const stackedTasks = useMemo(() => {
-    return tasks.filter(
+    if (_tasks === undefined) {
+      return List([]);
+    }
+    return _tasks.filter(
       (task) => task.assignee === userName && task.status !== DefaultStatus.Done
     );
-  }, [tasks, userName]);
+  }, [_tasks, userName]);
 
   return (
     <GlobalContext.Provider

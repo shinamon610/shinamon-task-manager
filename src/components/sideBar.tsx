@@ -1,7 +1,6 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
-import { DefaultStatus } from "@/models/status";
 import { Task, UUID } from "@/models/task";
 import { Mode } from "@/vim/mode";
 import { useContext, useMemo } from "react";
@@ -24,22 +23,15 @@ const CardComponent: React.FC<{ card: Card }> = ({ card }) => {
 };
 
 export function SideBar() {
-  const { tasks, userName } = useContext(GlobalContext);
+  const { stackedTasks } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
   const cards: Card[] = useMemo(() => {
-    return (
-      tasks
-        .filter(
-          (task) =>
-            task.assignee === userName && task.status !== DefaultStatus.Done
-        )
-        .toJS() as Task[]
-    ).map((task) => ({
+    return (stackedTasks.toJS() as Task[]).map((task) => ({
       id: task.id,
       title: task.name,
       isSelected: task.isSelected,
     }));
-  }, [tasks, userName]);
+  }, [stackedTasks]);
 
   return (
     <div
