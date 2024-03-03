@@ -447,6 +447,9 @@ export function keyEventToCommand(
       }
       return Command.Nothing;
     case Mode.SideBarSelecting:
+      if (key === "Escape" || key === "Enter") {
+        return Command.Cancel;
+      }
       return Command.Nothing;
   }
 }
