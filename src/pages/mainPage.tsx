@@ -231,6 +231,7 @@ export function MainPage() {
 
       if (
         newMode === Mode.NodeSelecting ||
+        newMode === Mode.SideBarSelecting ||
         newCommand === Command.CreateTaskNode
       ) {
         setTaskData(newCommand, newTasks);
