@@ -17,7 +17,7 @@ export type Task = {
   spentTime: number;
   to: UUID[];
   from: UUID[]; // fromを辿って検索するから、やっぱり必要
-  priority: number;
+  priority: number; // 大きい方が優先度高い
   memo: string;
   status: Status;
   assignee: Assignee | null;
