@@ -458,6 +458,9 @@ export function keyEventToCommand(
       if (key === "c") {
         return Command.CloseSideBar;
       }
+      if (key === "e") {
+        return Command.SelectTitle;
+      }
       if (upStrings.includes(key)) {
         return Command.SelectAbove;
       }

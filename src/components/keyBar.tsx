@@ -143,8 +143,8 @@ function createLabelsAndKeys(
       return [["Done"], [[`${ESC}|${Enter}`]]];
     case Mode.SideBarSelecting:
       return [
-        ["Done", "Close"],
-        [[`${ESC}|${Enter}`], ["c"]],
+        ["Done", "Close", "Edit"],
+        [[`${ESC}|${Enter}`], ["c"], ["e"]],
       ];
   }
 }
