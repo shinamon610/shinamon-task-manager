@@ -1,3 +1,4 @@
+import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
 import { DefaultStatus } from "@/models/status";
@@ -105,9 +106,13 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     if (_tasks === undefined) {
       return List([]);
     }
-    return _tasks.filter(
-      (task) => task.assignee === userName && task.status !== DefaultStatus.Done
-    );
+    const stackedTasks = _tasks
+      .filter(
+        (task) =>
+          task.assignee === userName && task.status !== DefaultStatus.Done
+      )
+      .map(({ id }) => id);
+    return toposort(_tasks).filter((task) => stackedTasks.includes(task.id));
   }, [_tasks, userName]);
 
   return (
