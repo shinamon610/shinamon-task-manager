@@ -1,38 +1,39 @@
-import { Task } from "@/models/task";
+import { PriorityQueue } from "./priorityQueue";
 
-export type TopologicalSortable = {
-  id: string;
-  to: string[]; // 依存するタスクのIDのリスト
-};
+// keyはtask.idで、valueは[task.to,task.priority]
+export type TopologicalSortable = Map<string, [string[], number]>;
 
-// 単体テストするからexportしている
-export const topologicalSort = (tasks: TopologicalSortable[]): string[] => {
-  const graph = new Map<string, string[]>();
-  const visited = new Set<string>();
-  const result: string[] = [];
+export function toposortWithPriority(tasks: TopologicalSortable): string[] {
+  // init inDegree.
+  const inDegrees = new Map<string, number>();
+  tasks.forEach((_, id) => inDegrees.set(id, 0));
 
-  // グラフの構築
-  tasks.forEach((task) => {
-    graph.set(task.id, task.to);
+  // compute inDegree
+  tasks.forEach(([to, _]) =>
+    to.forEach((id) => {
+      const old = inDegrees.get(id)!;
+      inDegrees.set(id, (old || 0) + 1);
+    })
+  );
+
+  // fst is priority, snd is id
+  const heap = new PriorityQueue((a: [number, string], b: [number, string]) => {
+    return a[0] < b[0];
+  });
+  inDegrees.forEach((inDegree, id) => {
+    if (inDegree === 0) heap.push([tasks.get(id)![1], id]);
   });
 
-  const visit = (taskId: string) => {
-    if (visited.has(taskId)) return;
-    visited.add(taskId);
+  const result: string[] = [];
+  while (!heap.isEmpty()) {
+    const [_, id] = heap.pop()!;
+    result.push(id);
+    tasks.get(id)![0].forEach((id) => {
+      const inDegree = inDegrees.get(id)! - 1;
+      inDegrees.set(id, inDegree - 1);
+      if (inDegree === 0) heap.push([tasks.get(id)![1], id]);
+    });
+  }
 
-    const dependencies = graph.get(taskId) || [];
-    dependencies.forEach(visit);
-
-    result.push(taskId);
-  };
-
-  tasks.forEach((task) => visit(task.id));
-
-  return result.reverse();
-};
-
-export function topologicalSortTasks(tasks: Task[]): Task[] {
-  return topologicalSort(
-    tasks.map((task) => ({ id: task.id, to: task.to }))
-  ).map((taskId) => tasks.find((task) => task.id === taskId)!);
+  return result;
 }
