@@ -1,12 +1,7 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
-import {
-  Task,
-  UUID,
-  getAllTasksFromSource,
-  getAllTasksFromTarget,
-} from "@/models/task";
+import { UUID } from "@/models/task";
 import { Mode } from "@/vim/mode";
 import { useContext, useMemo } from "react";
 
@@ -31,38 +26,35 @@ const CardComponent: React.FC<{
 };
 
 export function SideBar() {
-  const { tasks, stackedTasks } = useContext(GlobalContext);
+  const { dependentIds, stackedTasks } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
-  const cards: Card[] = useMemo(() => {
-    return (stackedTasks.toJS() as Task[]).map((task) => ({
-      id: task.id,
-      title: task.name,
-      isSelected: task.isSelected,
-    }));
+  const selectedId = useMemo(() => {
+    return stackedTasks.find((task) => task.isSelected)?.id;
   }, [stackedTasks]);
-  const dependentCards = useMemo(() => {
-    const selectedCard = cards.filter((card) => card.isSelected)[0];
-    if (selectedCard === undefined) return [];
-    const candidates = getAllTasksFromSource(tasks, selectedCard.id)
-      .concat(getAllTasksFromTarget(tasks, selectedCard.id))
-      .map(({ id }) => id);
-    return cards
-      .filter((card) => candidates.includes(card.id))
-      .map(({ id }) => id);
-  }, [cards, tasks]);
 
   return (
     <div
       className="bg-darkGray"
       style={getSelectedStyle(mode === Mode.SideBarSelecting, "blue")}
     >
-      {cards.map((card) => {
-        const style = card.isSelected
+      {stackedTasks.map((task) => {
+        const style = task.isSelected
           ? getSelectedStyle(true, AccentColor)
-          : dependentCards.includes(card.id)
+          : selectedId !== undefined &&
+              dependentIds(selectedId).includes(task.id)
             ? getSelectedStyle(true, "blue")
             : getSelectedStyle(false, "");
-        return <CardComponent key={card.id} card={card} style={style} />;
+        return (
+          <CardComponent
+            key={task.id}
+            card={{
+              id: task.id,
+              title: task.name,
+              isSelected: task.isSelected,
+            }}
+            style={style}
+          />
+        );
       })}
     </div>
   );

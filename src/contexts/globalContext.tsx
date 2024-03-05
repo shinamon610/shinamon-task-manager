@@ -2,7 +2,12 @@ import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
 import { loadData, loadInitialFilePath } from "@/models/file";
 import { DefaultStatus } from "@/models/status";
-import { Task } from "@/models/task";
+import {
+  Task,
+  UUID,
+  getAllTasksFromSource,
+  getAllTasksFromTarget,
+} from "@/models/task";
 import { List } from "immutable";
 import {
   Dispatch,
@@ -30,6 +35,7 @@ export const GlobalContext = createContext<GlobalContextType>({
   assignees: new Set(),
   setAssignees: () => {},
   stackedTasks: List([]),
+  dependentIds: () => List([]),
 });
 
 type GlobalContextType = {
@@ -49,6 +55,7 @@ type GlobalContextType = {
   assignees: Set<Assignee>;
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
   stackedTasks: List<Task>;
+  dependentIds: (id: UUID) => List<UUID>;
 };
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
@@ -115,6 +122,18 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     return toposort(_tasks).filter((task) => stackedTasks.includes(task.id));
   }, [_tasks, userName]);
 
+  const dependentIds = useCallback(
+    (selectedId: UUID) => {
+      const candidates = getAllTasksFromSource(tasks, selectedId)
+        .concat(getAllTasksFromTarget(tasks, selectedId))
+        .map(({ id }) => id);
+      return stackedTasks
+        .filter((card) => candidates.includes(card.id))
+        .map(({ id }) => id);
+    },
+    [tasks, stackedTasks]
+  );
+
   return (
     <GlobalContext.Provider
       value={{
@@ -134,6 +153,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         assignees,
         setAssignees,
         stackedTasks,
+        dependentIds,
       }}
     >
       {children}
