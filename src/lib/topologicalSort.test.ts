@@ -35,8 +35,8 @@ test("toposortWithPriority test3", () => {
   tasks.set("a", [["b", "c"], 1]);
   tasks.set("b", [[], 2]);
   tasks.set("c", [["d", "e"], 3]);
-  tasks.set("d", [[], 4]);
-  tasks.set("e", [[], 1]);
+  tasks.set("d", [[], 1]);
+  tasks.set("e", [[], 4]);
 
   const sortedTasks = toposortWithPriority(tasks);
   expect(sortedTasks).toEqual(["a", "c", "e", "b", "d"]);
