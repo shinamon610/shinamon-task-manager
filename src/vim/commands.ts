@@ -98,10 +98,10 @@ export enum Command {
 }
 
 export const selectString = "ahik";
-const leftStrings = ["ArrowLeft", "h"];
-const downStrings = ["ArrowDown", "j"];
-const upStrings = ["ArrowUp", "k"];
-const rightStrings = ["ArrowRight", "l"];
+export const leftStrings = ["ArrowLeft", "h"];
+export const downStrings = ["ArrowDown", "j"];
+export const upStrings = ["ArrowUp", "k"];
+export const rightStrings = ["ArrowRight", "l"];
 
 const selectingCommands = [
   [Command.SelectTitle],

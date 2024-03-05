@@ -1,7 +1,8 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { Task, hasNotDoneChildTask } from "@/models/task";
+import { Task, UUID, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
+import { downStrings, upStrings } from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
@@ -9,15 +10,21 @@ import { useContext } from "react";
 import { Key } from "./key";
 
 export function KeyBar() {
-  const { tasks } = useContext(GlobalContext);
+  const { tasks, stackedTasks, dependentIds } = useContext(GlobalContext);
   const { mode, viewMode } = useContext(MainContext);
-  return <div className="flex">{createElements(mode, viewMode, tasks)}</div>;
+  return (
+    <div className="flex">
+      {createElements(mode, viewMode, tasks, stackedTasks, dependentIds)}
+    </div>
+  );
 }
 
 function createLabelsAndKeys(
   mode: Mode,
   viewMode: ViewMode,
-  tasks: List<Task>
+  tasks: List<Task>,
+  stackedTasks: List<Task>,
+  dependentIds: (id: UUID) => List<UUID>
 ): [string[], string[][]] {
   const ESC = "Escape";
   const Enter = "Enter";
@@ -142,9 +149,29 @@ function createLabelsAndKeys(
     case Mode.EditorSetting:
       return [["Done"], [[`${ESC}|${Enter}`]]];
     case Mode.SideBarSelecting:
+      const selectedIndex = stackedTasks.findIndex(
+        ({ isSelected }) => isSelected
+      );
+      const sideBarBaseLabels = ["Done", "Close", "Edit", "Up", "Down"];
+      const sideBarBaseKeys = [
+        [`${ESC}|${Enter}`],
+        ["c"],
+        ["e"],
+        [upStrings.join("|")],
+        [downStrings.join("|")],
+      ];
+      if (selectedIndex === -1) {
+        return [sideBarBaseLabels, sideBarBaseKeys];
+      }
       return [
-        ["Done", "Close", "Edit"],
-        [[`${ESC}|${Enter}`], ["c"], ["e"]],
+        ["Done", "Close", "Edit", "Up", "Down"],
+        [
+          [`${ESC}|${Enter}`],
+          ["c"],
+          ["e"],
+          [upStrings.join("|")],
+          [downStrings.join("|")],
+        ],
       ];
   }
 }
@@ -152,9 +179,17 @@ function createLabelsAndKeys(
 function createElements(
   mode: Mode,
   viewMode: ViewMode,
-  tasks: List<Task>
+  tasks: List<Task>,
+  stackedTasks: List<Task>,
+  dependentIds: (id: UUID) => List<UUID>
 ): React.JSX.Element[] {
-  const [labels, keys] = createLabelsAndKeys(mode, viewMode, tasks);
+  const [labels, keys] = createLabelsAndKeys(
+    mode,
+    viewMode,
+    tasks,
+    stackedTasks,
+    dependentIds
+  );
   return zip(labels, keys).map(([label, key]) => {
     return Key({
       label: label,
