@@ -18,27 +18,26 @@ test.each([
   expect(sortedTasks).toEqual(["task3", "task2", "task1"]);
 });
 
-// test("topologicalSort test2", () => {
-//   const tasks: TopologicalSortable[] = [
-//     { id: "task1", to: [] },
-//     { id: "task2", to: ["task1"] },
-//     { id: "task3", to: ["task1"] },
-//     { id: "task4", to: ["task2", "task3"] },
-//     { id: "task5", to: ["task1", "task3", "task4"] },
-//     { id: "task6", to: ["task5"] },
-//   ];
-//   // task6 -> task5 -> task4 -> task2 -> task1
-//   // task6 -> task5 -> task4 -> task3 -> task1
-//   // task6 -> task5 -> task1
-//   // task6 -> task5 -> task3
+test("toposortWithPriority test2", () => {
+  const tasks: TopologicalSortable = new Map();
+  tasks.set("a", [["b", "c"], 1]);
+  tasks.set("b", [[], 1]);
+  tasks.set("c", [["d", "e"], 1]);
+  tasks.set("d", [[], 1]);
+  tasks.set("e", [[], 1]);
 
-//   const sortedTasks = topologicalSort(tasks);
-//   expect(sortedTasks).toEqual([
-//     "task6",
-//     "task5",
-//     "task4",
-//     "task3",
-//     "task2",
-//     "task1",
-//   ]);
-// });
+  const sortedTasks = toposortWithPriority(tasks);
+  expect(sortedTasks).toEqual(["a", "b", "c", "d", "e"]);
+});
+
+test("toposortWithPriority test3", () => {
+  const tasks: TopologicalSortable = new Map();
+  tasks.set("a", [["b", "c"], 1]);
+  tasks.set("b", [[], 2]);
+  tasks.set("c", [["d", "e"], 3]);
+  tasks.set("d", [[], 4]);
+  tasks.set("e", [[], 1]);
+
+  const sortedTasks = toposortWithPriority(tasks);
+  expect(sortedTasks).toEqual(["a", "c", "e", "b", "d"]);
+});
