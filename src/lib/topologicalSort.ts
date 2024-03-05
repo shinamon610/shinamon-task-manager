@@ -1,3 +1,4 @@
+import { Task } from "@/models/task";
 import { PriorityQueue } from "./priorityQueue";
 
 // keyはtask.idで、valueは[task.to,task.priority]
@@ -36,4 +37,14 @@ export function toposortWithPriority(tasks: TopologicalSortable): string[] {
   }
 
   return result;
+}
+
+export function toposort(tasks: Task[]): Task[] {
+  const sortableTasks: TopologicalSortable = new Map();
+  tasks.forEach((task) => {
+    sortableTasks.set(task.id, [task.to, task.priority]);
+  });
+  return toposortWithPriority(sortableTasks).map(
+    (id) => tasks.find((task) => task.id === id)!
+  );
 }
