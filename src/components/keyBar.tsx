@@ -168,16 +168,16 @@ function createLabelsAndKeys(
       if (selectedIndex === -1) {
         return [sideBarBaseLabels, sideBarBaseKeys];
       }
-      const [shouldHideSwapAbove, shouldHideSwapBelow] = swappable;
+      const [swappableAbove, swappableBelow] = swappable;
 
       return [
         sideBarBaseLabels.concat(
-          shouldHideSwapAbove ? [] : ["Swap Above"],
-          shouldHideSwapBelow ? [] : ["Swap Below"]
+          swappableAbove ? ["Swap Above"] : [],
+          swappableBelow ? ["Swap Below"] : []
         ),
         sideBarBaseKeys.concat(
-          shouldHideSwapAbove ? [] : [[leftStrings.join("|")]],
-          shouldHideSwapBelow ? [] : [[rightStrings.join("|")]]
+          swappableAbove ? [[leftStrings.join("|")]] : [],
+          swappableBelow ? [[rightStrings.join("|")]] : []
         ),
       ];
   }

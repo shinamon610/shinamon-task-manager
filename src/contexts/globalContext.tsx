@@ -140,7 +140,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     const selectedIndex = stackedTasks.findIndex((task) => task.isSelected);
     if (selectedIndex === -1) return [false, false] as [boolean, boolean];
     return [-1, +1].map((diff) => {
-      return dependentIds.includes(
+      return !dependentIds.includes(
         stackedTasks.get(
           getCircularIndex(selectedIndex, stackedTasks.size, diff)
         )!.id
