@@ -1,9 +1,9 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
+import { getNodeBorderStyle, getSelectedStyle } from "@/lib/layoutUtils";
 import { UUID } from "@/models/task";
 import { Mode } from "@/vim/mode";
-import { useContext, useMemo } from "react";
+import { CSSProperties, useContext } from "react";
 
 type Card = {
   id: UUID;
@@ -13,10 +13,7 @@ type Card = {
 
 const CardComponent: React.FC<{
   card: Card;
-  style: {
-    padding: string;
-    border: string;
-  };
+  style: CSSProperties;
 }> = ({ card, style }) => {
   return (
     <div className="m-1 items-center bg-active" style={style}>
@@ -26,23 +23,18 @@ const CardComponent: React.FC<{
 };
 
 export function SideBar() {
-  const { dependentIds, stackedTasks } = useContext(GlobalContext);
+  const { stackedTasks, assignees } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
-  const selectedId = useMemo(() => {
-    return stackedTasks.find((task) => task.isSelected)?.id;
-  }, [stackedTasks]);
 
   return (
     <div
-      className="bg-darkGray"
-      style={getSelectedStyle(mode === Mode.SideBarSelecting, "blue")}
+      style={{
+        ...getSelectedStyle(mode === Mode.SideBarSelecting, "blue"),
+        backgroundColor: "var(--light-gray)",
+      }}
     >
       {stackedTasks.map((task) => {
-        const style = task.isSelected
-          ? getSelectedStyle(true, AccentColor)
-          : selectedId !== undefined && dependentIds.includes(task.id)
-            ? getSelectedStyle(true, "blue")
-            : getSelectedStyle(false, "");
+        const style = getNodeBorderStyle(assignees, task);
         return (
           <CardComponent
             key={task.id}
