@@ -12,7 +12,7 @@ function createLabels(
   if (mode === Mode.Normal) {
     const l = label === null ? "" : label;
     const si = serialInput === null ? "" : serialInput;
-    let isSelectedArray = createLabelSelectArray(l, si);
+    const isSelectedArray = createLabelSelectArray(l, si);
 
     return [
       Key({
