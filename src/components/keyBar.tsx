@@ -1,7 +1,7 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { Task, UUID, hasNotDoneChildTask } from "@/models/task";
-import { getCircularIndex, zip } from "@/utils";
+import { Task, hasNotDoneChildTask } from "@/models/task";
+import { zip } from "@/utils";
 import {
   downStrings,
   leftStrings,
@@ -15,11 +15,11 @@ import { useContext } from "react";
 import { Key } from "./key";
 
 export function KeyBar() {
-  const { tasks, stackedTasks, dependentIds } = useContext(GlobalContext);
+  const { tasks, stackedTasks, shouldSwap } = useContext(GlobalContext);
   const { mode, viewMode } = useContext(MainContext);
   return (
     <div className="flex">
-      {createElements(mode, viewMode, tasks, stackedTasks, dependentIds)}
+      {createElements(mode, viewMode, tasks, stackedTasks, shouldSwap)}
     </div>
   );
 }
@@ -29,7 +29,7 @@ function createLabelsAndKeys(
   viewMode: ViewMode,
   tasks: List<Task>,
   stackedTasks: List<Task>,
-  dependentIds: (id: UUID) => List<UUID>
+  shouldSwap: (index: number) => [boolean, boolean]
 ): [string[], string[][]] {
   const ESC = "Escape";
   const Enter = "Enter";
@@ -168,16 +168,8 @@ function createLabelsAndKeys(
       if (selectedIndex === -1) {
         return [sideBarBaseLabels, sideBarBaseKeys];
       }
-      const selectedId = stackedTasks.get(selectedIndex)!.id;
-      const [shouldHideSwapAbove, shouldHideSwapBelow] = [-1, +1].map(
-        (diff) => {
-          return dependentIds(selectedId).includes(
-            stackedTasks.get(
-              getCircularIndex(selectedIndex, stackedTasks.size, diff)
-            )!.id
-          );
-        }
-      );
+      const [shouldHideSwapAbove, shouldHideSwapBelow] =
+        shouldSwap(selectedIndex);
 
       return [
         sideBarBaseLabels.concat(
@@ -197,14 +189,14 @@ function createElements(
   viewMode: ViewMode,
   tasks: List<Task>,
   stackedTasks: List<Task>,
-  dependentIds: (id: UUID) => List<UUID>
+  shouldSwap: (index: number) => [boolean, boolean]
 ): React.JSX.Element[] {
   const [labels, keys] = createLabelsAndKeys(
     mode,
     viewMode,
     tasks,
     stackedTasks,
-    dependentIds
+    shouldSwap
   );
   return zip(labels, keys).map(([label, key]) => {
     return Key({

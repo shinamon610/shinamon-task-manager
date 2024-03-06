@@ -8,6 +8,7 @@ import {
   getAllTasksFromSource,
   getAllTasksFromTarget,
 } from "@/models/task";
+import { getCircularIndex } from "@/utils";
 import { List } from "immutable";
 import {
   Dispatch,
@@ -36,6 +37,7 @@ export const GlobalContext = createContext<GlobalContextType>({
   setAssignees: () => {},
   stackedTasks: List([]),
   dependentIds: () => List([]),
+  shouldSwap: () => [false, false],
 });
 
 type GlobalContextType = {
@@ -56,6 +58,7 @@ type GlobalContextType = {
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
   stackedTasks: List<Task>;
   dependentIds: (id: UUID) => List<UUID>;
+  shouldSwap: (index: number) => [boolean, boolean];
 };
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
@@ -134,6 +137,19 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     [tasks, stackedTasks]
   );
 
+  const shouldSwap = useCallback(
+    (selectedIndex: number) => {
+      const selectedId = stackedTasks.get(selectedIndex)!.id;
+      return [-1, +1].map((diff) => {
+        return dependentIds(selectedId).includes(
+          stackedTasks.get(
+            getCircularIndex(selectedIndex, stackedTasks.size, diff)
+          )!.id
+        );
+      }) as [boolean, boolean];
+    },
+    [dependentIds, stackedTasks]
+  );
   return (
     <GlobalContext.Provider
       value={{
@@ -154,6 +170,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         setAssignees,
         stackedTasks,
         dependentIds,
+        shouldSwap,
       }}
     >
       {children}
