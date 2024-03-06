@@ -1,10 +1,10 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
-import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
+import { getNodeBorderStyle } from "@/lib/layoutUtils";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
-import { DefaultStatus, Status } from "@/models/status";
+import { DefaultStatus } from "@/models/status";
 import { Task } from "@/models/task";
 import { zip } from "@/utils";
 import { Command, panCommands } from "@/vim/commands";
@@ -35,37 +35,6 @@ type TaskGraphProps = {
   refresh: boolean;
 };
 
-function isColoredAndColor(
-  status: Status,
-  isSelected: boolean,
-  color: string | null
-): [boolean, string] {
-  if (isSelected) {
-    return [true, AccentColor];
-  }
-  if (status === DefaultStatus.Working) {
-    return [color !== null, color ?? ""];
-  }
-  return [false, ""];
-}
-
-function boxShadow(
-  status: Status,
-  isSelected: boolean,
-  color: string | null
-): string {
-  if (!isSelected) {
-    return "";
-  }
-  if (status === DefaultStatus.Working) {
-    if (color == null) {
-      return "";
-    }
-    return `inset 0 0 0 2px ${color}`;
-  }
-  return "";
-}
-
 function createNodesAndEdgesFromTasks(
   tasks: List<Task>,
   assignees: Set<Assignee>,
@@ -76,12 +45,6 @@ function createNodesAndEdgesFromTasks(
   const nodes = zip(tasks.toJS(), labels).map(([task, label]) => {
     const color =
       task.assignee == null ? null : getColor(assignees, task.assignee);
-    const [isSelected, outerColor] = isColoredAndColor(
-      task.status,
-      task.isSelected,
-      color
-    );
-    const { border, padding } = getSelectedStyle(isSelected, outerColor);
 
     return {
       id: task.id,
@@ -98,9 +61,7 @@ function createNodesAndEdgesFromTasks(
       type: "normalNode",
       selected: task.isSelected,
       style: {
-        border,
-        padding,
-        boxShadow: boxShadow(task.status, task.isSelected, color),
+        ...getNodeBorderStyle(assignees, task),
         background:
           task.status === DefaultStatus.Done
             ? "var(--inactive)"
