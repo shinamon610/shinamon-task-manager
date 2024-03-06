@@ -376,6 +376,17 @@ export function hasNotDoneChildTask(tasks: List<Task>): boolean {
   );
 }
 
+function updatePriorities(
+  tasks: List<Task>,
+  ids: UUID[],
+  newPriorities: number[]
+): List<Task> {
+  return tasks.map((task) => {
+    const index = ids.findIndex((id) => id === task.id);
+    return index === -1 ? task : { ...task, priority: newPriorities[index] };
+  });
+}
+
 export function createTasks(
   command: Command,
   tasks: List<Task>,
@@ -410,21 +421,49 @@ export function createTasks(
       return tasks;
     case Command.SelectAbove:
     case Command.SelectBelow:
-      const currentIndex = stackedTasks.findIndex((task) => task.isSelected);
-      if (currentIndex === -1) {
-        return tasks;
-      }
-      return selectTask(
-        tasks,
-        stackedTasks.get(
-          getCircularIndex(
-            currentIndex,
-            stackedTasks.size,
-            command === Command.SelectAbove ? -1 : 1
-          )
-        )!.id
-      );
-
+      const f = () => {
+        const currentIndex = stackedTasks.findIndex((task) => task.isSelected);
+        if (currentIndex === -1) {
+          return tasks;
+        }
+        return selectTask(
+          tasks,
+          stackedTasks.get(
+            getCircularIndex(
+              currentIndex,
+              stackedTasks.size,
+              command === Command.SelectAbove ? -1 : 1
+            )
+          )!.id
+        );
+      };
+      return f();
+    case Command.SwapAbove:
+    case Command.SwapBelow:
+      const g = () => {
+        const diff = command === Command.SwapAbove ? -1 : 1;
+        if (stackedTasks.size < 2) return tasks;
+        const currentIndex = stackedTasks.findIndex((task) => task.isSelected);
+        if (currentIndex === -1) {
+          return tasks;
+        }
+        const indexes = [
+          currentIndex,
+          getCircularIndex(currentIndex, stackedTasks.size, diff),
+        ];
+        const ps = indexes
+          .map((index) => stackedTasks.get(index)!.priority)
+          .reverse();
+        if (ps[0] === ps[1]) {
+          ps[0] = ps[0] + 1;
+        }
+        return updatePriorities(
+          tasks,
+          indexes.map((index) => stackedTasks.get(index)!.id),
+          ps
+        );
+      };
+      return g();
     case Command.Cancel:
       if (isCreatingNewTask) {
         return unSelectAll(deleteSelectedTask(tasks));

@@ -211,6 +211,8 @@ export function createMode(
     case Command.OpenSideBar:
     case Command.SelectAbove:
     case Command.SelectBelow:
+    case Command.SwapAbove:
+    case Command.SwapBelow:
       return Mode.SideBarSelecting;
     case Command.CloseSideBar:
       return Mode.Normal;

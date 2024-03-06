@@ -31,6 +31,8 @@ export enum Command {
   CloseSideBar,
   SelectAbove,
   SelectBelow,
+  SwapAbove,
+  SwapBelow,
 
   // zoomとpan
   ZoomIn,
@@ -238,7 +240,8 @@ export function keyEventToCommand(
   viewMode: ViewMode,
   event: KeyboardEvent,
   sourcesRef: MutableRefObject<null>,
-  targetsRef: MutableRefObject<null>
+  targetsRef: MutableRefObject<null>,
+  shouldSwap: [boolean, boolean]
 ): Command {
   const key = event.key;
   // console.log("key", key);
@@ -466,6 +469,12 @@ export function keyEventToCommand(
       }
       if (downStrings.includes(key)) {
         return Command.SelectBelow;
+      }
+      if (leftStrings.includes(key) && shouldSwap[0]) {
+        return Command.SwapAbove;
+      }
+      if (rightStrings.includes(key) && shouldSwap[1]) {
+        return Command.SwapBelow;
       }
       return Command.Nothing;
   }

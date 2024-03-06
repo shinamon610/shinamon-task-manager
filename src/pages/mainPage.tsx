@@ -31,6 +31,7 @@ export function MainPage() {
     pushHistory,
     prevHistory,
     nextHistory,
+    shouldSwap,
   } = useContext(GlobalContext);
   const {
     mode,
@@ -93,7 +94,8 @@ export function MainPage() {
         viewMode,
         event,
         sourcesRef,
-        targetsRef
+        targetsRef,
+        shouldSwap
       );
       preventKey(event, newCommand);
 
