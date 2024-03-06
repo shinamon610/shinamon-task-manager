@@ -222,6 +222,8 @@ export function MainPage() {
         newCommand === Command.OpenSideBar ||
         newCommand === Command.SelectAbove ||
         newCommand === Command.SelectBelow ||
+        newCommand === Command.SwapAbove ||
+        newCommand === Command.SwapBelow ||
         newCommand === Command.Cancel ||
         newCommand === Command.ConfirmEdit ||
         newCommand === Command.SetToWorking ||
