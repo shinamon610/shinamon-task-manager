@@ -15,11 +15,11 @@ import { useContext } from "react";
 import { Key } from "./key";
 
 export function KeyBar() {
-  const { tasks, stackedTasks, shouldSwap } = useContext(GlobalContext);
+  const { tasks, stackedTasks, swappable } = useContext(GlobalContext);
   const { mode, viewMode } = useContext(MainContext);
   return (
     <div className="flex">
-      {createElements(mode, viewMode, tasks, stackedTasks, shouldSwap)}
+      {createElements(mode, viewMode, tasks, stackedTasks, swappable)}
     </div>
   );
 }
@@ -29,7 +29,7 @@ function createLabelsAndKeys(
   viewMode: ViewMode,
   tasks: List<Task>,
   stackedTasks: List<Task>,
-  shouldSwap: [boolean, boolean]
+  swappable: [boolean, boolean]
 ): [string[], string[][]] {
   const ESC = "Escape";
   const Enter = "Enter";
@@ -168,7 +168,7 @@ function createLabelsAndKeys(
       if (selectedIndex === -1) {
         return [sideBarBaseLabels, sideBarBaseKeys];
       }
-      const [shouldHideSwapAbove, shouldHideSwapBelow] = shouldSwap;
+      const [shouldHideSwapAbove, shouldHideSwapBelow] = swappable;
 
       return [
         sideBarBaseLabels.concat(
@@ -188,14 +188,14 @@ function createElements(
   viewMode: ViewMode,
   tasks: List<Task>,
   stackedTasks: List<Task>,
-  shouldSwap: [boolean, boolean]
+  swappable: [boolean, boolean]
 ): React.JSX.Element[] {
   const [labels, keys] = createLabelsAndKeys(
     mode,
     viewMode,
     tasks,
     stackedTasks,
-    shouldSwap
+    swappable
   );
   return zip(labels, keys).map(([label, key]) => {
     return Key({

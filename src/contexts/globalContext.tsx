@@ -37,7 +37,7 @@ export const GlobalContext = createContext<GlobalContextType>({
   setAssignees: () => {},
   stackedTasks: List([]),
   dependentIds: List([]),
-  shouldSwap: [false, false],
+  swappable: [false, false],
 });
 
 type GlobalContextType = {
@@ -58,7 +58,7 @@ type GlobalContextType = {
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
   stackedTasks: List<Task>;
   dependentIds: List<UUID>;
-  shouldSwap: [boolean, boolean];
+  swappable: [boolean, boolean];
 };
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
@@ -136,7 +136,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
       .map(({ id }) => id);
   }, [tasks, stackedTasks]);
 
-  const shouldSwap = useMemo(() => {
+  const swappable = useMemo(() => {
     const selectedIndex = stackedTasks.findIndex((task) => task.isSelected);
     if (selectedIndex === -1) return [false, false] as [boolean, boolean];
     return [-1, +1].map((diff) => {
@@ -168,7 +168,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         setAssignees,
         stackedTasks,
         dependentIds,
-        shouldSwap,
+        swappable: swappable,
       }}
     >
       {children}
