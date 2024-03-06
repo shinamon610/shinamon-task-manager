@@ -455,7 +455,7 @@ export function createTasks(
           .map((index) => stackedTasks.get(index)!.priority)
           .reverse();
         if (ps[0] === ps[1]) {
-          ps[0] = ps[0] + 1;
+          ps[0] = Math.min(stackedTasks.size - 1, Math.max(0, ps[0] + diff));
         }
         return updatePriorities(
           tasks,
