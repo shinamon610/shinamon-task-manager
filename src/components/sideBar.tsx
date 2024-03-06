@@ -40,8 +40,7 @@ export function SideBar() {
       {stackedTasks.map((task) => {
         const style = task.isSelected
           ? getSelectedStyle(true, AccentColor)
-          : selectedId !== undefined &&
-              dependentIds(selectedId).includes(task.id)
+          : selectedId !== undefined && dependentIds.includes(task.id)
             ? getSelectedStyle(true, "blue")
             : getSelectedStyle(false, "");
         return (

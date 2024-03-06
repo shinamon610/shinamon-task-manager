@@ -36,8 +36,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   assignees: new Set(),
   setAssignees: () => {},
   stackedTasks: List([]),
-  dependentIds: () => List([]),
-  shouldSwap: () => [false, false],
+  dependentIds: List([]),
+  shouldSwap: [false, false],
 });
 
 type GlobalContextType = {
@@ -57,8 +57,8 @@ type GlobalContextType = {
   assignees: Set<Assignee>;
   setAssignees: Dispatch<SetStateAction<Set<Assignee>>>;
   stackedTasks: List<Task>;
-  dependentIds: (id: UUID) => List<UUID>;
-  shouldSwap: (index: number) => [boolean, boolean];
+  dependentIds: List<UUID>;
+  shouldSwap: [boolean, boolean];
 };
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
@@ -125,31 +125,29 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     return toposort(_tasks).filter((task) => stackedTasks.includes(task.id));
   }, [_tasks, userName]);
 
-  const dependentIds = useCallback(
-    (selectedId: UUID) => {
-      const candidates = getAllTasksFromSource(tasks, selectedId)
-        .concat(getAllTasksFromTarget(tasks, selectedId))
-        .map(({ id }) => id);
-      return stackedTasks
-        .filter((card) => candidates.includes(card.id))
-        .map(({ id }) => id);
-    },
-    [tasks, stackedTasks]
-  );
+  const dependentIds = useMemo(() => {
+    const selectedId = stackedTasks.find((task) => task.isSelected)?.id;
+    if (selectedId === undefined) return List([]);
+    const candidates = getAllTasksFromSource(tasks, selectedId)
+      .concat(getAllTasksFromTarget(tasks, selectedId))
+      .map(({ id }) => id);
+    return stackedTasks
+      .filter((card) => candidates.includes(card.id))
+      .map(({ id }) => id);
+  }, [tasks, stackedTasks]);
 
-  const shouldSwap = useCallback(
-    (selectedIndex: number) => {
-      const selectedId = stackedTasks.get(selectedIndex)!.id;
-      return [-1, +1].map((diff) => {
-        return dependentIds(selectedId).includes(
-          stackedTasks.get(
-            getCircularIndex(selectedIndex, stackedTasks.size, diff)
-          )!.id
-        );
-      }) as [boolean, boolean];
-    },
-    [dependentIds, stackedTasks]
-  );
+  const shouldSwap = useMemo(() => {
+    const selectedIndex = stackedTasks.findIndex((task) => task.isSelected);
+    if (selectedIndex === -1) return [false, false] as [boolean, boolean];
+    return [-1, +1].map((diff) => {
+      return dependentIds.includes(
+        stackedTasks.get(
+          getCircularIndex(selectedIndex, stackedTasks.size, diff)
+        )!.id
+      );
+    }) as [boolean, boolean];
+  }, [dependentIds, stackedTasks]);
+
   return (
     <GlobalContext.Provider
       value={{

@@ -29,7 +29,7 @@ function createLabelsAndKeys(
   viewMode: ViewMode,
   tasks: List<Task>,
   stackedTasks: List<Task>,
-  shouldSwap: (index: number) => [boolean, boolean]
+  shouldSwap: [boolean, boolean]
 ): [string[], string[][]] {
   const ESC = "Escape";
   const Enter = "Enter";
@@ -168,8 +168,7 @@ function createLabelsAndKeys(
       if (selectedIndex === -1) {
         return [sideBarBaseLabels, sideBarBaseKeys];
       }
-      const [shouldHideSwapAbove, shouldHideSwapBelow] =
-        shouldSwap(selectedIndex);
+      const [shouldHideSwapAbove, shouldHideSwapBelow] = shouldSwap;
 
       return [
         sideBarBaseLabels.concat(
@@ -189,7 +188,7 @@ function createElements(
   viewMode: ViewMode,
   tasks: List<Task>,
   stackedTasks: List<Task>,
-  shouldSwap: (index: number) => [boolean, boolean]
+  shouldSwap: [boolean, boolean]
 ): React.JSX.Element[] {
   const [labels, keys] = createLabelsAndKeys(
     mode,
