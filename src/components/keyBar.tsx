@@ -2,12 +2,6 @@ import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Task, hasNotDoneChildTask } from "@/models/task";
 import { zip } from "@/utils";
-import {
-  downStrings,
-  leftStrings,
-  rightStrings,
-  upStrings,
-} from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
@@ -162,8 +156,8 @@ function createLabelsAndKeys(
         [`${ESC}|${Enter}`],
         ["c"],
         ["e"],
-        [upStrings.join("|")],
-        [downStrings.join("|")],
+        ["↑|k"],
+        ["↓|j"],
       ];
       if (selectedIndex === -1) {
         return [sideBarBaseLabels, sideBarBaseKeys];
@@ -176,8 +170,8 @@ function createLabelsAndKeys(
           swappableBelow ? ["Swap Below"] : []
         ),
         sideBarBaseKeys.concat(
-          swappableAbove ? [[leftStrings.join("|")]] : [],
-          swappableBelow ? [[rightStrings.join("|")]] : []
+          swappableAbove ? [["←|h"]] : [],
+          swappableBelow ? [["→|l"]] : []
         ),
       ];
   }
