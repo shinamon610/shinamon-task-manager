@@ -83,6 +83,8 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.CloseSideBar:
     case Command.SelectAbove:
     case Command.SelectBelow:
+    case Command.SwapAbove:
+    case Command.SwapBelow:
       return viewMode;
   }
 }
