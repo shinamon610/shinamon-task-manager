@@ -215,7 +215,7 @@ export function createMode(
     case Command.SwapBelow:
       return Mode.SideBarSelecting;
     case Command.CloseSideBar:
-      return Mode.Normal;
+      return Mode.NodeSelecting;
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:
