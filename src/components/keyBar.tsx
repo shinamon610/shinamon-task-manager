@@ -1,8 +1,13 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { Task, UUID, hasNotDoneChildTask } from "@/models/task";
-import { zip } from "@/utils";
-import { downStrings, upStrings } from "@/vim/commands";
+import { getCircularIndex, zip } from "@/utils";
+import {
+  downStrings,
+  leftStrings,
+  rightStrings,
+  upStrings,
+} from "@/vim/commands";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { List } from "immutable";
@@ -163,15 +168,26 @@ function createLabelsAndKeys(
       if (selectedIndex === -1) {
         return [sideBarBaseLabels, sideBarBaseKeys];
       }
+      const selectedId = stackedTasks.get(selectedIndex)!.id;
+      const [shouldHideSwapAbove, shouldHideSwapBelow] = [-1, +1].map(
+        (diff) => {
+          return dependentIds(selectedId).includes(
+            stackedTasks.get(
+              getCircularIndex(selectedIndex, stackedTasks.size, diff)
+            )!.id
+          );
+        }
+      );
+
       return [
-        ["Done", "Close", "Edit", "Up", "Down"],
-        [
-          [`${ESC}|${Enter}`],
-          ["c"],
-          ["e"],
-          [upStrings.join("|")],
-          [downStrings.join("|")],
-        ],
+        sideBarBaseLabels.concat(
+          shouldHideSwapAbove ? [] : ["Swap Above"],
+          shouldHideSwapBelow ? [] : ["Swap Below"]
+        ),
+        sideBarBaseKeys.concat(
+          shouldHideSwapAbove ? [] : [[leftStrings.join("|")]],
+          shouldHideSwapBelow ? [] : [[rightStrings.join("|")]]
+        ),
       ];
   }
 }
