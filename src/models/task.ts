@@ -474,7 +474,12 @@ export function createTasks(
     case Command.ConfirmEdit:
       return updateTasks(tasks, userInput, userName);
     case Command.SetToWorking:
-      return updateTaskStatus(tasks, DefaultStatus.Working, userName);
+      const maxPriority = stackedTasks.map((task) => task.priority).max() ?? 0;
+      return updatePriorities(
+        updateTaskStatus(tasks, DefaultStatus.Working, userName),
+        [getSelectedTask(tasks)!.id],
+        [maxPriority + 1]
+      );
     case Command.SetToPending:
       return updateTaskStatus(tasks, DefaultStatus.Pending, userName);
     case Command.SetToDone:
