@@ -116,13 +116,13 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     if (_tasks === undefined) {
       return List([]);
     }
-    const stackedTasks = _tasks
+    const _stackedTasks = _tasks
       .filter(
         (task) =>
           task.assignee === userName && task.status !== DefaultStatus.Done
       )
       .map(({ id }) => id);
-    return toposort(_tasks).filter((task) => stackedTasks.includes(task.id));
+    return toposort(_tasks).filter((task) => _stackedTasks.includes(task.id));
   }, [_tasks, userName]);
 
   const dependentIds = useMemo(() => {
