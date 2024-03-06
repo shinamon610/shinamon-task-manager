@@ -32,7 +32,7 @@ export function toposortWithPriority(tasks: TopologicalSortable): string[] {
     result.push(id);
     tasks.get(id)![0].forEach((id) => {
       const inDegree = inDegrees.get(id)! - 1;
-      inDegrees.set(id, inDegree - 1);
+      inDegrees.set(id, inDegree);
       if (inDegree === 0) heap.push([tasks.get(id)![1], id]);
     });
   }
