@@ -14,18 +14,19 @@ type Card = {
 const CardComponent: React.FC<{
   card: Card;
   style: CSSProperties;
-}> = ({ card, style }) => {
+  hasDependency: boolean;
+}> = ({ card, style, hasDependency }) => {
+  const color = hasDependency && !card.isSelected ? "bg-darkGray" : "bg-active";
   return (
-    <div className="m-1 items-center bg-active" style={style}>
+    <div className={`m-1 items-center ${color}`} style={style}>
       <div className="truncate">{card.title}</div>
     </div>
   );
 };
 
 export function SideBar() {
-  const { stackedTasks, assignees } = useContext(GlobalContext);
+  const { stackedTasks, assignees, dependentIds } = useContext(GlobalContext);
   const { mode } = useContext(MainContext);
-
   return (
     <div
       style={{
@@ -44,6 +45,7 @@ export function SideBar() {
               isSelected: task.isSelected,
             }}
             style={style}
+            hasDependency={dependentIds.includes(task.id)}
           />
         );
       })}
