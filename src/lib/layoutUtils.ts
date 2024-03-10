@@ -54,8 +54,9 @@ export function getNodeBorderStyle(
   padding: string;
   boxShadow: string;
 } {
-  const color =
-    task.assignee == null ? null : getColor(assignees, task.assignee);
+  //colorはassigneeごとの色で、workingのみ表示する。
+  //outerColorは選択中を表す色
+  const color = task.assignee == null ? "" : getColor(assignees, task.assignee);
   const [isSelected, outerColor] = isColoredAndColor(
     task.status,
     task.isSelected,
