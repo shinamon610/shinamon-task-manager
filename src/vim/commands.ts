@@ -464,6 +464,15 @@ export function keyEventToCommand(
       if (key === "e") {
         return Command.SelectTitle;
       }
+      if (key === "w") {
+        return Command.SetToWorking;
+      }
+      if (key === "p") {
+        return Command.SetToPending;
+      }
+      if (key === "d") {
+        return Command.SetToDone;
+      }
       if (upStrings.includes(key)) {
         return Command.SelectAbove;
       }
