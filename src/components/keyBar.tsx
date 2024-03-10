@@ -151,11 +151,23 @@ function createLabelsAndKeys(
       const selectedIndex = stackedTasks.findIndex(
         ({ isSelected }) => isSelected
       );
-      const sideBarBaseLabels = ["Done", "Close", "Edit", "Up", "Down"];
+      const sideBarBaseLabels = [
+        "Done",
+        "Close",
+        "Edit",
+        "Set to Working",
+        "Set to Pending",
+        "Set to Done",
+        "Up",
+        "Down",
+      ];
       const sideBarBaseKeys = [
         [`${ESC}|${Enter}`],
         ["c"],
         ["e"],
+        ["w"],
+        ["p"],
+        ["d"],
         ["↑|k"],
         ["↓|j"],
       ];
