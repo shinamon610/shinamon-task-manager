@@ -15,18 +15,11 @@ export function getSelectedStyle(
     : { border: "", padding: "3px" };
 }
 
-function boxShadow(
-  status: Status,
-  isSelected: boolean,
-  color: string | null
-): string {
+function boxShadow(status: Status, isSelected: boolean, color: string): string {
   if (!isSelected) {
     return "";
   }
-  if (status === DefaultStatus.Working) {
-    if (color == null) {
-      return "";
-    }
+  if (status === DefaultStatus.Working && color !== "") {
     return `inset 0 0 0 2px ${color}`;
   }
   return "";
@@ -35,13 +28,13 @@ function boxShadow(
 function isColoredAndColor(
   status: Status,
   isSelected: boolean,
-  color: string | null
+  color: string
 ): [boolean, string] {
   if (isSelected) {
     return [true, AccentColor];
   }
   if (status === DefaultStatus.Working) {
-    return [color !== null, color ?? ""];
+    return [true, color];
   }
   return [false, ""];
 }
@@ -54,18 +47,17 @@ export function getNodeBorderStyle(
   padding: string;
   boxShadow: string;
 } {
-  //colorはassigneeごとの色で、workingのみ表示する。
-  //outerColorは選択中を表す色
-  const color = task.assignee == null ? "" : getColor(assignees, task.assignee);
+  const innerColor =
+    task.assignee == null ? "" : getColor(assignees, task.assignee);
   const [isSelected, outerColor] = isColoredAndColor(
     task.status,
     task.isSelected,
-    color
+    innerColor
   );
   const { border, padding } = getSelectedStyle(isSelected, outerColor);
   return {
     border,
     padding,
-    boxShadow: boxShadow(task.status, task.isSelected, color),
+    boxShadow: boxShadow(task.status, task.isSelected, innerColor),
   };
 }
