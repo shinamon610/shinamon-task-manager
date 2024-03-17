@@ -5,3 +5,5 @@ npm run tauri build
 # run dev
 npm run tauri dev
 アプリをdevモードで開く
+
+This software is released under the MIT License, see LICENSE.txt.
