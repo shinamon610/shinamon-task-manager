@@ -3,7 +3,7 @@ import { InputUserName } from "@/components/inputUserName";
 import { SelectSaveLocation } from "@/components/selectSaveLocation";
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainProvider } from "@/contexts/mainContext";
-import { MainPage } from "@/pages/mainPage";
+import { MainPage } from "@/templates/mainPage";
 import { useContext, useEffect } from "react";
 
 export function TopPage() {

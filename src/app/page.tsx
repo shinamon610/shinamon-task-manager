@@ -1,6 +1,6 @@
 "use client";
 import { GlobalProvider } from "@/contexts/globalContext";
-import { TopPage } from "@/pages/topPage";
+import { TopPage } from "@/templates/topPage";
 
 const HomePage = () => {
   return (

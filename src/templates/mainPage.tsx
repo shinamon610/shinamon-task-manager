@@ -1,6 +1,13 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { saveData } from "@/models/file";
+import {
+  Task,
+  UUID,
+  createTasks,
+  getSelectedTask,
+  noneId,
+} from "@/models/task";
 import { Command, keyEventToCommand, panCommands } from "@/vim/commands";
 import { createSerialInput } from "@/vim/createSerialInput";
 import { Mode, createMode, markdownModes } from "@/vim/mode";
@@ -10,13 +17,6 @@ import { ViewMode as GanttViewMode } from "gantt-task-react";
 import { List } from "immutable";
 import moment, { Moment } from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
-import {
-  Task,
-  UUID,
-  createTasks,
-  getSelectedTask,
-  noneId,
-} from "../models/task";
 import { MarkdownPage } from "./markdownPage";
 import { TaskPage } from "./taskPage";
 
