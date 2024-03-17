@@ -1,4 +1,4 @@
-#a build
+# build
 npm run tauri build
 .dmgファイルが生成されて勝手に起動する。
 
