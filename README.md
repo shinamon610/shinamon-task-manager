@@ -1,3 +1,5 @@
+![logo](src-tauri/icons/icon.png)
+
 # 概要
 これはTODO管理ツール。
 まだ開発途中なのでバグだらけ。
