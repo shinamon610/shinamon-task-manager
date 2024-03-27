@@ -2,10 +2,13 @@
 
 # 概要
 これはTODO管理ツール。
+
 まだ開発途中なのでバグだらけ。
 
 # Overview
-This is a TODO management tool. It's still under development, so it's full of bugs.
+This is a TODO management tool.
+
+It's still under development, so it's full of bugs.
 
 # 特徴
 - タスクの依存関係を可視化
@@ -24,8 +27,9 @@ This is a TODO management tool. It's still under development, so it's full of bu
 - n押す
 - タイトルとか入力したらCtrlとかと一緒にEnter押す
 
-**注意**
+[!NOTE]
 フォーカス外すのにマウス使ったりするとバグるかもw。
+
 マウスはあんまり使わない方が吉。
 
 ## タスクの編集
@@ -40,13 +44,15 @@ This is a TODO management tool. It's still under development, so it's full of bu
 
 ## ステータス
 タスクにはステータスが設定できる。
+
 WorkingとPendingとDoneがあるよ。
 
-**注意**
+[!NOTE]
 1人のUserが並行処理することはできない想定だよ。つまりWorkingは1人のUserにつき、1つしか設定できないよ。
 
 ## タスク同士の依存関係
 タスクには依存関係が設定できる。
+
 循環させるのはできないよ。
 - タスクを選択する
 - eを押す
@@ -54,8 +60,11 @@ WorkingとPendingとDoneがあるよ。
 
 ## フィルター
 タスクはDoneにしても見えなくなったりしない。
+
 Doneのタスクを見たくないときはf:Filterを押して、StatusにNot Doneを設定してみてね。
+
 他の要素でもフィルターできるよ。
+
 以下がおすすめの使い方。
 - とりあえずStatusにNot Doneを設定
 - 依存関係のTop(最終的にやりたいこと)を一覧表示したい->TargetsにNoneを設定
@@ -74,10 +83,15 @@ viewの簡単な説明
 
 ## Sidebar
 サイドバーを開くと自分がAssignされていて、Doneではないタスク一覧が見えるよ。
+
 開き方はbを押すだけだよ。
+
 一番上が一番優先度高いタスク(Working中)だよ。
+
 ここ結構バグってて絶対一番上がWorkingになるはずなんだけどならないこともあるよw。
+
 優先度変えたかったら左とか右矢印入力したら変えられるはず。でもバグってて変わんないときもあるw。
+
 依存関係的に優先度変えられないときもあるよ。これはバグじゃないよ。
 
 # How to Use
@@ -85,8 +99,9 @@ viewの簡単な説明
 - Press n
 - After entering the title etc., press Enter together with Ctrl
 
-**Note**
+[!NOTE]
 Using the mouse to unfocus might cause bugs lol.
+
 It's better not to use the mouse much.
 
 ## Editing a Task
@@ -101,13 +116,17 @@ It's better not to use the mouse much.
 
 ## Status
 Tasks can be set with statuses.
+
 There are Working, Pending, and Done.
 
-**Note**
-It is assumed that one User cannot do parallel processing. In other words, only one Working status can be set per User.
+[!NOTE]
+It is assumed that one User cannot do parallel processing. 
+
+In other words, only one Working status can be set per User.
 
 ## Dependency Between Tasks
 Tasks can have dependencies set.
+
 Circular dependencies cannot be made.
 
 - Select a task
@@ -116,8 +135,11 @@ Circular dependencies cannot be made.
 
 ## Filter
 Tasks do not disappear even if set to Done.
+
 If you don't want to see Done tasks, press f:Filter and set the Status to Not Done.
+
 You can filter by other elements as well.
+
 Here are recommended ways to use it.
 
 - First, set the Status to Not Done
@@ -139,10 +161,15 @@ Brief descriptions of views
 
 ## Sidebar
 Opening the sidebar shows a list of tasks assigned to you that are not Done.
+
 Just press b to open.
+
 The topmost task is the highest priority (Working).
+
 This part is quite buggy, and the topmost isn't always Working as it's supposed to be lol.
+
 If you wanted to change the priority, you're supposed to be able to do it with the left or right arrow keys, but it's buggy and sometimes doesn't change lol.
+
 There are also times when you can't change the priority due to dependency reasons. This isn't a bug.
 
 # 開発者向け/For developers
