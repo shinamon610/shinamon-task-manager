@@ -27,10 +27,9 @@ It's still under development, so it's full of bugs.
 - n押す
 - タイトルとか入力したらCtrlとかと一緒にEnter押す
 
-[!NOTE]
-フォーカス外すのにマウス使ったりするとバグるかもw。
-
-マウスはあんまり使わない方が吉。
+> [!NOTE]
+> フォーカス外すのにマウス使ったりするとバグるかもw。
+> マウスはあんまり使わない方が吉。
 
 ## タスクの編集
 - タスクの上に書いてある文字を順番に入力して、タスクを選択
@@ -47,8 +46,8 @@ It's still under development, so it's full of bugs.
 
 WorkingとPendingとDoneがあるよ。
 
-[!NOTE]
-1人のUserが並行処理することはできない想定だよ。つまりWorkingは1人のUserにつき、1つしか設定できないよ。
+> [!NOTE]
+> 1人のUserが並行処理することはできない想定だよ。つまりWorkingは1人のUserにつき、1つしか設定できないよ。
 
 ## タスク同士の依存関係
 タスクには依存関係が設定できる。
@@ -99,10 +98,9 @@ viewの簡単な説明
 - Press n
 - After entering the title etc., press Enter together with Ctrl
 
-[!NOTE]
-Using the mouse to unfocus might cause bugs lol.
-
-It's better not to use the mouse much.
+> [!NOTE]
+> Using the mouse to unfocus might cause bugs lol.
+> It's better not to use the mouse much.
 
 ## Editing a Task
 - Type the characters written on the task in order and select the task
@@ -119,8 +117,8 @@ Tasks can be set with statuses.
 
 There are Working, Pending, and Done.
 
-[!NOTE]
-It is assumed that one User cannot do parallel processing. 
+> [!NOTE]
+> It is assumed that one User cannot do parallel processing. 
 
 In other words, only one Working status can be set per User.
 
