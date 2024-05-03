@@ -163,7 +163,8 @@ function BaseNewTaskGraph({
       inputtingFilterModes.flat().includes(mode) ||
       command === Command.ToTile ||
       command === Command.ToGraph ||
-      command === Command.ConfirmFilterEdit
+      command === Command.ConfirmFilterEdit ||
+      command === Command.ShowSources
     ) {
       setTimeout(() => {
         fitView({

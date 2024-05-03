@@ -122,6 +122,7 @@ export function createMode(
     case Command.SpanWeek:
     case Command.SpanMonth:
     case Command.SpanYear:
+    case Command.ShowSources:
       return Mode.Normal;
     case Command.SelectTitle:
       return Mode.TitleSelecting;
