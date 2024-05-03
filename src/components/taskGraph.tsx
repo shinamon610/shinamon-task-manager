@@ -164,7 +164,8 @@ function BaseNewTaskGraph({
       command === Command.ToTile ||
       command === Command.ToGraph ||
       command === Command.ConfirmFilterEdit ||
-      command === Command.ShowSources
+      command === Command.ShowSources ||
+      command === Command.ShowTargets
     ) {
       setTimeout(() => {
         fitView({

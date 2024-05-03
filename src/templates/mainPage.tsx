@@ -53,6 +53,7 @@ export function MainPage() {
     setViewMode,
     setGanttViewMode,
     filterSources,
+    setFilterSources,
     filterTargets,
     setFilterTargets,
   } = useContext(MainContext);
@@ -210,6 +211,9 @@ export function MainPage() {
       }
       if (newCommand === Command.ShowSources) {
         setFilterTargets(new Set([getSelectedTask(tasks)!.id]));
+      }
+      if (newCommand === Command.ShowTargets) {
+        setFilterSources(new Set([getSelectedTask(tasks)!.id]));
       }
 
       // 新しいtaskが存在するとき

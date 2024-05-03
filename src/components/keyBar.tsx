@@ -73,6 +73,7 @@ function createLabelsAndKeys(
         "View Memo",
         "SideBar",
         "Show Sources",
+        "Show Targets",
         "Set to Working",
         "Set to Pending",
         "Set to Done",
@@ -84,6 +85,7 @@ function createLabelsAndKeys(
         ["f"],
         ["b"],
         ["s"],
+        ["t"],
         ["w"],
         ["p"],
         ["d"],
@@ -91,7 +93,7 @@ function createLabelsAndKeys(
 
       // Doneじゃないタスクがある場合、statusは選択できないようにする
       return hasNotDoneChildTask(tasks)
-        ? [labelsNodeSelecting.slice(0, 6), keyNodeSelecting.slice(0, 6)]
+        ? [labelsNodeSelecting.slice(0, 7), keyNodeSelecting.slice(0, 7)]
         : [labelsNodeSelecting, keyNodeSelecting];
     case Mode.ViewSelecting:
       return [

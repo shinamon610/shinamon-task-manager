@@ -544,6 +544,7 @@ export function createTasks(
     case Command.PanUp:
     case Command.CloseSideBar:
     case Command.ShowSources:
+    case Command.ShowTargets:
       return null;
   }
 }
