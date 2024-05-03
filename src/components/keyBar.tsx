@@ -12,7 +12,7 @@ export function KeyBar() {
   const { tasks, stackedTasks, swappable } = useContext(GlobalContext);
   const { mode, viewMode } = useContext(MainContext);
   return (
-    <div className="flex">
+    <div className="flex flex-wrap items-center justify-start">
       {createElements(mode, viewMode, tasks, stackedTasks, swappable)}
     </div>
   );
