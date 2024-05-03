@@ -12,7 +12,7 @@ export function KeyBar() {
   const { tasks, stackedTasks, swappable } = useContext(GlobalContext);
   const { mode, viewMode } = useContext(MainContext);
   return (
-    <div className="flex">
+    <div className="flex flex-wrap items-center justify-start">
       {createElements(mode, viewMode, tasks, stackedTasks, swappable)}
     </div>
   );
@@ -72,6 +72,8 @@ function createLabelsAndKeys(
         "Cancel",
         "View Memo",
         "SideBar",
+        "Show Sources",
+        "Show Targets",
         "Set to Working",
         "Set to Pending",
         "Set to Done",
@@ -82,6 +84,8 @@ function createLabelsAndKeys(
         [ESC],
         ["f"],
         ["b"],
+        ["s"],
+        ["t"],
         ["w"],
         ["p"],
         ["d"],
@@ -89,7 +93,7 @@ function createLabelsAndKeys(
 
       // Doneじゃないタスクがある場合、statusは選択できないようにする
       return hasNotDoneChildTask(tasks)
-        ? [labelsNodeSelecting.slice(0, 5), keyNodeSelecting.slice(0, 5)]
+        ? [labelsNodeSelecting.slice(0, 7), keyNodeSelecting.slice(0, 7)]
         : [labelsNodeSelecting, keyNodeSelecting];
     case Mode.ViewSelecting:
       return [

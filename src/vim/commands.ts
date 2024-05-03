@@ -34,6 +34,9 @@ export enum Command {
   SwapAbove,
   SwapBelow,
 
+  ShowSources,
+  ShowTargets,
+
   // zoomとpan
   ZoomIn,
   ZoomOut,
@@ -313,6 +316,12 @@ export function keyEventToCommand(
       }
       if (key === "e") {
         return Command.SelectTitle;
+      }
+      if (key === "s") {
+        return Command.ShowSources;
+      }
+      if (key === "t") {
+        return Command.ShowTargets;
       }
       if (key === "w") {
         return Command.SetToWorking;

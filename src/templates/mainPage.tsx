@@ -53,7 +53,9 @@ export function MainPage() {
     setViewMode,
     setGanttViewMode,
     filterSources,
+    setFilterSources,
     filterTargets,
+    setFilterTargets,
   } = useContext(MainContext);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -206,6 +208,12 @@ export function MainPage() {
       }
       if (newCommand === Command.ConfirmEdit || newCommand === Command.Cancel) {
         setIsCreatingNewTask(false);
+      }
+      if (newCommand === Command.ShowSources) {
+        setFilterTargets(new Set([getSelectedTask(tasks)!.id]));
+      }
+      if (newCommand === Command.ShowTargets) {
+        setFilterSources(new Set([getSelectedTask(tasks)!.id]));
       }
 
       // 新しいtaskが存在するとき

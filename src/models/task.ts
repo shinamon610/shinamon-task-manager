@@ -543,6 +543,8 @@ export function createTasks(
     case Command.PanDown:
     case Command.PanUp:
     case Command.CloseSideBar:
+    case Command.ShowSources:
+    case Command.ShowTargets:
       return null;
   }
 }
