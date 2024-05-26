@@ -65,10 +65,14 @@ export const MultiBox = forwardRef<BoxRef, MultiBoxProps>(
         menuPlacement="top"
         styles={focused ? boxStyles(isDisabled) : customBoxStyles(isDisabled)}
         ref={selectRef}
-        value={Array.from(defaultOption).map((id) => ({
-          value: id,
-          label: tasks.filter((task) => task.id === id).get(0)!.name,
-        }))}
+        value={Array.from(defaultOption).map((id) => {
+          const maybeTarget = tasks.filter((task) => task.id === id); // dumpされていて存在しないかもしれない。
+          if (maybeTarget.size === 0) return { value: id, label: "Archived" };
+          return {
+            value: id,
+            label: maybeTarget.get(0)!.name,
+          };
+        })}
         isMulti={true}
         onMenuOpen={() => setInnerMenuIsOpen(true)}
         onMenuClose={() => {

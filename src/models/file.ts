@@ -97,7 +97,7 @@ export async function saveData(data: DataToSave, filePath: string) {
   await writeTextFile(filePath, jsonContent);
 }
 
-async function load(filePath: string): Promise<DataToSave> {
+export async function load(filePath: string): Promise<DataToSave> {
   const { readTextFile } = await import("@tauri-apps/api/fs");
   const jsonContent = await readTextFile(filePath);
   const { tasks, userName }: DataToSave = JSON.parse(jsonContent);

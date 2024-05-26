@@ -368,10 +368,9 @@ export function hasNotDoneChildTask(tasks: List<Task>): boolean {
   const selectedTask = getSelectedTask(tasks)!;
   return (
     selectedTask.from.filter((id) => {
-      return (
-        tasks.filter((task) => task.id === id).get(0)!.status !==
-        DefaultStatus.Done
-      );
+      const maybeTarget = tasks.filter((task) => task.id === id); // dumpされて存在しない可能性がある。dumpされている場合はdoneになっているはずなので、対象から外す。
+      if (maybeTarget.size === 0) return false;
+      return maybeTarget.get(0)!.status !== DefaultStatus.Done;
     }).length > 0
   );
 }
@@ -485,9 +484,9 @@ export function createTasks(
     case Command.SetToDone:
       return updateTaskStatus(tasks, DefaultStatus.Done, userName);
     case Command.DumpArchive:
-      return null;
+      return tasks;
     case Command.ReadArchive:
-      return null;
+      return tasks;
     case Command.ToGraph:
     case Command.ToTile:
     case Command.ToGantt:

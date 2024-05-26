@@ -1,10 +1,12 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { saveData } from "@/models/file";
+import { load, saveData } from "@/models/file";
+import { DefaultStatus, NotStatus } from "@/models/status";
 import {
   Task,
   UUID,
   createTasks,
+  filterTasks,
   getSelectedTask,
   noneId,
 } from "@/models/task";
@@ -25,10 +27,12 @@ export function MainPage() {
     setDirPath,
     userName,
     filePath,
+    archivePath,
     setUserName,
     tasks,
     stackedTasks,
     pushHistory,
+    setHistories,
     prevHistory,
     nextHistory,
     swappable,
@@ -221,7 +225,39 @@ export function MainPage() {
         return;
       }
       const newTasks = maybeNewTasks;
-      saveData({ tasks: newTasks, userName }, filePath);
+
+      if (newCommand === Command.DumpArchive) {
+        const dumpTasks = filterTasks(
+          newTasks,
+          "",
+          DefaultStatus.Done,
+          "",
+          new Set([]),
+          new Set([]),
+          ""
+        );
+        const restTasks = filterTasks(
+          newTasks,
+          "",
+          NotStatus.NotDone,
+          "",
+          new Set([]),
+          new Set([]),
+          ""
+        );
+        saveData({ tasks: dumpTasks, userName }, archivePath);
+        setHistories(List([restTasks]));
+        saveData({ tasks: restTasks, userName }, filePath);
+      }
+
+      if (newCommand === Command.ReadArchive) {
+        load(archivePath).then((data) => {
+          const dumpedTasks = data.tasks;
+          const mergedTasks = newTasks.concat(dumpedTasks);
+          saveData({ tasks: mergedTasks, userName }, filePath);
+          pushHistory(mergedTasks);
+        });
+      }
 
       if (
         newCommand === Command.CreateTaskNode ||
@@ -233,12 +269,14 @@ export function MainPage() {
         newCommand === Command.SwapAbove ||
         newCommand === Command.SwapBelow ||
         newCommand === Command.Cancel ||
+        newCommand === Command.ConfirmFilterEdit ||
         newCommand === Command.ConfirmEdit ||
         newCommand === Command.SetToWorking ||
         newCommand === Command.SetToPending ||
         newCommand === Command.SetToDone
       ) {
         pushHistory(newTasks);
+        saveData({ tasks, userName }, filePath);
       }
 
       if (

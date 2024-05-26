@@ -27,6 +27,7 @@ import {
 export const GlobalContext = createContext<GlobalContextType>({
   initializeData: () => {},
   filePath: "",
+  archivePath: "",
   dirPath: "",
   setDirPath: () => {},
   userName: "",
@@ -49,6 +50,7 @@ export const GlobalContext = createContext<GlobalContextType>({
 type GlobalContextType = {
   initializeData: () => void;
   filePath: string;
+  archivePath: string;
   dirPath: string;
   setDirPath: Dispatch<SetStateAction<string>>;
   userName: Assignee;
@@ -162,6 +164,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
       value={{
         initializeData,
         filePath,
+        archivePath,
         dirPath,
         setDirPath,
         userName,
