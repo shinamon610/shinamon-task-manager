@@ -1,6 +1,6 @@
 import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
-import { loadData, loadInitialFilePath } from "@/models/file";
+import { loadData, loadInitialFilePath, saveData } from "@/models/file";
 import { DefaultStatus } from "@/models/status";
 import {
   Task,
@@ -20,6 +20,7 @@ import {
 } from "react";
 
 export const GlobalContext = createContext<GlobalContextType>({
+  saveTasks: () => {},
   initializeData: () => {},
   filePath: "",
   setFilePath: () => {},
@@ -41,6 +42,7 @@ export const GlobalContext = createContext<GlobalContextType>({
 });
 
 type GlobalContextType = {
+  saveTasks: (tasks: List<Task>) => void;
   initializeData: () => void;
   filePath: string;
   setFilePath: Dispatch<SetStateAction<string>>;
@@ -148,9 +150,14 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     }) as [boolean, boolean];
   }, [dependentIds, stackedTasks]);
 
+  const saveTasks = (newTasks: List<Task>) => {
+    saveData({ tasks: newTasks, userName }, filePath);
+  };
+
   return (
     <GlobalContext.Provider
       value={{
+        saveTasks,
         initializeData,
         filePath,
         setFilePath,

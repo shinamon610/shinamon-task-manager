@@ -1,6 +1,5 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { saveData } from "@/models/file";
 import {
   Task,
   UUID,
@@ -22,7 +21,7 @@ import { TaskPage } from "./taskPage";
 
 export function MainPage() {
   const {
-    filePath,
+    saveTasks,
     setFilePath,
     userName,
     setUserName,
@@ -221,7 +220,7 @@ export function MainPage() {
         return;
       }
       const newTasks = maybeNewTasks;
-      saveData({ tasks: newTasks, userName }, filePath);
+      saveTasks(newTasks);
 
       if (
         newCommand === Command.CreateTaskNode ||
