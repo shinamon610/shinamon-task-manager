@@ -45,20 +45,20 @@ async function ensureDirExists(dir: string) {
 }
 
 async function savePath(
-  filePath: Promise<string | null>
+  dirPath: Promise<string | null>
 ): Promise<string | null> {
   try {
-    const fp = await filePath;
-    if (fp === null || fp === "") {
+    const dp = await dirPath;
+    if (dp === null || dp === "") {
       return null;
     }
     const { appConfigDir } = await import("@tauri-apps/api/path");
     const { BaseDirectory, writeTextFile } = await import("@tauri-apps/api/fs");
     await ensureDirExists(await appConfigDir());
-    await writeTextFile(configFileName, fp, {
+    await writeTextFile(configFileName, dp, {
       dir: BaseDirectory.AppConfig,
     });
-    return fp;
+    return dp;
   } catch (error) {
     return null;
   }
@@ -74,7 +74,7 @@ export async function openDir(): Promise<string | null> {
   return savePath(_openDirectory());
 }
 
-export async function loadInitialFilePath(): Promise<string | null> {
+export async function loadInitialDir(): Promise<string | null> {
   const { BaseDirectory, readTextFile } = await import("@tauri-apps/api/fs");
   return readTextFile(configFileName, {
     dir: BaseDirectory.AppConfig,

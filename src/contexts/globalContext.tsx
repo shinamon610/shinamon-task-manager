@@ -1,6 +1,6 @@
 import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
-import { loadData, loadInitialFilePath, saveData } from "@/models/file";
+import { loadData, loadInitialDir, saveData } from "@/models/file";
 import { DefaultStatus } from "@/models/status";
 import {
   Task,
@@ -100,14 +100,8 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
   }, [currentHistoryIndex, histories.size]);
 
   const initializeData = useCallback(() => {
-    loadInitialFilePath().then((newFilePath) => {
-      loadData(
-        newFilePath,
-        setFilePath,
-        setHistories,
-        setAssignees,
-        setUserName
-      );
+    loadInitialDir().then((newDir) => {
+      loadData(newDir, setFilePath, setHistories, setAssignees, setUserName);
     });
   }, [setFilePath, setHistories, setAssignees, setUserName]);
 
