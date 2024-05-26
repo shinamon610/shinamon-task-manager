@@ -7,7 +7,7 @@ import { MainPage } from "@/templates/mainPage";
 import { useContext, useEffect } from "react";
 
 export function TopPage() {
-  const { filePath, userName, initializeData } = useContext(GlobalContext);
+  const { dirPath, userName, initializeData } = useContext(GlobalContext);
 
   useEffect(() => {
     initializeData();
@@ -15,7 +15,7 @@ export function TopPage() {
 
   return (
     <div>
-      {filePath === "" ? (
+      {dirPath === "" ? (
         <SelectSaveLocation />
       ) : userName === "" ? (
         <InputUserName />

@@ -1,10 +1,12 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
-import { saveData } from "@/models/file";
+import { load, saveData } from "@/models/file";
+import { DefaultStatus, NotStatus } from "@/models/status";
 import {
   Task,
   UUID,
   createTasks,
+  filterTasks,
   getSelectedTask,
   noneId,
 } from "@/models/task";
@@ -22,13 +24,15 @@ import { TaskPage } from "./taskPage";
 
 export function MainPage() {
   const {
-    filePath,
-    setFilePath,
+    setDirPath,
     userName,
+    filePath,
+    archivePath,
     setUserName,
     tasks,
     stackedTasks,
     pushHistory,
+    setHistories,
     prevHistory,
     nextHistory,
     swappable,
@@ -88,6 +92,17 @@ export function MainPage() {
     setEndDateTime(selectedTask.endTime);
     setMemo(selectedTask.memo);
   }
+
+  const mergeTasks = (
+    dumpedTasks: List<Task>,
+    newTasks: List<Task>
+  ): List<Task> => {
+    const unmergedDumpedTasks = dumpedTasks.filter(
+      (dtask) => !newTasks.map((t) => t.id).contains(dtask.id)
+    );
+    const mergedTasks = newTasks.concat(unmergedDumpedTasks);
+    return mergedTasks;
+  };
 
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
@@ -166,7 +181,7 @@ export function MainPage() {
         nextHistory();
       }
       if (newCommand === Command.SelectAnotherLocation) {
-        setFilePath("");
+        setDirPath("");
       }
       if (newCommand === Command.InputStartDateTime) {
         if (startDateTime === null) {
@@ -221,7 +236,49 @@ export function MainPage() {
         return;
       }
       const newTasks = maybeNewTasks;
-      saveData({ tasks: newTasks, userName }, filePath);
+
+      if (newCommand === Command.DumpArchive) {
+        // dumpする前に、全てのdumpを取得しておかないと以前のdumpが消えてしまう。
+        const f = (dumpedTasks: List<Task>) => {
+          const mergedTasks = mergeTasks(dumpedTasks, newTasks);
+          const newDumpTasks = filterTasks(
+            mergedTasks,
+            "",
+            DefaultStatus.Done,
+            "",
+            new Set([]),
+            new Set([]),
+            ""
+          );
+          const restTasks = filterTasks(
+            mergedTasks,
+            "",
+            NotStatus.NotDone,
+            "",
+            new Set([]),
+            new Set([]),
+            ""
+          );
+          saveData({ tasks: newDumpTasks, userName }, archivePath);
+          setHistories(List([restTasks]));
+          saveData({ tasks: restTasks, userName }, filePath);
+        };
+        load(archivePath)
+          .then((data) => {
+            f(data.tasks);
+          })
+          .catch(() => {
+            f(List([]));
+          });
+      }
+
+      if (newCommand === Command.ReadArchive) {
+        load(archivePath).then((data) => {
+          const mergedTasks = mergeTasks(data.tasks, newTasks);
+          saveData({ tasks: mergedTasks, userName }, filePath);
+          pushHistory(mergedTasks);
+        });
+      }
 
       if (
         newCommand === Command.CreateTaskNode ||
@@ -233,12 +290,14 @@ export function MainPage() {
         newCommand === Command.SwapAbove ||
         newCommand === Command.SwapBelow ||
         newCommand === Command.Cancel ||
+        newCommand === Command.ConfirmFilterEdit ||
         newCommand === Command.ConfirmEdit ||
         newCommand === Command.SetToWorking ||
         newCommand === Command.SetToPending ||
         newCommand === Command.SetToDone
       ) {
         pushHistory(newTasks);
+        saveData({ tasks, userName }, filePath);
       }
 
       if (

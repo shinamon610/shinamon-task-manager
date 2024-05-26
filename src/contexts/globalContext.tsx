@@ -1,6 +1,11 @@
 import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
-import { loadData, loadInitialFilePath } from "@/models/file";
+import {
+  getArchivesJsonFile,
+  getTasksJsonFile,
+  loadData,
+  loadInitialDir,
+} from "@/models/file";
 import { DefaultStatus } from "@/models/status";
 import {
   Task,
@@ -22,7 +27,9 @@ import {
 export const GlobalContext = createContext<GlobalContextType>({
   initializeData: () => {},
   filePath: "",
-  setFilePath: () => {},
+  archivePath: "",
+  dirPath: "",
+  setDirPath: () => {},
   userName: "",
   setUserName: () => {},
   tasks: List([]),
@@ -43,7 +50,9 @@ export const GlobalContext = createContext<GlobalContextType>({
 type GlobalContextType = {
   initializeData: () => void;
   filePath: string;
-  setFilePath: Dispatch<SetStateAction<string>>;
+  archivePath: string;
+  dirPath: string;
+  setDirPath: Dispatch<SetStateAction<string>>;
   userName: Assignee;
   setUserName: Dispatch<SetStateAction<Assignee>>;
   tasks: List<Task>;
@@ -63,11 +72,19 @@ type GlobalContextType = {
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
   const historySize = 20;
-  const [filePath, setFilePath] = useState("");
+  const [dirPath, setDirPath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
   const [histories, _setHistories] = useState<List<List<Task>>>(List([]));
   const [currentHistoryIndex, setCurrentHistoryIndex] = useState(0);
   const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
+
+  const filePath = useMemo(() => {
+    return getTasksJsonFile(dirPath);
+  }, [dirPath]);
+
+  const archivePath = useMemo(() => {
+    return getArchivesJsonFile(dirPath);
+  }, [dirPath]);
 
   const setHistories = useCallback(
     (newHistories: List<List<Task>>) => {
@@ -98,16 +115,10 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
   }, [currentHistoryIndex, histories.size]);
 
   const initializeData = useCallback(() => {
-    loadInitialFilePath().then((newFilePath) => {
-      loadData(
-        newFilePath,
-        setFilePath,
-        setHistories,
-        setAssignees,
-        setUserName
-      );
+    loadInitialDir().then((newDir) => {
+      loadData(newDir, setDirPath, setHistories, setAssignees, setUserName);
     });
-  }, [setFilePath, setHistories, setAssignees, setUserName]);
+  }, [setDirPath, setHistories, setAssignees, setUserName]);
 
   const _tasks = histories.get(currentHistoryIndex);
   const tasks = _tasks === undefined ? List([]) : _tasks;
@@ -153,7 +164,9 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
       value={{
         initializeData,
         filePath,
-        setFilePath,
+        archivePath,
+        dirPath,
+        setDirPath,
         userName,
         setUserName,
         tasks,

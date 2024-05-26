@@ -178,3 +178,7 @@ npm run tauri build
 npm run tauri dev
 
 This software is released under the MIT License, see LICENSE.txt.
+
+# publish
+Cargo.tomlのversionを更新して、push。
+mainに向けて、PR作ってマージ

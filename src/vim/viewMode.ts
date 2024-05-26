@@ -73,6 +73,7 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.Undo:
     case Command.Redo:
     case Command.SelectView:
+    case Command.SelectArchive:
     case Command.ZoomIn:
     case Command.ZoomOut:
     case Command.PanLeft:
@@ -87,6 +88,8 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.SwapBelow:
     case Command.ShowSources:
     case Command.ShowTargets:
+    case Command.DumpArchive:
+    case Command.ReadArchive:
       return viewMode;
   }
 }

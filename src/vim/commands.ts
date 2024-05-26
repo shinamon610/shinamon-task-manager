@@ -26,6 +26,7 @@ export enum Command {
   Undo,
   Redo,
   SelectView,
+  SelectArchive,
 
   OpenSideBar,
   CloseSideBar,
@@ -100,6 +101,10 @@ export enum Command {
   ToTile,
   ToGantt,
   ToTimeLine,
+
+  // Archive
+  DumpArchive,
+  ReadArchive,
 }
 
 export const selectString = "ahik";
@@ -274,6 +279,9 @@ export function keyEventToCommand(
       if (key === "e") {
         return Command.SelectView;
       }
+      if (key === "z") {
+        return Command.SelectArchive;
+      }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
       }
@@ -351,6 +359,18 @@ export function keyEventToCommand(
       }
       if (key === "l") {
         return Command.ToTimeLine;
+      }
+      if (key === "Escape" || key === "Enter") {
+        return Command.Cancel;
+      }
+      return Command.Nothing;
+
+    case Mode.ArchiveSelecting:
+      if (key === "d") {
+        return Command.DumpArchive;
+      }
+      if (key === "r") {
+        return Command.ReadArchive;
       }
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;

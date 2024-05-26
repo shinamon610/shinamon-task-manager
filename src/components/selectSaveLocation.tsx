@@ -1,10 +1,10 @@
 import { GlobalContext } from "@/contexts/globalContext";
-import { createDir, getTasksJsonFile, loadData, openDir } from "@/models/file";
+import { createDir, loadData, openDir } from "@/models/file";
 import { List } from "immutable";
 import { useContext } from "react";
 
 export function SelectSaveLocation() {
-  const { setFilePath, userName, setUserName, setHistories, setAssignees } =
+  const { setDirPath, userName, setUserName, setHistories, setAssignees } =
     useContext(GlobalContext);
   const style = {
     backgroundColor: "var(--active)",
@@ -30,7 +30,7 @@ export function SelectSaveLocation() {
             if (newDir == null) {
               return;
             }
-            setFilePath(getTasksJsonFile(newDir));
+            setDirPath(newDir);
             setHistories(List(List([])));
             setAssignees(new Set([userName]));
             setUserName(userName);
@@ -48,7 +48,7 @@ export function SelectSaveLocation() {
             }
             loadData(
               dirToLoad,
-              setFilePath,
+              setDirPath,
               setHistories,
               setAssignees,
               setUserName

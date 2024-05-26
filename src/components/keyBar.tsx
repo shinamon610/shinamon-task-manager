@@ -40,6 +40,7 @@ function createLabelsAndKeys(
         "Undo",
         "Redo",
         "SideBar",
+        "Archive",
       ];
       const normalKeys = [
         ["n"],
@@ -50,6 +51,7 @@ function createLabelsAndKeys(
         ["u"],
         ["r"],
         ["b"],
+        ["z"],
       ];
       if (viewMode === ViewMode.Gantt) {
         return [
@@ -99,6 +101,11 @@ function createLabelsAndKeys(
       return [
         ["Graph", "Tile", "Gantt", "TimeLine"],
         [["e"], ["t"], ["g"], ["l"]],
+      ];
+    case Mode.ArchiveSelecting:
+      return [
+        ["Dump", "Read"],
+        [["d"], ["r"]],
       ];
     case Mode.SpanSelecting:
       return [
