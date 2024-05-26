@@ -103,7 +103,10 @@ function createLabelsAndKeys(
         [["e"], ["t"], ["g"], ["l"]],
       ];
     case Mode.ArchiveSelecting:
-      return [[], []];
+      return [
+        ["Dump", "Read"],
+        [["d"], ["r"]],
+      ];
     case Mode.SpanSelecting:
       return [
         ["Hour", "Day", "Week", "Month", "Year"],

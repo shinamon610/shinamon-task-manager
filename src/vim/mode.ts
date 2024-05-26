@@ -125,6 +125,8 @@ export function createMode(
     case Command.SpanYear:
     case Command.ShowSources:
     case Command.ShowTargets:
+    case Command.DumpArchive:
+    case Command.ReadArchive:
       return Mode.Normal;
     case Command.SelectTitle:
       return Mode.TitleSelecting;

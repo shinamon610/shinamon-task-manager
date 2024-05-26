@@ -484,6 +484,10 @@ export function createTasks(
       return updateTaskStatus(tasks, DefaultStatus.Pending, userName);
     case Command.SetToDone:
       return updateTaskStatus(tasks, DefaultStatus.Done, userName);
+    case Command.DumpArchive:
+      return null;
+    case Command.ReadArchive:
+      return null;
     case Command.ToGraph:
     case Command.ToTile:
     case Command.ToGantt:

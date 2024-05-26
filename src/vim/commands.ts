@@ -101,6 +101,10 @@ export enum Command {
   ToTile,
   ToGantt,
   ToTimeLine,
+
+  // Archive
+  DumpArchive,
+  ReadArchive,
 }
 
 export const selectString = "ahik";
@@ -362,6 +366,12 @@ export function keyEventToCommand(
       return Command.Nothing;
 
     case Mode.ArchiveSelecting:
+      if (key === "d") {
+        return Command.DumpArchive;
+      }
+      if (key === "r") {
+        return Command.ReadArchive;
+      }
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;
       }

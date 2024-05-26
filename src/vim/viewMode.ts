@@ -88,6 +88,8 @@ export function createViewMode(command: Command, viewMode: ViewMode): ViewMode {
     case Command.SwapBelow:
     case Command.ShowSources:
     case Command.ShowTargets:
+    case Command.DumpArchive:
+    case Command.ReadArchive:
       return viewMode;
   }
 }
