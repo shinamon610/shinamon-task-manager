@@ -1,10 +1,10 @@
 import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
 import {
+  getArchivesJsonFile,
   getTasksJsonFile,
   loadData,
   loadInitialDir,
-  saveData,
 } from "@/models/file";
 import { DefaultStatus } from "@/models/status";
 import {
@@ -25,7 +25,6 @@ import {
 } from "react";
 
 export const GlobalContext = createContext<GlobalContextType>({
-  saveTasks: () => {},
   initializeData: () => {},
   filePath: "",
   dirPath: "",
@@ -48,7 +47,6 @@ export const GlobalContext = createContext<GlobalContextType>({
 });
 
 type GlobalContextType = {
-  saveTasks: (tasks: List<Task>) => void;
   initializeData: () => void;
   filePath: string;
   dirPath: string;
@@ -80,6 +78,10 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
 
   const filePath = useMemo(() => {
     return getTasksJsonFile(dirPath);
+  }, [dirPath]);
+
+  const archivePath = useMemo(() => {
+    return getArchivesJsonFile(dirPath);
   }, [dirPath]);
 
   const setHistories = useCallback(
@@ -155,14 +157,9 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     }) as [boolean, boolean];
   }, [dependentIds, stackedTasks]);
 
-  const saveTasks = (newTasks: List<Task>) => {
-    saveData({ tasks: newTasks, userName }, filePath);
-  };
-
   return (
     <GlobalContext.Provider
       value={{
-        saveTasks,
         initializeData,
         filePath,
         dirPath,

@@ -6,11 +6,16 @@ import { extractAssignees } from "./assignee";
 import { Task } from "./task";
 
 const defaultPath = "tasks.json";
+const archivePath = "archives.json";
 const defaultDir = "ShinamonTaskManager";
 const configFileName = "config.txt";
 
 export function getTasksJsonFile(dirPath: string): string {
   return path.join(dirPath, defaultPath);
+}
+
+export function getArchivesJsonFile(dirPath: string): string {
+  return path.join(dirPath, archivePath);
 }
 
 async function _selectDirectory(): Promise<string | null> {
