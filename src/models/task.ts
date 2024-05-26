@@ -530,6 +530,7 @@ export function createTasks(
     case Command.Undo:
     case Command.Redo:
     case Command.SelectView:
+    case Command.SelectArchive:
     case Command.SelectSpan:
     case Command.SpanHour:
     case Command.SpanDay:

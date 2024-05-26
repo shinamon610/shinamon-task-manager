@@ -26,6 +26,7 @@ export enum Command {
   Undo,
   Redo,
   SelectView,
+  SelectArchive,
 
   OpenSideBar,
   CloseSideBar,
@@ -274,6 +275,9 @@ export function keyEventToCommand(
       if (key === "e") {
         return Command.SelectView;
       }
+      if (key === "z") {
+        return Command.SelectArchive;
+      }
       if (selectString.includes(key)) {
         return Command.SelectTaskNode;
       }
@@ -352,6 +356,12 @@ export function keyEventToCommand(
       if (key === "l") {
         return Command.ToTimeLine;
       }
+      if (key === "Escape" || key === "Enter") {
+        return Command.Cancel;
+      }
+      return Command.Nothing;
+
+    case Mode.ArchiveSelecting:
       if (key === "Escape" || key === "Enter") {
         return Command.Cancel;
       }

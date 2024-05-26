@@ -7,6 +7,7 @@ export enum Mode {
   Normal,
   NodeSelecting,
   ViewSelecting,
+  ArchiveSelecting,
   SpanSelecting,
 
   SideBarSelecting,
@@ -171,6 +172,8 @@ export function createMode(
         : Mode.NodeSelecting;
     case Command.SelectView:
       return Mode.ViewSelecting;
+    case Command.SelectArchive:
+      return Mode.ArchiveSelecting;
     case Command.SelectAnotherLocation:
     case Command.SelectFilterTitle:
       return Mode.FilterTitleSelecting;
