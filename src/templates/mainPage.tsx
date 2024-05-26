@@ -22,7 +22,7 @@ import { TaskPage } from "./taskPage";
 export function MainPage() {
   const {
     saveTasks,
-    setFilePath,
+    setDirPath,
     userName,
     setUserName,
     tasks,
@@ -165,7 +165,7 @@ export function MainPage() {
         nextHistory();
       }
       if (newCommand === Command.SelectAnotherLocation) {
-        setFilePath("");
+        setDirPath("");
       }
       if (newCommand === Command.InputStartDateTime) {
         if (startDateTime === null) {

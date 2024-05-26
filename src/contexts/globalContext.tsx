@@ -1,6 +1,11 @@
 import { toposort } from "@/lib/topologicalSort";
 import { Assignee } from "@/models/assignee";
-import { loadData, loadInitialDir, saveData } from "@/models/file";
+import {
+  getTasksJsonFile,
+  loadData,
+  loadInitialDir,
+  saveData,
+} from "@/models/file";
 import { DefaultStatus } from "@/models/status";
 import {
   Task,
@@ -23,7 +28,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   saveTasks: () => {},
   initializeData: () => {},
   filePath: "",
-  setFilePath: () => {},
+  dirPath: "",
+  setDirPath: () => {},
   userName: "",
   setUserName: () => {},
   tasks: List([]),
@@ -45,7 +51,8 @@ type GlobalContextType = {
   saveTasks: (tasks: List<Task>) => void;
   initializeData: () => void;
   filePath: string;
-  setFilePath: Dispatch<SetStateAction<string>>;
+  dirPath: string;
+  setDirPath: Dispatch<SetStateAction<string>>;
   userName: Assignee;
   setUserName: Dispatch<SetStateAction<Assignee>>;
   tasks: List<Task>;
@@ -65,11 +72,15 @@ type GlobalContextType = {
 
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
   const historySize = 20;
-  const [filePath, setFilePath] = useState("");
+  const [dirPath, setDirPath] = useState("");
   const [userName, setUserName] = useState<Assignee>("");
   const [histories, _setHistories] = useState<List<List<Task>>>(List([]));
   const [currentHistoryIndex, setCurrentHistoryIndex] = useState(0);
   const [assignees, setAssignees] = useState<Set<Assignee>>(new Set());
+
+  const filePath = useMemo(() => {
+    return getTasksJsonFile(dirPath);
+  }, [dirPath]);
 
   const setHistories = useCallback(
     (newHistories: List<List<Task>>) => {
@@ -101,9 +112,9 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
 
   const initializeData = useCallback(() => {
     loadInitialDir().then((newDir) => {
-      loadData(newDir, setFilePath, setHistories, setAssignees, setUserName);
+      loadData(newDir, setDirPath, setHistories, setAssignees, setUserName);
     });
-  }, [setFilePath, setHistories, setAssignees, setUserName]);
+  }, [setDirPath, setHistories, setAssignees, setUserName]);
 
   const _tasks = histories.get(currentHistoryIndex);
   const tasks = _tasks === undefined ? List([]) : _tasks;
@@ -154,7 +165,8 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
         saveTasks,
         initializeData,
         filePath,
-        setFilePath,
+        dirPath,
+        setDirPath,
         userName,
         setUserName,
         tasks,

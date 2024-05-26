@@ -112,7 +112,7 @@ async function load(filePath: string): Promise<DataToSave> {
 
 export async function loadData(
   dir: string | null,
-  setFilePath: Dispatch<SetStateAction<string>>,
+  setDirPath: Dispatch<SetStateAction<string>>,
   setHistory: (histories: List<List<Task>>) => void,
   setAssignees: Dispatch<SetStateAction<Set<string>>>,
   setUserName: Dispatch<SetStateAction<string>>
@@ -120,8 +120,8 @@ export async function loadData(
   if (dir === null) {
     return;
   }
+  setDirPath(dir);
   const filePath = getTasksJsonFile(dir);
-  setFilePath(filePath);
   load(filePath).then((data) => {
     setHistory(List([data.tasks]));
     setAssignees(extractAssignees(data.tasks).add(data.userName));
