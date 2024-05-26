@@ -93,6 +93,17 @@ export function MainPage() {
     setMemo(selectedTask.memo);
   }
 
+  const mergeTasks = (
+    dumpedTasks: List<Task>,
+    newTasks: List<Task>
+  ): List<Task> => {
+    const unmergedDumpedTasks = dumpedTasks.filter(
+      (dtask) => !newTasks.map((t) => t.id).contains(dtask.id)
+    );
+    const mergedTasks = newTasks.concat(unmergedDumpedTasks);
+    return mergedTasks;
+  };
+
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
       const newCommand = keyEventToCommand(
@@ -227,33 +238,43 @@ export function MainPage() {
       const newTasks = maybeNewTasks;
 
       if (newCommand === Command.DumpArchive) {
-        const dumpTasks = filterTasks(
-          newTasks,
-          "",
-          DefaultStatus.Done,
-          "",
-          new Set([]),
-          new Set([]),
-          ""
-        );
-        const restTasks = filterTasks(
-          newTasks,
-          "",
-          NotStatus.NotDone,
-          "",
-          new Set([]),
-          new Set([]),
-          ""
-        );
-        saveData({ tasks: dumpTasks, userName }, archivePath);
-        setHistories(List([restTasks]));
-        saveData({ tasks: restTasks, userName }, filePath);
+        // dumpする前に、全てのdumpを取得しておかないと以前のdumpが消えてしまう。
+        const f = (dumpedTasks: List<Task>) => {
+          const mergedTasks = mergeTasks(dumpedTasks, newTasks);
+          const newDumpTasks = filterTasks(
+            mergedTasks,
+            "",
+            DefaultStatus.Done,
+            "",
+            new Set([]),
+            new Set([]),
+            ""
+          );
+          const restTasks = filterTasks(
+            mergedTasks,
+            "",
+            NotStatus.NotDone,
+            "",
+            new Set([]),
+            new Set([]),
+            ""
+          );
+          saveData({ tasks: newDumpTasks, userName }, archivePath);
+          setHistories(List([restTasks]));
+          saveData({ tasks: restTasks, userName }, filePath);
+        };
+        load(archivePath)
+          .then((data) => {
+            f(data.tasks);
+          })
+          .catch(() => {
+            f(List([]));
+          });
       }
 
       if (newCommand === Command.ReadArchive) {
         load(archivePath).then((data) => {
-          const dumpedTasks = data.tasks;
-          const mergedTasks = newTasks.concat(dumpedTasks);
+          const mergedTasks = mergeTasks(data.tasks, newTasks);
           saveData({ tasks: mergedTasks, userName }, filePath);
           pushHistory(mergedTasks);
         });
