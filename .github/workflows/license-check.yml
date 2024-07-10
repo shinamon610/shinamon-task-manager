@@ -33,6 +33,7 @@ jobs:
         uses: github/licensed-ci@v1.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          command: "licensed status --debug"
 
       - uses: actions/github-script@0.2.0
         if: always() && steps.licensed.outputs.pr_number
