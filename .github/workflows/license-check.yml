@@ -10,7 +10,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run license check
-        uses: jslicense/licensed-ci-action@v1
+      - name: Licensed CI
+        uses: github/licensed-ci@v1.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
