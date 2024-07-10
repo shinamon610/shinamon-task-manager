@@ -1,0 +1,12 @@
+# sources
+sources:
+  npm:
+    - path: .
+
+# cache path
+cache_path: .licenses
+
+# license rules
+allowed:
+  - mit
+  - apache-2.0
