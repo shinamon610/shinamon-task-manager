@@ -29,11 +29,13 @@ jobs:
         with:
           version: 4.x
 
-      - id: licensed
-        uses: github/licensed-ci@v1.9.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          command: "licensed status --debug"
+      # キャッシュの更新
+      - name: Update license cache
+        run: licensed cache --debug -c .licensed.yml
+
+      # ステータスの確認
+      - name: Check license status
+        run: licensed status --debug -c .licensed.yml
 
       - uses: actions/github-script@0.2.0
         if: always() && steps.licensed.outputs.pr_number
