@@ -2,15 +2,45 @@ name: License Check
 
 on: [pull_request]
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
-  license-check:
+  licensed:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Licensed CI
+      # 環境のセットアップとプロジェクト依存関係のインストール
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm # 依存関係のキャッシュ
+
+      - run: npm install --production --ignore-scripts
+
+      # licensedのインストール
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+
+      - uses: github/setup-licensed@v1
+        with:
+          version: 4.x
+
+      - id: licensed
         uses: github/licensed-ci@v1.9.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/github-script@0.2.0
+        if: always() && steps.licensed.outputs.pr_number
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              ...context.repo,
+              issue_number: ${{ steps.licensed.outputs.pr_number }},
+              body: 'ライセンスチェックの結果が更新されました。'
+            })
