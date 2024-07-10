@@ -1,0 +1,16 @@
+name: License Check
+
+on: [pull_request]
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run license check
+        uses: jslicense/licensed-ci-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
