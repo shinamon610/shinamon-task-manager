@@ -1,7 +1,7 @@
-name: License Check
-
 on: [pull_request]
 
+# ensure that the action can push changes to the repo and edit PRs
+# when using `secrets.GITHUB_TOKEN`
 permissions:
   pull-requests: write
   contents: write
@@ -12,31 +12,27 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # 環境のセットアップとプロジェクト依存関係のインストール
+      # install environment pre-requisites and project dependencies
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: npm # 依存関係のキャッシュ
-
+          cache: npm # cache dependencies for faster subsequent runs.
       - run: npm install --production --ignore-scripts
 
-      # licensedのインストール
+      # install licensed.  licensed v4 can only be installed as a gem and requires
+      # running ruby/setup-ruby before github/setup-licensed.  If a project doesn't
+      # require a specific version of ruby, default to installing latest stable
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
-
       - uses: github/setup-licensed@v1
         with:
           version: 4.x
 
-      # キャッシュの更新
-      - name: Update license cache
-        run: licensed cache --debug -c .licensed.yml
-
-      # ステータスの確認
-      - name: Check license status
-        run: licensed status --debug -c .licensed.yml
-
+      - id: licensed
+        uses: github/licensed-ci@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/github-script@0.2.0
         if: always() && steps.licensed.outputs.pr_number
         with:
@@ -44,6 +40,6 @@ jobs:
           script: |
             github.issues.createComment({
               ...context.repo,
-              issue_number: ${{ steps.licensed.outputs.pr_number }},
-              body: 'ライセンスチェックの結果が更新されました。'
+              issue_number: ${{ steps.licensed.outputs.pr_number }}
+              body: 'My custom PR message'
             })
