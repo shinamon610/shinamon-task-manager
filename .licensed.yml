@@ -10,3 +10,20 @@ cache_path: .licenses
 allowed:
   - mit
   - apache-2.0
+  - isc
+  - 0bsd
+
+reviewed:
+  npm:
+    - caniuse-lite
+
+ignored:
+  npm:
+    - "@next/swc-darwin-x64"
+    - "@next/swc-linux-arm64-gnu"
+    - "@next/swc-linux-arm64-musl"
+    - "@next/swc-linux-x64-gnu"
+    - "@next/swc-linux-x64-musl"
+    - "@next/swc-win32-arm64-msvc"
+    - "@next/swc-win32-ia32-msvc"
+    - "@next/swc-win32-x64-msvc"
