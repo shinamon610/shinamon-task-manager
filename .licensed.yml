@@ -12,10 +12,21 @@ allowed:
   - apache-2.0
   - isc
   - 0bsd
+  - bsd-2-clause
+  - bsd-3-clause
 
 reviewed:
   npm:
     - caniuse-lite
+    - source-map
+    - source-map-js
+    - react-transition-group
+    - prettier
+    - lodash
+    - json-parse-even-better-errors
+    - hoist-non-react-statics
+    - cytoscape
+    - color-convert
 
 ignored:
   npm:
