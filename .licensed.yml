@@ -31,6 +31,7 @@ reviewed:
 ignored:
   npm:
     - "@next/swc-darwin-x64"
+    - "@next/swc-darwin-arm64"
     - "@next/swc-linux-arm64-gnu"
     - "@next/swc-linux-arm64-musl"
     - "@next/swc-linux-x64-gnu"
