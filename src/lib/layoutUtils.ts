@@ -1,5 +1,5 @@
 import { Assignee, getColor } from "@/models/assignee";
-import { DefaultStatus, Status } from "@/models/status";
+import { Status } from "@/models/status";
 
 export const AccentColor = "var(--accent)";
 
@@ -19,7 +19,7 @@ function boxShadow(status: Status, isSelected: boolean, color: string): string {
   if (!isSelected) {
     return "";
   }
-  if (status === DefaultStatus.Working && color !== "") {
+  if (status === "Working" && color !== "") {
     return `inset 0 0 0 2px ${color}`;
   }
   return "";
@@ -33,7 +33,7 @@ function isColoredAndColor(
   if (isSelected) {
     return [true, AccentColor];
   }
-  if (status === DefaultStatus.Working) {
+  if (status === "Working") {
     return [true, color];
   }
   return [false, ""];

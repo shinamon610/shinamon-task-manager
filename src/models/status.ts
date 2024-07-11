@@ -1,35 +1,27 @@
 export type Status = DefaultStatus | NotStatus;
 
-export enum DefaultStatus {
-  Working = "Working",
-  Pending = "Pending",
-  Done = "Done",
-}
+export const AllDefaultStatus = ["Working", "Pending", "Done"] as const;
+export const AllNotStatus = ["Not Working", "Not Pending", "Not Done"] as const;
 
-export enum NotStatus {
-  NotWorking = "Not Working",
-  NotPending = "Not Pending",
-  NotDone = "Not Done",
-}
+export type DefaultStatus = (typeof AllDefaultStatus)[number];
+
+export type NotStatus = (typeof AllNotStatus)[number];
 
 export function toDefaultStatus(status: NotStatus): DefaultStatus {
   switch (status) {
-    case NotStatus.NotWorking:
-      return DefaultStatus.Working;
-    case NotStatus.NotPending:
-      return DefaultStatus.Pending;
-    case NotStatus.NotDone:
-      return DefaultStatus.Done;
+    case "Not Working":
+      return "Working";
+    case "Not Pending":
+      return "Pending";
+    case "Not Done":
+      return "Done";
   }
 }
 
 export function loadInitialStatus(): Set<Status> {
-  return new Set(Object.values(DefaultStatus));
+  return new Set(AllDefaultStatus);
 }
 
 export function loadInitialAllStatus(): Set<Status> {
-  return new Set([
-    ...Object.values(DefaultStatus),
-    ...Object.values(NotStatus),
-  ]);
+  return new Set([...AllDefaultStatus, ...AllNotStatus]);
 }

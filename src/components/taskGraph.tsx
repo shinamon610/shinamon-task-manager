@@ -4,7 +4,6 @@ import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
 import { getNodeBorderStyle } from "@/lib/layoutUtils";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
-import { DefaultStatus } from "@/models/status";
 import { Task } from "@/models/task";
 import { zip } from "@/utils";
 import { Command, panCommands } from "@/vim/commands";
@@ -63,9 +62,7 @@ function createNodesAndEdgesFromTasks(
       style: {
         ...getNodeBorderStyle(assignees, task),
         background:
-          task.status === DefaultStatus.Done
-            ? "var(--inactive)"
-            : "var(--active)",
+          task.status === "Done" ? "var(--inactive)" : "var(--active)",
       },
     };
   });

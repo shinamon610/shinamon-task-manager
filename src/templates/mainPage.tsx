@@ -1,7 +1,6 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { load, saveData } from "@/models/file";
-import { DefaultStatus, NotStatus } from "@/models/status";
 import {
   Task,
   UUID,
@@ -244,7 +243,7 @@ export function MainPage() {
           const newDumpTasks = filterTasks(
             mergedTasks,
             "",
-            DefaultStatus.Done,
+            "Done",
             "",
             new Set([]),
             new Set([]),
@@ -253,7 +252,7 @@ export function MainPage() {
           const restTasks = filterTasks(
             mergedTasks,
             "",
-            NotStatus.NotDone,
+            "Not Done",
             "",
             new Set([]),
             new Set([]),

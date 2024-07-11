@@ -4,7 +4,13 @@ import { List } from "immutable";
 import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
 import { selectLabelIndex } from "./labels";
-import { DefaultStatus, NotStatus, Status, toDefaultStatus } from "./status";
+import {
+  AllDefaultStatus,
+  DefaultStatus,
+  NotStatus,
+  Status,
+  toDefaultStatus,
+} from "./status";
 
 export type UUID = string;
 
@@ -37,7 +43,7 @@ export const noneTask: Task = {
   from: [],
   priority: 0,
   memo: "",
-  status: DefaultStatus.Pending,
+  status: "Pending",
   assignee: null,
   isSelected: false,
 };
@@ -64,14 +70,13 @@ function createTask(
   function toStatus(): Status {
     if (
       tasks.filter(
-        ({ id, status }) =>
-          userInput.from.includes(id) && status !== DefaultStatus.Done
+        ({ id, status }) => userInput.from.includes(id) && status !== "Done"
       ).size > 0
     ) {
-      return DefaultStatus.Pending;
+      return "Pending";
     }
     if (userInput.status == null) {
-      return DefaultStatus.Pending;
+      return "Pending";
     }
     return userInput.status;
   }
@@ -80,7 +85,7 @@ function createTask(
     if (userInput.assignee != null && userInput.assignee !== "") {
       return userInput.assignee;
     }
-    if (status === DefaultStatus.Working) {
+    if (status === "Working") {
       return userName;
     }
     return null;
@@ -176,7 +181,7 @@ function updateSelectedTask(tasks: List<Task>, newTask: Task): List<Task> {
       return newTask;
     }
     //もうDoneのタスクは何もしない
-    if (task.status === DefaultStatus.Done) {
+    if (task.status === "Done") {
       return task;
     }
 
@@ -184,14 +189,14 @@ function updateSelectedTask(tasks: List<Task>, newTask: Task): List<Task> {
     const isNewTaskWorking =
       newTask.assignee !== null &&
       newTask.assignee === task.assignee &&
-      newTask.status === DefaultStatus.Working;
+      newTask.status === "Working";
 
     // 新規タスクのtoのタスクがある時はそれもpendingにする
     const isNewTaskTo = newTask.to.includes(task.id);
     if (isNewTaskWorking || isNewTaskTo) {
       return {
         ...task,
-        status: DefaultStatus.Pending,
+        status: "Pending",
       };
     }
     return task;
@@ -294,7 +299,7 @@ export function filterTasks(
   }
   function filterByStatus(task: Task | null): Task | null {
     return baseFilter(task, filterStatus, (task, status) => {
-      if (Object.values(DefaultStatus).includes(status as DefaultStatus)) {
+      if (AllDefaultStatus.includes(status as DefaultStatus)) {
         return task.status === status ? task : null;
       }
       return task.status !== toDefaultStatus(status as NotStatus) ? task : null;
@@ -370,7 +375,7 @@ export function hasNotDoneChildTask(tasks: List<Task>): boolean {
     selectedTask.from.filter((id) => {
       const maybeTarget = tasks.filter((task) => task.id === id); // dumpされて存在しない可能性がある。dumpされている場合はdoneになっているはずなので、対象から外す。
       if (maybeTarget.size === 0) return false;
-      return maybeTarget.get(0)!.status !== DefaultStatus.Done;
+      return maybeTarget.get(0)!.status !== "Done";
     }).length > 0
   );
 }
@@ -475,14 +480,14 @@ export function createTasks(
     case Command.SetToWorking:
       const maxPriority = stackedTasks.map((task) => task.priority).max() ?? 0;
       return updatePriorities(
-        updateTaskStatus(tasks, DefaultStatus.Working, userName),
+        updateTaskStatus(tasks, "Working", userName),
         [getSelectedTask(tasks)!.id],
         [maxPriority + 1]
       );
     case Command.SetToPending:
-      return updateTaskStatus(tasks, DefaultStatus.Pending, userName);
+      return updateTaskStatus(tasks, "Pending", userName);
     case Command.SetToDone:
-      return updateTaskStatus(tasks, DefaultStatus.Done, userName);
+      return updateTaskStatus(tasks, "Done", userName);
     case Command.DumpArchive:
       return tasks;
     case Command.ReadArchive:

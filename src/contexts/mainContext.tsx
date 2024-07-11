@@ -1,5 +1,5 @@
 import { Assignee } from "@/models/assignee";
-import { DefaultStatus, Status } from "@/models/status";
+import { Status } from "@/models/status";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { ViewMode as GanttViewMode } from "gantt-task-react";
@@ -42,7 +42,7 @@ export const MainContext = createContext<MainContextType>({
   filterMemo: "",
   setFilterMemo: () => {},
   filteredTasks: List([]),
-  selectedStatus: DefaultStatus.Pending,
+  selectedStatus: "Pending",
   setSelectedStatus: () => {},
 
   viewMode: ViewMode.Graph,
@@ -100,9 +100,7 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   );
   const [mode, setMode] = useState(Mode.Normal);
   const [title, setTitle] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<Status>(
-    DefaultStatus.Pending
-  );
+  const [selectedStatus, setSelectedStatus] = useState<Status>("Pending");
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );

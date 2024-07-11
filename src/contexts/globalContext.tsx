@@ -6,7 +6,6 @@ import {
   loadData,
   loadInitialDir,
 } from "@/models/file";
-import { DefaultStatus } from "@/models/status";
 import {
   Task,
   UUID,
@@ -128,10 +127,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
       return List([]);
     }
     const _stackedTaskIds = _tasks
-      .filter(
-        (task) =>
-          task.assignee === userName && task.status !== DefaultStatus.Done
-      )
+      .filter((task) => task.assignee === userName && task.status !== "Done")
       .map(({ id }) => id);
     return toposort(_tasks).filter((task) => _stackedTaskIds.includes(task.id));
   }, [_tasks, userName]);
