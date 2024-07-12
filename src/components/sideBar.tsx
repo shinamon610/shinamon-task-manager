@@ -35,7 +35,10 @@ export function SideBar() {
       }}
     >
       {stackedTasks.map((task) => {
-        const style = getNodeBorderStyle(assignees, task);
+        const style = getNodeBorderStyle(assignees, {
+          ...task,
+          statusLabel: task.status.type,
+        });
         return (
           <CardComponent
             key={task.id}

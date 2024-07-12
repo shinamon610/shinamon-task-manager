@@ -1,6 +1,7 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { load, saveData } from "@/models/file";
+import { toStatus } from "@/models/status";
 import {
   Task,
   UUID,
@@ -41,8 +42,8 @@ export function MainPage() {
     setMode,
     title,
     setTitle,
-    selectedStatus,
-    setSelectedStatus,
+    selectedStatusLabel,
+    setSelectedStatusLabel,
     selectedAssignee,
     setSelectedAssignee,
     selectedSources,
@@ -81,7 +82,7 @@ export function MainPage() {
   function setTaskData(newCommand: Command, newTasks: List<Task>) {
     const selectedTask = getSelectedTask(newTasks)!;
     setTitle(newCommand === Command.CreateTaskNode ? "" : selectedTask.name);
-    setSelectedStatus(selectedTask.status);
+    setSelectedStatusLabel(selectedTask.status.type);
     setSelectedAssignee(selectedTask.assignee);
     setSelectedSources(new Set<UUID>(selectedTask.from));
     setSelectedTargets(new Set<UUID>(selectedTask.to));
@@ -140,7 +141,7 @@ export function MainPage() {
             from: Array.from(selectedSources),
             priority: null,
             memo: memo,
-            status: selectedStatus,
+            status: toStatus(selectedStatusLabel),
             assignee: selectedAssignee,
           },
           userName,

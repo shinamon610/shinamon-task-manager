@@ -127,7 +127,9 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
       return List([]);
     }
     const _stackedTaskIds = _tasks
-      .filter((task) => task.assignee === userName && task.status !== "Done")
+      .filter(
+        (task) => task.assignee === userName && task.status.type !== "Done"
+      )
       .map(({ id }) => id);
     return toposort(_tasks).filter((task) => _stackedTaskIds.includes(task.id));
   }, [_tasks, userName]);

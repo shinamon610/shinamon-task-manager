@@ -3,9 +3,9 @@ import { MainContext } from "@/contexts/mainContext";
 import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
 import { Assignee } from "@/models/assignee";
 import {
-  Status,
+  StatusLabel,
   loadInitialAllStatus,
-  loadInitialStatus,
+  loadInitialStatusLabel,
 } from "@/models/status";
 import {
   Task,
@@ -71,11 +71,11 @@ function createContent(
   tasks: List<Task>,
   title: string,
   setTitle: React.Dispatch<React.SetStateAction<string>>,
-  selectedStatus: Status | null,
-  setSelectedStatus:
-    | React.Dispatch<React.SetStateAction<Status>>
-    | React.Dispatch<React.SetStateAction<Status | null>>,
-  statuses: Set<Status>,
+  selectedStatusLabel: StatusLabel | null,
+  setSelectedStatusLabel:
+    | React.Dispatch<React.SetStateAction<StatusLabel>>
+    | React.Dispatch<React.SetStateAction<StatusLabel | null>>,
+  statuses: Set<StatusLabel>,
   selectedAssignee: Assignee | null,
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>,
   assignees: Set<Assignee>,
@@ -143,9 +143,9 @@ function createContent(
                   mode !== Mode.StatusInputting &&
                   mode !== Mode.FilterStatusInputting
                 }
-                defaultOption={selectedStatus}
+                defaultOption={selectedStatusLabel}
                 data={statuses}
-                setSelectedValue={setSelectedStatus}
+                setSelectedValue={setSelectedStatusLabel}
                 ref={statusRef}
                 toLabel={idf}
                 nullable={
@@ -398,15 +398,15 @@ export const EditBar = ({
   const setTitle = isFilter(mode)
     ? mainContext.setFilterTitle
     : mainContext.setTitle;
-  const selectedStatus = isFilter(mode)
-    ? mainContext.filterStatus
-    : mainContext.selectedStatus;
-  const setSelectedStatus = isFilter(mode)
-    ? mainContext.setFilterStatus
-    : mainContext.setSelectedStatus;
+  const statusLabel = isFilter(mode)
+    ? mainContext.filterStatusLabel
+    : mainContext.selectedStatusLabel;
+  const setStatusLabel = isFilter(mode)
+    ? mainContext.setFilterStatusLabel
+    : mainContext.setSelectedStatusLabel;
   const statuses = isFilter(mode)
     ? loadInitialAllStatus()
-    : loadInitialStatus();
+    : loadInitialStatusLabel();
   const selectedAssignee = isFilter(mode)
     ? mainContext.filterAssignee
     : mainContext.selectedAssignee;
@@ -475,8 +475,8 @@ export const EditBar = ({
         tasks,
         title,
         setTitle,
-        selectedStatus,
-        setSelectedStatus,
+        statusLabel,
+        setStatusLabel,
         statuses,
         selectedAssignee,
         setSelectedAssignee,

@@ -1,13 +1,23 @@
-export type Status = DefaultStatus | NotStatus;
+import moment from "moment";
+export type Status = DefaultStatus | NotStatus | Done;
+export type StatusLabel = DefaultStatusLabel | NotStatusLabel;
 
-export const AllDefaultStatus = ["Working", "Pending", "Done"] as const;
-export const AllNotStatus = ["Not Working", "Not Pending", "Not Done"] as const;
+export const AllDefaultStatusLabel = ["Working", "Pending", "Done"] as const;
+export const AllNotStatusLabel = [
+  "Not Working",
+  "Not Pending",
+  "Not Done",
+] as const;
+export type DefaultStatusLabel = (typeof AllDefaultStatusLabel)[number];
+export type NotStatusLabel = (typeof AllNotStatusLabel)[number];
 
-export type DefaultStatus = (typeof AllDefaultStatus)[number];
+type DefaultStatus = { type: Exclude<DefaultStatusLabel, "Done"> };
+type NotStatus = { type: NotStatusLabel };
+type Done = { type: "Done"; date: moment.Moment };
 
-export type NotStatus = (typeof AllNotStatus)[number];
-
-export function toDefaultStatus(status: NotStatus): DefaultStatus {
+export function toDefaultStatusLabel(
+  status: NotStatusLabel
+): DefaultStatusLabel {
   switch (status) {
     case "Not Working":
       return "Working";
@@ -18,10 +28,17 @@ export function toDefaultStatus(status: NotStatus): DefaultStatus {
   }
 }
 
-export function loadInitialStatus(): Set<Status> {
-  return new Set(AllDefaultStatus);
+export function loadInitialStatusLabel(): Set<DefaultStatusLabel> {
+  return new Set(AllDefaultStatusLabel);
 }
 
-export function loadInitialAllStatus(): Set<Status> {
-  return new Set([...AllDefaultStatus, ...AllNotStatus]);
+export function loadInitialAllStatus(): Set<StatusLabel> {
+  return new Set([...AllDefaultStatusLabel, ...AllNotStatusLabel]);
+}
+
+export function toStatus(statusLabel: StatusLabel): Status {
+  if (statusLabel == "Done") {
+    return { type: "Done", date: moment() };
+  }
+  return { type: statusLabel };
 }

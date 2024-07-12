@@ -41,7 +41,10 @@ function createNodesAndEdgesFromTasks(
   mode: Mode
 ): [Node[], Edge[]] {
   const labels = indexesToLabels(tasks.size);
-  const nodes = zip(tasks.toJS(), labels).map(([task, label]) => {
+  const nodes = zip(
+    tasks.map((task) => ({ ...task, statusLabel: task.status.type })).toJS(),
+    labels
+  ).map(([task, label]) => {
     const color =
       task.assignee == null ? null : getColor(assignees, task.assignee);
 
