@@ -65,7 +65,7 @@ function createNodesAndEdgesFromTasks(
       style: {
         ...getNodeBorderStyle(assignees, task),
         background:
-          task.status === "Done" ? "var(--inactive)" : "var(--active)",
+          task.statusLabel === "Done" ? "var(--inactive)" : "var(--active)",
       },
     };
   });
