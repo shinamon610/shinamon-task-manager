@@ -1,10 +1,10 @@
 import React, {
-  useState,
   forwardRef,
-  useRef,
   useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
-import Select, { createFilter, SelectInstance } from "react-select";
+import Select, { SelectInstance, createFilter } from "react-select";
 
 export type Option<S> = {
   value: S;
