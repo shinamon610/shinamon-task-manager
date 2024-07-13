@@ -55,6 +55,8 @@ export enum Mode {
 
   FilterDoneStartSelecting,
   FilterDoneStartInputting,
+  FilterDoneEndSelecting,
+  FilterDoneEndInputting,
 }
 
 export const markdownModes = [
@@ -94,6 +96,7 @@ export const selectingFilterModes = (isDone: boolean) => [
     ? [
         Mode.FilterStatusSelecting,
         Mode.FilterDoneStartSelecting,
+        Mode.FilterDoneEndSelecting,
         Mode.FilterAssigneeSelecting,
       ]
     : [Mode.FilterStatusSelecting, Mode.FilterAssigneeSelecting],
@@ -106,6 +109,7 @@ export const inputtingFilterModes = (isDone: boolean) => [
     ? [
         Mode.FilterStatusInputting,
         Mode.FilterDoneStartInputting,
+        Mode.FilterDoneEndInputting,
         Mode.FilterAssigneeInputting,
       ]
     : [Mode.FilterStatusInputting, Mode.FilterAssigneeInputting],
@@ -220,6 +224,10 @@ export function createMode(
       return Mode.FilterDoneStartSelecting;
     case Command.InputFilterDoneStart:
       return Mode.FilterDoneStartInputting;
+    case Command.SelectFilterDoneEnd:
+      return Mode.FilterDoneEndSelecting;
+    case Command.InputFilterDoneEnd:
+      return Mode.FilterDoneEndInputting;
     case Command.SetToWorking:
       return Mode.NodeSelecting;
     case Command.SetToPending:

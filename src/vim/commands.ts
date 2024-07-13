@@ -99,6 +99,8 @@ export enum Command {
 
   SelectFilterDoneStart,
   InputFilterDoneStart,
+  SelectFilterDoneEnd,
+  InputFilterDoneEnd,
 
   // ViewMode
   ToGraph,
@@ -148,6 +150,7 @@ const selectingFilterCommands = (isDone: boolean) => [
     ? [
         Command.SelectFilterStatus,
         Command.SelectFilterDoneStart,
+        Command.SelectFilterDoneEnd,
         Command.SelectFilterAssignee,
       ]
     : [Command.SelectFilterStatus, Command.SelectFilterAssignee],
@@ -160,6 +163,7 @@ const inputtingFilterCommands = (isDone: boolean) => [
     ? [
         Command.InputFilterStatus,
         Command.InputFilterDoneStart,
+        Command.InputFilterDoneEnd,
         Command.InputFilterAssignee,
       ]
     : [Command.InputFilterStatus, Command.InputFilterAssignee],
@@ -455,6 +459,7 @@ export function keyEventToCommand(
     case Mode.FilterTargetsSelecting:
     case Mode.FilterMemoSelecting:
     case Mode.FilterDoneStartSelecting:
+    case Mode.FilterDoneEndSelecting:
       return handleSelectMode(
         mode,
         event,
@@ -469,6 +474,7 @@ export function keyEventToCommand(
     case Mode.FilterTargetsInputting:
     case Mode.FilterMemoInputting:
     case Mode.FilterDoneStartInputting:
+    case Mode.FilterDoneEndInputting:
       return handleInputMode(
         mode,
         event,

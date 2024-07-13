@@ -111,6 +111,7 @@ function createContent(
   titleRef: MutableRefObject<null>,
   statusRef: MutableRefObject<null>,
   doneStartRef: MutableRefObject<null>,
+  doneEndRef: MutableRefObject<null>,
   assigneeRef: MutableRefObject<null>,
   estimatedRef: MutableRefObject<null>,
   spentRef: MutableRefObject<null>,
@@ -205,24 +206,24 @@ function createContent(
                         />,
                         <label key="nyoro">~</label>,
                         <FlexContainer
-                          key="s1"
+                          key="s2"
                           components={[
                             <input
-                              key={"doneStart"}
-                              name="doneStart"
+                              key={"doneEnd"}
+                              name="doneEnd"
                               type="datetime-local"
                               value={
                                 startDateTime == null
                                   ? ""
                                   : startDateTime.format(dateFormat)
                               }
-                              ref={null}
+                              ref={doneEndRef}
                               onChange={(e) => {
                                 setStartDateTime(moment(e.target.value));
                               }}
                             />,
                           ]}
-                          isSelected={false}
+                          isSelected={mode === Mode.FilterDoneEndSelecting}
                           ratios={[1]}
                         />,
                       ]}
@@ -517,6 +518,7 @@ export const EditBar = ({
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const doneStartRef = useRef(null);
+  const doneEndRef = useRef(null);
   const assigneeRef = useRef(null);
   const estimatedRef = useRef(null);
   const spentRef = useRef(null);
@@ -528,6 +530,7 @@ export const EditBar = ({
     [titleRef, [Mode.TitleInputting, Mode.FilterTitleInputting]],
     [statusRef, [Mode.StatusInputting, Mode.FilterStatusInputting]],
     [doneStartRef, [Mode.FilterDoneStartInputting]],
+    [doneEndRef, [Mode.FilterDoneEndInputting]],
     [assigneeRef, [Mode.AssigneeInputting, Mode.FilterAssigneeInputting]],
     [sourcesRef, [Mode.SourcesInputting, Mode.FilterSourcesInputting]],
     [targetsRef, [Mode.TargetsInputting, Mode.FilterTargetsInputting]],
@@ -588,6 +591,7 @@ export const EditBar = ({
         titleRef,
         statusRef,
         doneStartRef,
+        doneEndRef,
         assigneeRef,
         estimatedRef,
         spentRef,
