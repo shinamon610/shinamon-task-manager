@@ -164,9 +164,48 @@ function createContent(
                 }
               />,
               <label key={"doneDate"}>On:</label>,
-              <label key={"doneDateOn"}>
-                {getSelectedTaskCompletedDateLetter(tasks)}
-              </label>,
+              isFilter(mode) ? (
+                <FlexContainer
+                  key={"doneDateSE"}
+                  components={[
+                    <input
+                      key={"doneStart"}
+                      name="doneStart"
+                      type="datetime-local"
+                      value={
+                        startDateTime == null
+                          ? ""
+                          : startDateTime.format(dateFormat)
+                      }
+                      ref={startDateTimeRef}
+                      onChange={(e) => {
+                        setStartDateTime(moment(e.target.value));
+                      }}
+                    />,
+                    <label key="nyoro">~</label>,
+                    <input
+                      key={"doneStart"}
+                      name="doneStart"
+                      type="datetime-local"
+                      value={
+                        startDateTime == null
+                          ? ""
+                          : startDateTime.format(dateFormat)
+                      }
+                      ref={startDateTimeRef}
+                      onChange={(e) => {
+                        setStartDateTime(moment(e.target.value));
+                      }}
+                    />,
+                  ]}
+                  isSelected={false}
+                  ratios={[1, 0, 1]}
+                />
+              ) : (
+                <label key={"doneDateOn"}>
+                  {getSelectedTaskCompletedDateLetter(tasks)}
+                </label>
+              ),
             ]}
             isSelected={
               mode === Mode.StatusSelecting ||
