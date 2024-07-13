@@ -69,7 +69,7 @@ function createMultiSelectBoxData(
 
 const dateFormat = "YYYY-MM-DDTHH:mm";
 
-function getSelectedTaskCompletedDateLetter(tasks: List<Task>): String {
+function getSelectedTaskCompletedDateLetter(tasks: List<Task>): string {
   const selectedTask = getSelectedTask(tasks);
   if (selectedTask === undefined) return "";
   if (selectedTask.status.type === "Done") {
