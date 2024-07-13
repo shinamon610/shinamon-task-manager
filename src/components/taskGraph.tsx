@@ -160,7 +160,10 @@ function BaseNewTaskGraph({
     if (
       mode === Mode.NodeSelecting ||
       inputtingModes.flat().includes(mode) ||
-      inputtingFilterModes.flat().includes(mode) ||
+      [true, false]
+        .map((b) => inputtingFilterModes(b))
+        .flat(Infinity)
+        .includes(mode) ||
       command === Command.ToTile ||
       command === Command.ToGraph ||
       command === Command.ConfirmFilterEdit ||

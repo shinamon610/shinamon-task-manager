@@ -110,6 +110,7 @@ function createContent(
   setMemo: React.Dispatch<React.SetStateAction<string>>,
   titleRef: MutableRefObject<null>,
   statusRef: MutableRefObject<null>,
+  doneStartRef: MutableRefObject<null>,
   assigneeRef: MutableRefObject<null>,
   estimatedRef: MutableRefObject<null>,
   spentRef: MutableRefObject<null>,
@@ -146,72 +147,100 @@ function createContent(
           <FlexContainer
             key={"s"}
             components={[
-              <label key={"status"}>Status:</label>,
-              <SelectBox
-                key={"statusInput"}
-                isDisabled={
-                  mode !== Mode.StatusInputting &&
-                  mode !== Mode.FilterStatusInputting
+              <FlexContainer
+                key={"sf"}
+                components={[
+                  <label key={"status"}>Status:</label>,
+                  <SelectBox
+                    key={"statusInput"}
+                    isDisabled={
+                      mode !== Mode.StatusInputting &&
+                      mode !== Mode.FilterStatusInputting
+                    }
+                    defaultOption={selectedStatusLabel}
+                    data={statuses}
+                    setSelectedValue={setSelectedStatusLabel}
+                    ref={statusRef}
+                    toLabel={idf}
+                    nullable={
+                      mode === Mode.FilterStatusSelecting ||
+                      mode === Mode.FilterStatusInputting
+                    }
+                  />,
+                ]}
+                isSelected={
+                  mode === Mode.StatusSelecting ||
+                  mode === Mode.FilterStatusSelecting
                 }
-                defaultOption={selectedStatusLabel}
-                data={statuses}
-                setSelectedValue={setSelectedStatusLabel}
-                ref={statusRef}
-                toLabel={idf}
-                nullable={
-                  mode === Mode.FilterStatusSelecting ||
-                  mode === Mode.FilterStatusInputting
-                }
+                ratios={[0, 1]}
               />,
-              <label key={"doneDate"}>On:</label>,
-              isFilter(mode) ? (
-                <FlexContainer
-                  key={"doneDateSE"}
-                  components={[
-                    <input
-                      key={"doneStart"}
-                      name="doneStart"
-                      type="datetime-local"
-                      value={
-                        startDateTime == null
-                          ? ""
-                          : startDateTime.format(dateFormat)
-                      }
-                      ref={startDateTimeRef}
-                      onChange={(e) => {
-                        setStartDateTime(moment(e.target.value));
-                      }}
-                    />,
-                    <label key="nyoro">~</label>,
-                    <input
-                      key={"doneStart"}
-                      name="doneStart"
-                      type="datetime-local"
-                      value={
-                        startDateTime == null
-                          ? ""
-                          : startDateTime.format(dateFormat)
-                      }
-                      ref={startDateTimeRef}
-                      onChange={(e) => {
-                        setStartDateTime(moment(e.target.value));
-                      }}
-                    />,
-                  ]}
-                  isSelected={false}
-                  ratios={[1, 0, 1]}
-                />
-              ) : (
-                <label key={"doneDateOn"}>
-                  {getSelectedTaskCompletedDateLetter(tasks)}
-                </label>
-              ),
+              <FlexContainer
+                key="fd"
+                components={[
+                  <label key={"doneDate"}>On:</label>,
+                  isFilter(mode) ? (
+                    <FlexContainer
+                      key={"doneDateSE"}
+                      components={[
+                        <FlexContainer
+                          key="s1"
+                          components={[
+                            <input
+                              key={"doneStart"}
+                              name="doneStart"
+                              type="datetime-local"
+                              value={
+                                startDateTime == null
+                                  ? ""
+                                  : startDateTime.format(dateFormat)
+                              }
+                              ref={doneStartRef}
+                              onChange={(e) => {
+                                setStartDateTime(moment(e.target.value));
+                              }}
+                            />,
+                          ]}
+                          isSelected={mode === Mode.FilterDoneStartSelecting}
+                          ratios={[1]}
+                        />,
+                        <label key="nyoro">~</label>,
+                        <FlexContainer
+                          key="s1"
+                          components={[
+                            <input
+                              key={"doneStart"}
+                              name="doneStart"
+                              type="datetime-local"
+                              value={
+                                startDateTime == null
+                                  ? ""
+                                  : startDateTime.format(dateFormat)
+                              }
+                              ref={null}
+                              onChange={(e) => {
+                                setStartDateTime(moment(e.target.value));
+                              }}
+                            />,
+                          ]}
+                          isSelected={false}
+                          ratios={[1]}
+                        />,
+                      ]}
+                      isSelected={false}
+                      ratios={[1, 0, 1]}
+                    />
+                  ) : (
+                    <label key={"doneDateOn"}>
+                      {getSelectedTaskCompletedDateLetter(tasks)}
+                    </label>
+                  ),
+                ]}
+                isSelected={false}
+                ratios={[0, 1]}
+              />,
             ]}
-            isSelected={
-              mode === Mode.StatusSelecting ||
-              mode === Mode.FilterStatusSelecting
-            }
-            ratios={[0, 1, 0, 1]}
+            isSelected={false}
+            ratios={[1, 1]}
           />,
           <FlexContainer
             key="a"
@@ -425,8 +454,10 @@ function isDisabled(mode: Mode): boolean {
   return [
     selectingModes,
     inputtingModes,
-    selectingFilterModes,
-    inputtingFilterModes,
+    selectingFilterModes(true),
+    inputtingFilterModes(true),
+    selectingFilterModes(false),
+    inputtingFilterModes(false),
   ].every((modes) => {
     return !modes.flat().includes(mode);
   });
@@ -485,6 +516,7 @@ export const EditBar = ({
 
   const titleRef = useRef(null);
   const statusRef = useRef(null);
+  const doneStartRef = useRef(null);
   const assigneeRef = useRef(null);
   const estimatedRef = useRef(null);
   const spentRef = useRef(null);
@@ -495,6 +527,7 @@ export const EditBar = ({
   const refAndModes: [MutableRefObject<null>, Mode[]][] = [
     [titleRef, [Mode.TitleInputting, Mode.FilterTitleInputting]],
     [statusRef, [Mode.StatusInputting, Mode.FilterStatusInputting]],
+    [doneStartRef, [Mode.FilterDoneStartInputting]],
     [assigneeRef, [Mode.AssigneeInputting, Mode.FilterAssigneeInputting]],
     [sourcesRef, [Mode.SourcesInputting, Mode.FilterSourcesInputting]],
     [targetsRef, [Mode.TargetsInputting, Mode.FilterTargetsInputting]],
@@ -506,6 +539,7 @@ export const EditBar = ({
   ];
   useEffect(() => {
     const refAndMode = refAndModes.filter(([_, m]) => m.includes(mode));
+    // refAndMode.lengthは1か0になる。
     if (refAndMode.length === 1) {
       // @ts-ignore
       refAndMode[0][0].current?.focus();
@@ -553,6 +587,7 @@ export const EditBar = ({
         setMemo,
         titleRef,
         statusRef,
+        doneStartRef,
         assigneeRef,
         estimatedRef,
         spentRef,

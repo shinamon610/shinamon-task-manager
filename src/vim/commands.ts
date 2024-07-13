@@ -1,3 +1,4 @@
+import { StatusLabel } from "@/models/status";
 import { getCircularIndex, getNextItem, getPrevItem } from "@/utils";
 import { MutableRefObject } from "react";
 import {
@@ -96,6 +97,9 @@ export enum Command {
   SelectFilterMemo,
   InputFilterMemo,
 
+  SelectFilterDoneStart,
+  InputFilterDoneStart,
+
   // ViewMode
   ToGraph,
   ToTile,
@@ -138,15 +142,27 @@ const inputtingCommands = [
   [Command.InputMemo],
 ];
 
-const selectingFilterCommands = [
+const selectingFilterCommands = (isDone: boolean) => [
   [Command.SelectFilterTitle],
-  [Command.SelectFilterStatus, Command.SelectFilterAssignee],
+  isDone
+    ? [
+        Command.SelectFilterStatus,
+        Command.SelectFilterDoneStart,
+        Command.SelectFilterAssignee,
+      ]
+    : [Command.SelectFilterStatus, Command.SelectFilterAssignee],
   [Command.SelectFilterSources, Command.SelectFilterTargets],
   [Command.SelectFilterMemo],
 ];
-const inputtingFilterCommands = [
+const inputtingFilterCommands = (isDone: boolean) => [
   [Command.InputFilterTitle],
-  [Command.InputFilterStatus, Command.InputFilterAssignee],
+  isDone
+    ? [
+        Command.InputFilterStatus,
+        Command.InputFilterDoneStart,
+        Command.InputFilterAssignee,
+      ]
+    : [Command.InputFilterStatus, Command.InputFilterAssignee],
   [Command.InputFilterSources, Command.InputFilterTargets],
   [Command.InputFilterMemo],
 ];
@@ -249,7 +265,8 @@ export function keyEventToCommand(
   event: KeyboardEvent,
   sourcesRef: MutableRefObject<null>,
   targetsRef: MutableRefObject<null>,
-  swappable: [boolean, boolean]
+  swappable: [boolean, boolean],
+  filterStatusLabel: StatusLabel | null
 ): Command {
   const key = event.key;
   // console.log("key", key);
@@ -437,12 +454,13 @@ export function keyEventToCommand(
     case Mode.FilterSourcesSelecting:
     case Mode.FilterTargetsSelecting:
     case Mode.FilterMemoSelecting:
+    case Mode.FilterDoneStartSelecting:
       return handleSelectMode(
         mode,
         event,
-        selectingFilterModes,
-        selectingFilterCommands,
-        inputtingFilterCommands
+        selectingFilterModes(filterStatusLabel === "Done"),
+        selectingFilterCommands(filterStatusLabel === "Done"),
+        inputtingFilterCommands(filterStatusLabel === "Done")
       );
     case Mode.FilterTitleInputting:
     case Mode.FilterStatusInputting:
@@ -450,14 +468,15 @@ export function keyEventToCommand(
     case Mode.FilterSourcesInputting:
     case Mode.FilterTargetsInputting:
     case Mode.FilterMemoInputting:
+    case Mode.FilterDoneStartInputting:
       return handleInputMode(
         mode,
         event,
         sourcesRef,
         targetsRef,
-        inputtingFilterModes,
-        selectingFilterCommands,
-        inputtingFilterCommands
+        inputtingFilterModes(filterStatusLabel === "Done"),
+        selectingFilterCommands(filterStatusLabel === "Done"),
+        inputtingFilterCommands(filterStatusLabel === "Done")
       );
     case Mode.MarkDownViewing:
       if (key === "i") {

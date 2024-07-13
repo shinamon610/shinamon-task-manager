@@ -544,6 +544,8 @@ export function createTasks(
     case Command.InputFilterTargets:
     case Command.SelectFilterMemo:
     case Command.InputFilterMemo:
+    case Command.SelectFilterDoneStart:
+    case Command.InputFilterDoneStart:
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:

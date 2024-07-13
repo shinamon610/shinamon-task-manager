@@ -60,6 +60,7 @@ export function MainPage() {
     setFilterSources,
     filterTargets,
     setFilterTargets,
+    filterStatusLabel,
   } = useContext(MainContext);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -112,7 +113,8 @@ export function MainPage() {
         event,
         sourcesRef,
         targetsRef,
-        swappable
+        swappable,
+        filterStatusLabel
       );
       preventKey(event, newCommand);
 
