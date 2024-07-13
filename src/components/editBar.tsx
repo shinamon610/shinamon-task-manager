@@ -3,15 +3,16 @@ import { MainContext } from "@/contexts/mainContext";
 import { AccentColor, getSelectedStyle } from "@/lib/layoutUtils";
 import { Assignee } from "@/models/assignee";
 import {
-  Status,
+  StatusLabel,
   loadInitialAllStatus,
-  loadInitialStatus,
+  loadInitialStatusLabel,
 } from "@/models/status";
 import {
   Task,
   UUID,
   getAllTasksFromSource,
   getAllTasksFromTarget,
+  getSelectedTask,
   noneTask,
 } from "@/models/task";
 import { idf } from "@/utils";
@@ -66,16 +67,31 @@ function createMultiSelectBoxData(
   return tasks.push(noneTask); // filtering中は先がないものを絞り込むためにnoneTaskが必要
 }
 
+const dateFormat = "YYYY-MM-DDTHH:mm";
+
+function getSelectedTaskCompletedDateLetter(tasks: List<Task>): string {
+  const selectedTask = getSelectedTask(tasks);
+  if (selectedTask === undefined) return "";
+  if (selectedTask.status.type === "Done") {
+    return moment(selectedTask.status.date).format(dateFormat);
+  }
+  return "";
+}
+
 function createContent(
   mode: Mode,
   tasks: List<Task>,
   title: string,
   setTitle: React.Dispatch<React.SetStateAction<string>>,
-  selectedStatus: Status | null,
-  setSelectedStatus:
-    | React.Dispatch<React.SetStateAction<Status>>
-    | React.Dispatch<React.SetStateAction<Status | null>>,
-  statuses: Set<Status>,
+  selectedStatusLabel: StatusLabel | null,
+  setSelectedStatusLabel:
+    | React.Dispatch<React.SetStateAction<StatusLabel>>
+    | React.Dispatch<React.SetStateAction<StatusLabel | null>>,
+  filterDoneStart: Moment | null,
+  setFilterDoneStart: React.Dispatch<React.SetStateAction<Moment | null>>,
+  filterDoneEnd: Moment | null,
+  setFilterDoneEnd: React.Dispatch<React.SetStateAction<Moment | null>>,
+  statuses: Set<StatusLabel>,
   selectedAssignee: Assignee | null,
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>,
   assignees: Set<Assignee>,
@@ -98,6 +114,8 @@ function createContent(
   setMemo: React.Dispatch<React.SetStateAction<string>>,
   titleRef: MutableRefObject<null>,
   statusRef: MutableRefObject<null>,
+  doneStartRef: MutableRefObject<null>,
+  doneEndRef: MutableRefObject<null>,
   assigneeRef: MutableRefObject<null>,
   estimatedRef: MutableRefObject<null>,
   spentRef: MutableRefObject<null>,
@@ -105,8 +123,6 @@ function createContent(
   endDateTimeRef: MutableRefObject<null>,
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
-  const dateFormat = "YYYY-MM-DDTHH:mm";
-
   return (
     <>
       <FlexContainer
@@ -136,29 +152,113 @@ function createContent(
           <FlexContainer
             key={"s"}
             components={[
-              <label key={"status"}>Status:</label>,
-              <SelectBox
-                key={"statusInput"}
-                isDisabled={
-                  mode !== Mode.StatusInputting &&
-                  mode !== Mode.FilterStatusInputting
+              <FlexContainer
+                key={"sf"}
+                components={[
+                  <label key={"status"}>Status:</label>,
+                  <SelectBox
+                    key={"statusInput"}
+                    isDisabled={
+                      mode !== Mode.StatusInputting &&
+                      mode !== Mode.FilterStatusInputting
+                    }
+                    defaultOption={selectedStatusLabel}
+                    data={statuses}
+                    setSelectedValue={(value) => {
+                      if ((value as StatusLabel) !== "Done") {
+                        setFilterDoneStart(null);
+                        setFilterDoneEnd(null);
+                      }
+                      setSelectedStatusLabel(value);
+                    }}
+                    ref={statusRef}
+                    toLabel={idf}
+                    nullable={
+                      mode === Mode.FilterStatusSelecting ||
+                      mode === Mode.FilterStatusInputting
+                    }
+                  />,
+                ]}
+                isSelected={
+                  mode === Mode.StatusSelecting ||
+                  mode === Mode.FilterStatusSelecting
                 }
-                defaultOption={selectedStatus}
-                data={statuses}
-                setSelectedValue={setSelectedStatus}
-                ref={statusRef}
-                toLabel={idf}
-                nullable={
-                  mode === Mode.FilterStatusSelecting ||
-                  mode === Mode.FilterStatusInputting
-                }
+                ratios={[0, 1]}
+              />,
+              <FlexContainer
+                key="fd"
+                components={[
+                  <label key={"doneDate"}>On:</label>,
+                  isFilter(mode) ? (
+                    <FlexContainer
+                      key={"doneDateSE"}
+                      components={[
+                        <FlexContainer
+                          key="s1"
+                          components={[
+                            <input
+                              key={"doneStart"}
+                              name="doneStart"
+                              type="datetime-local"
+                              placeholder="YYYY-MM-DDTHH:MM"
+                              value={
+                                filterDoneStart == null
+                                  ? ""
+                                  : filterDoneStart.format(dateFormat)
+                              }
+                              ref={doneStartRef}
+                              onChange={(e) => {
+                                const maybeDate = moment(e.target.value);
+                                setFilterDoneStart(
+                                  maybeDate.isValid() ? maybeDate : null
+                                );
+                              }}
+                            />,
+                          ]}
+                          isSelected={mode === Mode.FilterDoneStartSelecting}
+                          ratios={[1]}
+                        />,
+                        <label key="nyoro">~</label>,
+                        <FlexContainer
+                          key="s2"
+                          components={[
+                            <input
+                              key={"doneEnd"}
+                              name="doneEnd"
+                              type="datetime-local"
+                              value={
+                                filterDoneEnd == null
+                                  ? ""
+                                  : filterDoneEnd.format(dateFormat)
+                              }
+                              ref={doneEndRef}
+                              onChange={(e) => {
+                                const maybeDate = moment(e.target.value);
+                                setFilterDoneEnd(
+                                  maybeDate.isValid() ? maybeDate : null
+                                );
+                              }}
+                            />,
+                          ]}
+                          isSelected={mode === Mode.FilterDoneEndSelecting}
+                          ratios={[1]}
+                        />,
+                      ]}
+                      isSelected={false}
+                      ratios={[1, 0, 1]}
+                    />
+                  ) : (
+                    <label key={"doneDateOn"}>
+                      {getSelectedTaskCompletedDateLetter(tasks)}
+                    </label>
+                  ),
+                ]}
+                isSelected={false}
+                ratios={[0, 1]}
               />,
             ]}
-            isSelected={
-              mode === Mode.StatusSelecting ||
-              mode === Mode.FilterStatusSelecting
-            }
-            ratios={[0, 1]}
+            isSelected={false}
+            ratios={[1, 1]}
           />,
           <FlexContainer
             key="a"
@@ -372,8 +472,10 @@ function isDisabled(mode: Mode): boolean {
   return [
     selectingModes,
     inputtingModes,
-    selectingFilterModes,
-    inputtingFilterModes,
+    selectingFilterModes(true),
+    inputtingFilterModes(true),
+    selectingFilterModes(false),
+    inputtingFilterModes(false),
   ].every((modes) => {
     return !modes.flat().includes(mode);
   });
@@ -393,20 +495,26 @@ export const EditBar = ({
 }: EditBarProps) => {
   const { tasks, assignees, setAssignees } = useContext(GlobalContext);
   const mainContext = useContext(MainContext);
-  const { mode } = mainContext;
+  const {
+    mode,
+    filterDoneStart,
+    setFilterDoneStart,
+    filterDoneEnd,
+    setFilterDoneEnd,
+  } = mainContext;
   const title = isFilter(mode) ? mainContext.filterTitle : mainContext.title;
   const setTitle = isFilter(mode)
     ? mainContext.setFilterTitle
     : mainContext.setTitle;
-  const selectedStatus = isFilter(mode)
-    ? mainContext.filterStatus
-    : mainContext.selectedStatus;
-  const setSelectedStatus = isFilter(mode)
-    ? mainContext.setFilterStatus
-    : mainContext.setSelectedStatus;
+  const statusLabel = isFilter(mode)
+    ? mainContext.filterStatusLabel
+    : mainContext.selectedStatusLabel;
+  const setStatusLabel = isFilter(mode)
+    ? mainContext.setFilterStatusLabel
+    : mainContext.setSelectedStatusLabel;
   const statuses = isFilter(mode)
     ? loadInitialAllStatus()
-    : loadInitialStatus();
+    : loadInitialStatusLabel();
   const selectedAssignee = isFilter(mode)
     ? mainContext.filterAssignee
     : mainContext.selectedAssignee;
@@ -432,6 +540,8 @@ export const EditBar = ({
 
   const titleRef = useRef(null);
   const statusRef = useRef(null);
+  const doneStartRef = useRef(null);
+  const doneEndRef = useRef(null);
   const assigneeRef = useRef(null);
   const estimatedRef = useRef(null);
   const spentRef = useRef(null);
@@ -442,6 +552,8 @@ export const EditBar = ({
   const refAndModes: [MutableRefObject<null>, Mode[]][] = [
     [titleRef, [Mode.TitleInputting, Mode.FilterTitleInputting]],
     [statusRef, [Mode.StatusInputting, Mode.FilterStatusInputting]],
+    [doneStartRef, [Mode.FilterDoneStartInputting]],
+    [doneEndRef, [Mode.FilterDoneEndInputting]],
     [assigneeRef, [Mode.AssigneeInputting, Mode.FilterAssigneeInputting]],
     [sourcesRef, [Mode.SourcesInputting, Mode.FilterSourcesInputting]],
     [targetsRef, [Mode.TargetsInputting, Mode.FilterTargetsInputting]],
@@ -453,6 +565,7 @@ export const EditBar = ({
   ];
   useEffect(() => {
     const refAndMode = refAndModes.filter(([_, m]) => m.includes(mode));
+    // refAndMode.lengthは1か0になる。
     if (refAndMode.length === 1) {
       // @ts-ignore
       refAndMode[0][0].current?.focus();
@@ -475,8 +588,12 @@ export const EditBar = ({
         tasks,
         title,
         setTitle,
-        selectedStatus,
-        setSelectedStatus,
+        statusLabel,
+        setStatusLabel,
+        filterDoneStart,
+        setFilterDoneStart,
+        filterDoneEnd,
+        setFilterDoneEnd,
         statuses,
         selectedAssignee,
         setSelectedAssignee,
@@ -500,6 +617,8 @@ export const EditBar = ({
         setMemo,
         titleRef,
         statusRef,
+        doneStartRef,
+        doneEndRef,
         assigneeRef,
         estimatedRef,
         spentRef,

@@ -148,6 +148,10 @@ function createLabelsAndKeys(
     case Mode.FilterTargetsInputting:
     case Mode.FilterMemoSelecting:
     case Mode.FilterMemoInputting:
+    case Mode.FilterDoneStartSelecting:
+    case Mode.FilterDoneStartInputting:
+    case Mode.FilterDoneEndSelecting:
+    case Mode.FilterDoneEndInputting:
       return [["Done"], [[`${ESC}|${ModifierEnter}`]]];
     case Mode.MarkDownViewing:
       return [

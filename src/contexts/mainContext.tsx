@@ -1,9 +1,10 @@
 import { Assignee } from "@/models/assignee";
-import { DefaultStatus, Status } from "@/models/status";
+import { StatusLabel } from "@/models/status";
 import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { ViewMode as GanttViewMode } from "gantt-task-react";
 import { List } from "immutable";
+import { Moment } from "moment";
 import {
   Dispatch,
   SetStateAction,
@@ -31,8 +32,8 @@ export const MainContext = createContext<MainContextType>({
 
   filterTitle: "",
   setFilterTitle: () => {},
-  filterStatus: null,
-  setFilterStatus: () => {},
+  filterStatusLabel: null,
+  setFilterStatusLabel: () => {},
   filterAssignee: null,
   setFilterAssignee: () => {},
   filterSources: new Set<UUID>([]),
@@ -42,8 +43,12 @@ export const MainContext = createContext<MainContextType>({
   filterMemo: "",
   setFilterMemo: () => {},
   filteredTasks: List([]),
-  selectedStatus: DefaultStatus.Pending,
-  setSelectedStatus: () => {},
+  selectedStatusLabel: "Pending",
+  setSelectedStatusLabel: () => {},
+  filterDoneStart: null,
+  setFilterDoneStart: () => {},
+  filterDoneEnd: null,
+  setFilterDoneEnd: () => {},
 
   viewMode: ViewMode.Graph,
   setViewMode: () => {},
@@ -59,8 +64,8 @@ type MainContextType = {
   setMode: Dispatch<SetStateAction<Mode>>;
   title: string;
   setTitle: Dispatch<SetStateAction<string>>;
-  selectedStatus: Status;
-  setSelectedStatus: Dispatch<SetStateAction<Status>>;
+  selectedStatusLabel: StatusLabel;
+  setSelectedStatusLabel: Dispatch<SetStateAction<StatusLabel>>;
   selectedAssignee: Assignee | null;
   setSelectedAssignee: Dispatch<SetStateAction<Assignee | null>>;
   selectedSources: Set<UUID>;
@@ -72,8 +77,8 @@ type MainContextType = {
 
   filterTitle: string;
   setFilterTitle: Dispatch<SetStateAction<string>>;
-  filterStatus: Status | null;
-  setFilterStatus: Dispatch<SetStateAction<Status | null>>;
+  filterStatusLabel: StatusLabel | null;
+  setFilterStatusLabel: Dispatch<SetStateAction<StatusLabel | null>>;
   filterAssignee: Assignee | null;
   setFilterAssignee: Dispatch<SetStateAction<Assignee | null>>;
   filterSources: Set<UUID>;
@@ -87,7 +92,10 @@ type MainContextType = {
   setViewMode: Dispatch<SetStateAction<ViewMode>>;
   ganttViewMode: GanttViewMode;
   setGanttViewMode: Dispatch<SetStateAction<GanttViewMode>>;
-
+  filterDoneStart: Moment | null;
+  setFilterDoneStart: Dispatch<SetStateAction<Moment | null>>;
+  filterDoneEnd: Moment | null;
+  setFilterDoneEnd: Dispatch<SetStateAction<Moment | null>>;
   zoom: number;
   setZoom: Dispatch<SetStateAction<number>>;
 };
@@ -100,9 +108,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   );
   const [mode, setMode] = useState(Mode.Normal);
   const [title, setTitle] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<Status>(
-    DefaultStatus.Pending
-  );
+  const [selectedStatusLabel, setSelectedStatusLabel] =
+    useState<StatusLabel>("Pending");
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
@@ -115,7 +122,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
   const [memo, setMemo] = useState("");
 
   const [filterTitle, setFilterTitle] = useState("");
-  const [filterStatus, setFilterStatus] = useState<Status | null>(null);
+  const [filterStatusLabel, setFilterStatusLabel] =
+    useState<StatusLabel | null>(null);
   const [filterAssignee, setFilterAssignee] = useState<Assignee | null>(null);
   const [filterSources, setFilterSources] = useState<Set<UUID>>(
     new Set<UUID>([])
@@ -124,24 +132,30 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
     new Set<UUID>([])
   );
   const [filterMemo, setFilterMemo] = useState("");
+  const [filterDoneStart, setFilterDoneStart] = useState<Moment | null>(null);
+  const [filterDoneEnd, setFilterDoneEnd] = useState<Moment | null>(null);
   const filteredTasks = useMemo(() => {
     return filterTasks(
       tasks,
       filterTitle,
-      filterStatus,
+      filterStatusLabel,
       filterAssignee,
       filterSources,
       filterTargets,
-      filterMemo
+      filterMemo,
+      filterDoneStart,
+      filterDoneEnd
     );
   }, [
     tasks,
     filterTitle,
-    filterStatus,
+    filterStatusLabel,
     filterAssignee,
     filterSources,
     filterTargets,
     filterMemo,
+    filterDoneStart,
+    filterDoneEnd,
   ]);
 
   const [zoom, setZoom] = useState(1);
@@ -152,8 +166,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setMode,
         title,
         setTitle,
-        selectedStatus,
-        setSelectedStatus,
+        selectedStatusLabel,
+        setSelectedStatusLabel,
         selectedAssignee,
         setSelectedAssignee,
         selectedSources,
@@ -165,8 +179,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
 
         filterTitle,
         setFilterTitle,
-        filterStatus,
-        setFilterStatus,
+        filterStatusLabel,
+        setFilterStatusLabel,
         filterAssignee,
         setFilterAssignee,
         filterSources,
@@ -177,6 +191,10 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setFilterMemo,
         filteredTasks,
 
+        filterDoneStart,
+        setFilterDoneStart,
+        filterDoneEnd,
+        setFilterDoneEnd,
         viewMode,
         setViewMode,
         ganttViewMode,

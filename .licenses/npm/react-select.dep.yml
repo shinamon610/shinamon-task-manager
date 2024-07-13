@@ -1,0 +1,11 @@
+---
+name: react-select
+version: 5.8.0
+type: npm
+summary: A Select control built with and for ReactJS
+homepage:
+license: mit
+licenses:
+- sources: README.md
+  text: MIT Licensed. Copyright (c) Jed Watson 2022.
+notices: []

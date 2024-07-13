@@ -1,5 +1,5 @@
 import { Assignee, getColor } from "@/models/assignee";
-import { DefaultStatus, Status } from "@/models/status";
+import { StatusLabel } from "@/models/status";
 
 export const AccentColor = "var(--accent)";
 
@@ -15,25 +15,29 @@ export function getSelectedStyle(
     : { border: "", padding: "3px" };
 }
 
-function boxShadow(status: Status, isSelected: boolean, color: string): string {
+function boxShadow(
+  statusLabel: StatusLabel,
+  isSelected: boolean,
+  color: string
+): string {
   if (!isSelected) {
     return "";
   }
-  if (status === DefaultStatus.Working && color !== "") {
+  if (statusLabel === "Working" && color !== "") {
     return `inset 0 0 0 2px ${color}`;
   }
   return "";
 }
 
 function isColoredAndColor(
-  status: Status,
+  statusLabel: StatusLabel,
   isSelected: boolean,
   color: string
 ): [boolean, string] {
   if (isSelected) {
     return [true, AccentColor];
   }
-  if (status === DefaultStatus.Working) {
+  if (statusLabel === "Working") {
     return [true, color];
   }
   return [false, ""];
@@ -41,7 +45,11 @@ function isColoredAndColor(
 
 export function getNodeBorderStyle(
   assignees: Set<Assignee>,
-  task: { assignee: Assignee | null; status: Status; isSelected: boolean }
+  task: {
+    assignee: Assignee | null;
+    statusLabel: StatusLabel;
+    isSelected: boolean;
+  }
 ): {
   border: string;
   padding: string;
@@ -50,7 +58,7 @@ export function getNodeBorderStyle(
   const innerColor =
     task.assignee == null ? "" : getColor(assignees, task.assignee);
   const [isSelected, outerColor] = isColoredAndColor(
-    task.status,
+    task.statusLabel,
     task.isSelected,
     innerColor
   );
@@ -58,6 +66,6 @@ export function getNodeBorderStyle(
   return {
     border,
     padding,
-    boxShadow: boxShadow(task.status, task.isSelected, innerColor),
+    boxShadow: boxShadow(task.statusLabel, task.isSelected, innerColor),
   };
 }

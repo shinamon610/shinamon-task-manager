@@ -1,7 +1,7 @@
 import { GlobalContext } from "@/contexts/globalContext";
 import { MainContext } from "@/contexts/mainContext";
 import { load, saveData } from "@/models/file";
-import { DefaultStatus, NotStatus } from "@/models/status";
+import { toStatus } from "@/models/status";
 import {
   Task,
   UUID,
@@ -42,8 +42,8 @@ export function MainPage() {
     setMode,
     title,
     setTitle,
-    selectedStatus,
-    setSelectedStatus,
+    selectedStatusLabel,
+    setSelectedStatusLabel,
     selectedAssignee,
     setSelectedAssignee,
     selectedSources,
@@ -60,6 +60,7 @@ export function MainPage() {
     setFilterSources,
     filterTargets,
     setFilterTargets,
+    filterStatusLabel,
   } = useContext(MainContext);
   const [serialInput, setSerialInput] = useState("");
   const [command, setCommand] = useState(Command.Nothing);
@@ -82,7 +83,7 @@ export function MainPage() {
   function setTaskData(newCommand: Command, newTasks: List<Task>) {
     const selectedTask = getSelectedTask(newTasks)!;
     setTitle(newCommand === Command.CreateTaskNode ? "" : selectedTask.name);
-    setSelectedStatus(selectedTask.status);
+    setSelectedStatusLabel(selectedTask.status.type);
     setSelectedAssignee(selectedTask.assignee);
     setSelectedSources(new Set<UUID>(selectedTask.from));
     setSelectedTargets(new Set<UUID>(selectedTask.to));
@@ -112,7 +113,8 @@ export function MainPage() {
         event,
         sourcesRef,
         targetsRef,
-        swappable
+        swappable,
+        filterStatusLabel
       );
       preventKey(event, newCommand);
 
@@ -141,7 +143,7 @@ export function MainPage() {
             from: Array.from(selectedSources),
             priority: null,
             memo: memo,
-            status: selectedStatus,
+            status: toStatus(selectedStatusLabel),
             assignee: selectedAssignee,
           },
           userName,
@@ -244,20 +246,24 @@ export function MainPage() {
           const newDumpTasks = filterTasks(
             mergedTasks,
             "",
-            DefaultStatus.Done,
+            "Done",
             "",
             new Set([]),
             new Set([]),
-            ""
+            "",
+            null,
+            null
           );
           const restTasks = filterTasks(
             mergedTasks,
             "",
-            NotStatus.NotDone,
+            "Not Done",
             "",
             new Set([]),
             new Set([]),
-            ""
+            "",
+            null,
+            null
           );
           saveData({ tasks: newDumpTasks, userName }, archivePath);
           setHistories(List([restTasks]));

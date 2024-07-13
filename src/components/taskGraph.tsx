@@ -4,7 +4,6 @@ import { createLayoutedNodeAndEdges } from "@/lib/calculatePosition";
 import { getNodeBorderStyle } from "@/lib/layoutUtils";
 import { Assignee, getColor } from "@/models/assignee";
 import { indexesToLabels } from "@/models/labels";
-import { DefaultStatus } from "@/models/status";
 import { Task } from "@/models/task";
 import { zip } from "@/utils";
 import { Command, panCommands } from "@/vim/commands";
@@ -42,7 +41,10 @@ function createNodesAndEdgesFromTasks(
   mode: Mode
 ): [Node[], Edge[]] {
   const labels = indexesToLabels(tasks.size);
-  const nodes = zip(tasks.toJS(), labels).map(([task, label]) => {
+  const nodes = zip(
+    tasks.map((task) => ({ ...task, statusLabel: task.status.type })).toJS(),
+    labels
+  ).map(([task, label]) => {
     const color =
       task.assignee == null ? null : getColor(assignees, task.assignee);
 
@@ -63,9 +65,7 @@ function createNodesAndEdgesFromTasks(
       style: {
         ...getNodeBorderStyle(assignees, task),
         background:
-          task.status === DefaultStatus.Done
-            ? "var(--inactive)"
-            : "var(--active)",
+          task.statusLabel === "Done" ? "var(--inactive)" : "var(--active)",
       },
     };
   });
@@ -160,7 +160,10 @@ function BaseNewTaskGraph({
     if (
       mode === Mode.NodeSelecting ||
       inputtingModes.flat().includes(mode) ||
-      inputtingFilterModes.flat().includes(mode) ||
+      [true, false]
+        .map((b) => inputtingFilterModes(b))
+        .flat(Infinity)
+        .includes(mode) ||
       command === Command.ToTile ||
       command === Command.ToGraph ||
       command === Command.ConfirmFilterEdit ||

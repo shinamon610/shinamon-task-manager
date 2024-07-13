@@ -1,10 +1,19 @@
 import { getCircularIndex } from "@/utils";
 import { Command } from "@/vim/commands";
 import { List } from "immutable";
+import moment, { Moment } from "moment";
 import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
 import { selectLabelIndex } from "./labels";
-import { DefaultStatus, NotStatus, Status, toDefaultStatus } from "./status";
+import {
+  AllDefaultStatusLabel,
+  DefaultStatusLabel,
+  Done,
+  NotStatusLabel,
+  Status,
+  StatusLabel,
+  toDefaultStatusLabel,
+} from "./status";
 
 export type UUID = string;
 
@@ -37,7 +46,7 @@ export const noneTask: Task = {
   from: [],
   priority: 0,
   memo: "",
-  status: DefaultStatus.Pending,
+  status: { type: "Pending" },
   assignee: null,
   isSelected: false,
 };
@@ -65,13 +74,13 @@ function createTask(
     if (
       tasks.filter(
         ({ id, status }) =>
-          userInput.from.includes(id) && status !== DefaultStatus.Done
+          userInput.from.includes(id) && status.type !== "Done"
       ).size > 0
     ) {
-      return DefaultStatus.Pending;
+      return { type: "Pending" };
     }
     if (userInput.status == null) {
-      return DefaultStatus.Pending;
+      return { type: "Pending" };
     }
     return userInput.status;
   }
@@ -80,7 +89,7 @@ function createTask(
     if (userInput.assignee != null && userInput.assignee !== "") {
       return userInput.assignee;
     }
-    if (status === DefaultStatus.Working) {
+    if (status.type === "Working") {
       return userName;
     }
     return null;
@@ -176,7 +185,7 @@ function updateSelectedTask(tasks: List<Task>, newTask: Task): List<Task> {
       return newTask;
     }
     //もうDoneのタスクは何もしない
-    if (task.status === DefaultStatus.Done) {
+    if (task.status.type === "Done") {
       return task;
     }
 
@@ -184,14 +193,14 @@ function updateSelectedTask(tasks: List<Task>, newTask: Task): List<Task> {
     const isNewTaskWorking =
       newTask.assignee !== null &&
       newTask.assignee === task.assignee &&
-      newTask.status === DefaultStatus.Working;
+      newTask.status.type === "Working";
 
     // 新規タスクのtoのタスクがある時はそれもpendingにする
     const isNewTaskTo = newTask.to.includes(task.id);
     if (isNewTaskWorking || isNewTaskTo) {
       return {
         ...task,
-        status: DefaultStatus.Pending,
+        status: { type: "Pending" },
       };
     }
     return task;
@@ -270,11 +279,13 @@ export function getAllTasksFromTarget(
 export function filterTasks(
   tasks: List<Task>,
   filterTitle: string,
-  filterStatus: Status | null,
+  filterStatusLabel: StatusLabel | null,
   filterAssignee: Assignee | null,
   filterSoucres: Set<UUID>,
   filterTargets: Set<UUID>,
-  filterMemo: string
+  filterMemo: string,
+  filterDoneStart: Moment | null,
+  filterDoneEnd: Moment | null
 ): List<Task> {
   function baseFilter<S>(
     task: Task | null,
@@ -292,12 +303,31 @@ export function filterTasks(
   function filterByTitle(task: Task): Task | null {
     return task.name.includes(filterTitle) ? task : null;
   }
-  function filterByStatus(task: Task | null): Task | null {
-    return baseFilter(task, filterStatus, (task, status) => {
-      if (Object.values(DefaultStatus).includes(status as DefaultStatus)) {
-        return task.status === status ? task : null;
+  function filterByDoneStart(task: Task | null): Task | null {
+    return baseFilter(task, filterDoneStart, (task, doneStart) => {
+      if (task.status.type === "Done") {
+        return (task.status as Done).date >= doneStart ? task : null;
       }
-      return task.status !== toDefaultStatus(status as NotStatus) ? task : null;
+      return task;
+    });
+  }
+  function filterByDoneEnd(task: Task | null): Task | null {
+    return baseFilter(task, filterDoneEnd, (task, doneEnd) => {
+      if (task.status.type === "Done") {
+        return (task.status as Done).date <= doneEnd ? task : null;
+      }
+      return task;
+    });
+  }
+  function filterByStatus(task: Task | null): Task | null {
+    return baseFilter(task, filterStatusLabel, (task, statusLabel) => {
+      if (AllDefaultStatusLabel.includes(statusLabel as DefaultStatusLabel)) {
+        return task.status.type === statusLabel ? task : null;
+      }
+      return task.status.type !==
+        toDefaultStatusLabel(statusLabel as NotStatusLabel)
+        ? task
+        : null;
     });
   }
   function filterByAssignee(task: Task | null): Task | null {
@@ -333,8 +363,11 @@ export function filterTasks(
   );
   return filteredByDependency.filter((task) => {
     return (
-      filterByMemo(filterByAssignee(filterByStatus(filterByTitle(task)))) !=
-      null
+      filterByDoneEnd(
+        filterByDoneStart(
+          filterByMemo(filterByAssignee(filterByStatus(filterByTitle(task))))
+        )
+      ) != null
     );
   });
 }
@@ -370,7 +403,7 @@ export function hasNotDoneChildTask(tasks: List<Task>): boolean {
     selectedTask.from.filter((id) => {
       const maybeTarget = tasks.filter((task) => task.id === id); // dumpされて存在しない可能性がある。dumpされている場合はdoneになっているはずなので、対象から外す。
       if (maybeTarget.size === 0) return false;
-      return maybeTarget.get(0)!.status !== DefaultStatus.Done;
+      return maybeTarget.get(0)!.status.type !== "Done";
     }).length > 0
   );
 }
@@ -475,14 +508,18 @@ export function createTasks(
     case Command.SetToWorking:
       const maxPriority = stackedTasks.map((task) => task.priority).max() ?? 0;
       return updatePriorities(
-        updateTaskStatus(tasks, DefaultStatus.Working, userName),
+        updateTaskStatus(tasks, { type: "Working" }, userName),
         [getSelectedTask(tasks)!.id],
         [maxPriority + 1]
       );
     case Command.SetToPending:
-      return updateTaskStatus(tasks, DefaultStatus.Pending, userName);
+      return updateTaskStatus(tasks, { type: "Pending" }, userName);
     case Command.SetToDone:
-      return updateTaskStatus(tasks, DefaultStatus.Done, userName);
+      return updateTaskStatus(
+        tasks,
+        { type: "Done", date: moment() },
+        userName
+      );
     case Command.DumpArchive:
       return tasks;
     case Command.ReadArchive:
@@ -529,6 +566,10 @@ export function createTasks(
     case Command.InputFilterTargets:
     case Command.SelectFilterMemo:
     case Command.InputFilterMemo:
+    case Command.SelectFilterDoneStart:
+    case Command.InputFilterDoneStart:
+    case Command.SelectFilterDoneEnd:
+    case Command.InputFilterDoneEnd:
     case Command.Nothing:
     case Command.Undo:
     case Command.Redo:

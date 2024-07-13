@@ -52,6 +52,11 @@ export enum Mode {
   FilterTargetsInputting,
   FilterMemoSelecting,
   FilterMemoInputting,
+
+  FilterDoneStartSelecting,
+  FilterDoneStartInputting,
+  FilterDoneEndSelecting,
+  FilterDoneEndInputting,
 }
 
 export const markdownModes = [
@@ -85,15 +90,29 @@ export const inputtingModes = [
   [Mode.MemoInputting],
 ];
 
-export const selectingFilterModes = [
+export const selectingFilterModes = (isDone: boolean) => [
   [Mode.FilterTitleSelecting],
-  [Mode.FilterStatusSelecting, Mode.FilterAssigneeSelecting],
+  isDone
+    ? [
+        Mode.FilterStatusSelecting,
+        Mode.FilterDoneStartSelecting,
+        Mode.FilterDoneEndSelecting,
+        Mode.FilterAssigneeSelecting,
+      ]
+    : [Mode.FilterStatusSelecting, Mode.FilterAssigneeSelecting],
   [Mode.FilterSourcesSelecting, Mode.FilterTargetsSelecting],
   [Mode.FilterMemoSelecting],
 ];
-export const inputtingFilterModes = [
+export const inputtingFilterModes = (isDone: boolean) => [
   [Mode.FilterTitleInputting],
-  [Mode.FilterStatusInputting, Mode.FilterAssigneeInputting],
+  isDone
+    ? [
+        Mode.FilterStatusInputting,
+        Mode.FilterDoneStartInputting,
+        Mode.FilterDoneEndInputting,
+        Mode.FilterAssigneeInputting,
+      ]
+    : [Mode.FilterStatusInputting, Mode.FilterAssigneeInputting],
   [Mode.FilterSourcesInputting, Mode.FilterTargetsInputting],
   [Mode.FilterMemoInputting],
 ];
@@ -201,6 +220,14 @@ export function createMode(
       return Mode.FilterMemoSelecting;
     case Command.InputFilterMemo:
       return Mode.FilterMemoInputting;
+    case Command.SelectFilterDoneStart:
+      return Mode.FilterDoneStartSelecting;
+    case Command.InputFilterDoneStart:
+      return Mode.FilterDoneStartInputting;
+    case Command.SelectFilterDoneEnd:
+      return Mode.FilterDoneEndSelecting;
+    case Command.InputFilterDoneEnd:
+      return Mode.FilterDoneEndInputting;
     case Command.SetToWorking:
       return Mode.NodeSelecting;
     case Command.SetToPending:
@@ -237,7 +264,9 @@ export function createMode(
 }
 
 export function isFilter(mode: Mode): boolean {
-  return [selectingFilterModes, inputtingFilterModes].some((modes) => {
-    return modes.flat().includes(mode);
-  });
+  return [selectingFilterModes, inputtingFilterModes]
+    .flatMap((f) => [f(true), f(false)])
+    .some((modes) => {
+      return modes.flat().includes(mode);
+    });
 }

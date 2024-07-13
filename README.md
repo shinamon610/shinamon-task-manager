@@ -182,3 +182,11 @@ This software is released under the MIT License, see LICENSE.txt.
 # publish
 Cargo.tomlのversionを更新して、push。
 mainに向けて、PR作ってマージ
+
+# Third-Party Licenses
+
+This project uses the following third-party libraries:
+
+- **caniuse-lite**
+  - License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  - License Details: [https://creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/)

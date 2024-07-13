@@ -1,35 +1,44 @@
-export type Status = DefaultStatus | NotStatus;
+import moment from "moment";
+export type Status = DefaultStatus | NotStatus | Done;
+export type StatusLabel = DefaultStatusLabel | NotStatusLabel;
 
-export enum DefaultStatus {
-  Working = "Working",
-  Pending = "Pending",
-  Done = "Done",
-}
+export const AllDefaultStatusLabel = ["Working", "Pending", "Done"] as const;
+export const AllNotStatusLabel = [
+  "Not Working",
+  "Not Pending",
+  "Not Done",
+] as const;
+export type DefaultStatusLabel = (typeof AllDefaultStatusLabel)[number];
+export type NotStatusLabel = (typeof AllNotStatusLabel)[number];
 
-export enum NotStatus {
-  NotWorking = "Not Working",
-  NotPending = "Not Pending",
-  NotDone = "Not Done",
-}
+type DefaultStatus = { type: Exclude<DefaultStatusLabel, "Done"> };
+type NotStatus = { type: NotStatusLabel };
+export type Done = { type: "Done"; date: moment.Moment };
 
-export function toDefaultStatus(status: NotStatus): DefaultStatus {
+export function toDefaultStatusLabel(
+  status: NotStatusLabel
+): DefaultStatusLabel {
   switch (status) {
-    case NotStatus.NotWorking:
-      return DefaultStatus.Working;
-    case NotStatus.NotPending:
-      return DefaultStatus.Pending;
-    case NotStatus.NotDone:
-      return DefaultStatus.Done;
+    case "Not Working":
+      return "Working";
+    case "Not Pending":
+      return "Pending";
+    case "Not Done":
+      return "Done";
   }
 }
 
-export function loadInitialStatus(): Set<Status> {
-  return new Set(Object.values(DefaultStatus));
+export function loadInitialStatusLabel(): Set<DefaultStatusLabel> {
+  return new Set(AllDefaultStatusLabel);
 }
 
-export function loadInitialAllStatus(): Set<Status> {
-  return new Set([
-    ...Object.values(DefaultStatus),
-    ...Object.values(NotStatus),
-  ]);
+export function loadInitialAllStatus(): Set<StatusLabel> {
+  return new Set([...AllDefaultStatusLabel, ...AllNotStatusLabel]);
+}
+
+export function toStatus(statusLabel: StatusLabel): Status {
+  if (statusLabel == "Done") {
+    return { type: "Done", date: moment() };
+  }
+  return { type: statusLabel };
 }

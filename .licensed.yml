@@ -1,0 +1,41 @@
+# sources
+sources:
+  npm:
+    - path: .
+
+# cache path
+cache_path: .licenses
+
+# license rules
+allowed:
+  - mit
+  - apache-2.0
+  - isc
+  - 0bsd
+  - bsd-2-clause
+  - bsd-3-clause
+
+reviewed:
+  npm:
+    - caniuse-lite
+    - source-map
+    - source-map-js
+    - react-transition-group
+    - prettier
+    - lodash
+    - json-parse-even-better-errors
+    - hoist-non-react-statics
+    - cytoscape
+    - color-convert
+
+ignored:
+  npm:
+    - "@next/swc-darwin-x64"
+    - "@next/swc-darwin-arm64"
+    - "@next/swc-linux-arm64-gnu"
+    - "@next/swc-linux-arm64-musl"
+    - "@next/swc-linux-x64-gnu"
+    - "@next/swc-linux-x64-musl"
+    - "@next/swc-win32-arm64-msvc"
+    - "@next/swc-win32-ia32-msvc"
+    - "@next/swc-win32-x64-msvc"
