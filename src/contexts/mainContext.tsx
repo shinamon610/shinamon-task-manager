@@ -4,6 +4,7 @@ import { Mode } from "@/vim/mode";
 import { ViewMode } from "@/vim/viewMode";
 import { ViewMode as GanttViewMode } from "gantt-task-react";
 import { List } from "immutable";
+import { Moment } from "moment";
 import {
   Dispatch,
   SetStateAction,
@@ -44,6 +45,10 @@ export const MainContext = createContext<MainContextType>({
   filteredTasks: List([]),
   selectedStatusLabel: "Pending",
   setSelectedStatusLabel: () => {},
+  filterDoneStart: null,
+  setFilterDoneStart: () => {},
+  filterDoneEnd: null,
+  setFilterDoneEnd: () => {},
 
   viewMode: ViewMode.Graph,
   setViewMode: () => {},
@@ -87,7 +92,10 @@ type MainContextType = {
   setViewMode: Dispatch<SetStateAction<ViewMode>>;
   ganttViewMode: GanttViewMode;
   setGanttViewMode: Dispatch<SetStateAction<GanttViewMode>>;
-
+  filterDoneStart: Moment | null;
+  setFilterDoneStart: Dispatch<SetStateAction<Moment | null>>;
+  filterDoneEnd: Moment | null;
+  setFilterDoneEnd: Dispatch<SetStateAction<Moment | null>>;
   zoom: number;
   setZoom: Dispatch<SetStateAction<number>>;
 };
@@ -124,6 +132,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
     new Set<UUID>([])
   );
   const [filterMemo, setFilterMemo] = useState("");
+  const [filterDoneStart, setFilterDoneStart] = useState<Moment | null>(null);
+  const [filterDoneEnd, setFilterDoneEnd] = useState<Moment | null>(null);
   const filteredTasks = useMemo(() => {
     return filterTasks(
       tasks,
@@ -132,7 +142,9 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
       filterAssignee,
       filterSources,
       filterTargets,
-      filterMemo
+      filterMemo,
+      filterDoneStart,
+      filterDoneEnd
     );
   }, [
     tasks,
@@ -142,6 +154,8 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
     filterSources,
     filterTargets,
     filterMemo,
+    filterDoneStart,
+    filterDoneEnd,
   ]);
 
   const [zoom, setZoom] = useState(1);
@@ -177,6 +191,10 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
         setFilterMemo,
         filteredTasks,
 
+        filterDoneStart,
+        setFilterDoneStart,
+        filterDoneEnd,
+        setFilterDoneEnd,
         viewMode,
         setViewMode,
         ganttViewMode,

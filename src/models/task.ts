@@ -1,13 +1,14 @@
 import { getCircularIndex } from "@/utils";
 import { Command } from "@/vim/commands";
 import { List } from "immutable";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { v4 as uuidv4 } from "uuid";
 import { Assignee } from "./assignee";
 import { selectLabelIndex } from "./labels";
 import {
   AllDefaultStatusLabel,
   DefaultStatusLabel,
+  Done,
   NotStatusLabel,
   Status,
   StatusLabel,
@@ -282,7 +283,9 @@ export function filterTasks(
   filterAssignee: Assignee | null,
   filterSoucres: Set<UUID>,
   filterTargets: Set<UUID>,
-  filterMemo: string
+  filterMemo: string,
+  filterDoneStart: Moment | null,
+  filterDoneEnd: Moment | null
 ): List<Task> {
   function baseFilter<S>(
     task: Task | null,
@@ -299,6 +302,22 @@ export function filterTasks(
   }
   function filterByTitle(task: Task): Task | null {
     return task.name.includes(filterTitle) ? task : null;
+  }
+  function filterByDoneStart(task: Task | null): Task | null {
+    return baseFilter(task, filterDoneStart, (task, doneStart) => {
+      if (task.status.type === "Done") {
+        return (task.status as Done).date >= doneStart ? task : null;
+      }
+      return task;
+    });
+  }
+  function filterByDoneEnd(task: Task | null): Task | null {
+    return baseFilter(task, filterDoneEnd, (task, doneEnd) => {
+      if (task.status.type === "Done") {
+        return (task.status as Done).date <= doneEnd ? task : null;
+      }
+      return task;
+    });
   }
   function filterByStatus(task: Task | null): Task | null {
     return baseFilter(task, filterStatusLabel, (task, statusLabel) => {
@@ -344,8 +363,11 @@ export function filterTasks(
   );
   return filteredByDependency.filter((task) => {
     return (
-      filterByMemo(filterByAssignee(filterByStatus(filterByTitle(task)))) !=
-      null
+      filterByDoneEnd(
+        filterByDoneStart(
+          filterByMemo(filterByAssignee(filterByStatus(filterByTitle(task))))
+        )
+      ) != null
     );
   });
 }

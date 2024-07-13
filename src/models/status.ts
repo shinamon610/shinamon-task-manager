@@ -13,7 +13,7 @@ export type NotStatusLabel = (typeof AllNotStatusLabel)[number];
 
 type DefaultStatus = { type: Exclude<DefaultStatusLabel, "Done"> };
 type NotStatus = { type: NotStatusLabel };
-type Done = { type: "Done"; date: moment.Moment };
+export type Done = { type: "Done"; date: moment.Moment };
 
 export function toDefaultStatusLabel(
   status: NotStatusLabel

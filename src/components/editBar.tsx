@@ -87,6 +87,10 @@ function createContent(
   setSelectedStatusLabel:
     | React.Dispatch<React.SetStateAction<StatusLabel>>
     | React.Dispatch<React.SetStateAction<StatusLabel | null>>,
+  filterDoneStart: Moment | null,
+  setFilterDoneStart: React.Dispatch<React.SetStateAction<Moment | null>>,
+  filterDoneEnd: Moment | null,
+  setFilterDoneEnd: React.Dispatch<React.SetStateAction<Moment | null>>,
   statuses: Set<StatusLabel>,
   selectedAssignee: Assignee | null,
   setSelectedAssignee: React.Dispatch<React.SetStateAction<Assignee | null>>,
@@ -190,14 +194,18 @@ function createContent(
                               key={"doneStart"}
                               name="doneStart"
                               type="datetime-local"
+                              placeholder="YYYY-MM-DDTHH:MM"
                               value={
-                                startDateTime == null
+                                filterDoneStart == null
                                   ? ""
-                                  : startDateTime.format(dateFormat)
+                                  : filterDoneStart.format(dateFormat)
                               }
                               ref={doneStartRef}
                               onChange={(e) => {
-                                setStartDateTime(moment(e.target.value));
+                                const maybeDate = moment(e.target.value);
+                                setFilterDoneStart(
+                                  maybeDate.isValid() ? maybeDate : null
+                                );
                               }}
                             />,
                           ]}
@@ -213,13 +221,16 @@ function createContent(
                               name="doneEnd"
                               type="datetime-local"
                               value={
-                                startDateTime == null
+                                filterDoneEnd == null
                                   ? ""
-                                  : startDateTime.format(dateFormat)
+                                  : filterDoneEnd.format(dateFormat)
                               }
                               ref={doneEndRef}
                               onChange={(e) => {
-                                setStartDateTime(moment(e.target.value));
+                                const maybeDate = moment(e.target.value);
+                                setFilterDoneEnd(
+                                  maybeDate.isValid() ? maybeDate : null
+                                );
                               }}
                             />,
                           ]}
@@ -478,7 +489,13 @@ export const EditBar = ({
 }: EditBarProps) => {
   const { tasks, assignees, setAssignees } = useContext(GlobalContext);
   const mainContext = useContext(MainContext);
-  const { mode } = mainContext;
+  const {
+    mode,
+    filterDoneStart,
+    setFilterDoneStart,
+    filterDoneEnd,
+    setFilterDoneEnd,
+  } = mainContext;
   const title = isFilter(mode) ? mainContext.filterTitle : mainContext.title;
   const setTitle = isFilter(mode)
     ? mainContext.setFilterTitle
@@ -567,6 +584,10 @@ export const EditBar = ({
         setTitle,
         statusLabel,
         setStatusLabel,
+        filterDoneStart,
+        setFilterDoneStart,
+        filterDoneEnd,
+        setFilterDoneEnd,
         statuses,
         selectedAssignee,
         setSelectedAssignee,

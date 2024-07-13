@@ -250,7 +250,9 @@ export function MainPage() {
             "",
             new Set([]),
             new Set([]),
-            ""
+            "",
+            null,
+            null
           );
           const restTasks = filterTasks(
             mergedTasks,
@@ -259,7 +261,9 @@ export function MainPage() {
             "",
             new Set([]),
             new Set([]),
-            ""
+            "",
+            null,
+            null
           );
           saveData({ tasks: newDumpTasks, userName }, archivePath);
           setHistories(List([restTasks]));
