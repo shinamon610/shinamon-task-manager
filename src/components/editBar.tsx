@@ -12,6 +12,7 @@ import {
   UUID,
   getAllTasksFromSource,
   getAllTasksFromTarget,
+  getSelectedTask,
   noneTask,
 } from "@/models/task";
 import { idf } from "@/utils";
@@ -66,6 +67,17 @@ function createMultiSelectBoxData(
   return tasks.push(noneTask); // filtering中は先がないものを絞り込むためにnoneTaskが必要
 }
 
+const dateFormat = "YYYY-MM-DDTHH:mm";
+
+function getSelectedTaskCompletedDateLetter(tasks: List<Task>): String {
+  const selectedTask = getSelectedTask(tasks);
+  if (selectedTask === undefined) return "";
+  if (selectedTask.status.type === "Done") {
+    return moment(selectedTask.status.date).format(dateFormat);
+  }
+  return "";
+}
+
 function createContent(
   mode: Mode,
   tasks: List<Task>,
@@ -105,8 +117,6 @@ function createContent(
   endDateTimeRef: MutableRefObject<null>,
   memoRef: MutableRefObject<null>
 ): React.JSX.Element | null {
-  const dateFormat = "YYYY-MM-DDTHH:mm";
-
   return (
     <>
       <FlexContainer
@@ -153,12 +163,16 @@ function createContent(
                   mode === Mode.FilterStatusInputting
                 }
               />,
+              <label key={"doneDate"}>On:</label>,
+              <label key={"doneDateOn"}>
+                {getSelectedTaskCompletedDateLetter(tasks)}
+              </label>,
             ]}
             isSelected={
               mode === Mode.StatusSelecting ||
               mode === Mode.FilterStatusSelecting
             }
-            ratios={[0, 1]}
+            ratios={[0, 1, 0, 1]}
           />,
           <FlexContainer
             key="a"
