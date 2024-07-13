@@ -164,7 +164,13 @@ function createContent(
                     }
                     defaultOption={selectedStatusLabel}
                     data={statuses}
-                    setSelectedValue={setSelectedStatusLabel}
+                    setSelectedValue={(value) => {
+                      if ((value as StatusLabel) !== "Done") {
+                        setFilterDoneStart(null);
+                        setFilterDoneEnd(null);
+                      }
+                      setSelectedStatusLabel(value);
+                    }}
                     ref={statusRef}
                     toLabel={idf}
                     nullable={
