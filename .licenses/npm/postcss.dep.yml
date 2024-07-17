@@ -1,6 +1,6 @@
 ---
 name: postcss
-version: 8.4.14
+version: 8.4.31
 type: npm
 summary: Tool for transforming styles with JS plugins
 homepage: https://postcss.org/
