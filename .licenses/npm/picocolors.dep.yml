@@ -1,10 +1,10 @@
 ---
 name: picocolors
-version: 1.0.0
+version: 1.0.1
 type: npm
 summary: The tiniest and the fastest library for terminal output formatting with ANSI
   colors
-homepage:
+homepage: 
 license: isc
 licenses:
 - sources: LICENSE
