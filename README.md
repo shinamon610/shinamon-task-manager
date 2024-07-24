@@ -22,6 +22,35 @@ It's still under development, so it's full of bugs.
 - Self-contained locally
 - Data is saved in JSON files, so with some effort, it can be viewed in VSCode or similar editors
 
+# インストール方法
+https://github.com/shinamon610/shinamon-task-manager/releases
+ここから、最新versionのAssetsを見て、自分のPCに合うやつの最新のversionをダウンロードしてインストールする。
+例: Apple Siliconの場合
+releasesから、aarch64.dmgって書いてあるやつをクリック。
+ダウンロードしたら、dmgファイルをクリック。
+ポップアップが表示されるので、アプリをフォルダにドラッグ&ドロップ。
+terminalを開いて、以下を実行
+```
+cd /Application
+xattr -rc shinamon-task-manager.app
+```
+ここまでやったら、普通のアプリ同様にshinamon-task-managerが開けるようになる。
+
+# Installation Guide
+Go to https://github.com/shinamon610/shinamon-task-manager/releases and find the latest version under Assets that matches your PC. Download the latest version suitable for your system.
+
+For example, for Apple Silicon:
+1. From the releases page, click on the file labeled `aarch64.dmg`.
+2. Once the download is complete, click on the `.dmg` file.
+3. A pop-up will appear; drag and drop the app into the Applications folder.
+4. Open Terminal and execute the following commands:
+   ```
+   cd /Applications
+   xattr -rc shinamon-task-manager.app
+   ```
+After completing these steps, you can open shinamon-task-manager like any other app.
+
+
 # 使い方
 ## タスクの新規作成
 - n押す
